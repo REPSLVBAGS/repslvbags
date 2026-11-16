@@ -175,7 +175,7 @@ function renderPayMethods(){
   const methods=getActivePaymentMethods();
   const box=document.getElementById('payMethods');
   if(!methods.length){
-    box.innerHTML='<p class="empty-msg">No payment methods are currently configured. Please contact support@repslvbags.com.</p>';
+    box.innerHTML='<p class="empty-msg">No payment methods are currently configured. Please contact supportrepslvbags@gmail.com.</p>';
     document.getElementById('toStep4').classList.add('hidden');return;
   }
   document.getElementById('toStep4').classList.remove('hidden');
@@ -259,7 +259,7 @@ function renderPayAction(){
         <p>Amount Due: <b>$${total.toFixed(2)}</b></p>
         ${hasLink
           ?`<p style="font-size:13px;color:var(--muted)">Click below to open Cash App and pay securely. <b>Include "${order.orderNo}" in the payment note</b> so we can match your payment instantly.</p>`
-          :`<p style="font-size:13px;color:#8a5a00"><b>Our Cash App payment link is being configured.</b> Please use another method below, or email support@repslvbags.com and we'll send you payment details for order ${order.orderNo}.</p>`}
+          :`<p style="font-size:13px;color:#8a5a00"><b>Our Cash App payment link is being configured.</b> Please use another method below, or email supportrepslvbags@gmail.com and we'll send you payment details for order ${order.orderNo}.</p>`}
       </div>
       ${hasLink?`<a class="btn-gold full" style="display:block;text-align:center;margin-bottom:12px" href="${payUrl}" target="_blank" rel="noopener" id="cashAppPayBtn">PAY WITH CASH APP</a>`:''}
       <div class="step-nav">
@@ -281,9 +281,8 @@ function renderPayAction(){
         <p>Amount Due: <b>$${total.toFixed(2)}</b></p>
         <p style="font-size:13px">Payment instructions for <b>${m.label}</b> have been emailed to <b>${order.email}</b>.</p>
         ${m.details?`<p style="font-size:13px;margin-top:8px"><b>Details:</b> ${m.details}</p>`:''}
-        <p style="font-size:13px;margin-top:8px">After sending payment, submit your screenshot on the confirmation page — the link is in your email, or use the button below.</p>
+        <p style="font-size:13px;margin-top:8px">After sending payment, our team will verify it and confirm your order by email.</p>
       </div>
-      <a class="btn-gold full" style="display:block;text-align:center;margin-bottom:12px" href="payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}">Submit Payment Confirmation</a>
       <div class="step-nav">
         <button class="btn-ghost" id="backTo3">Back</button>
         <button class="btn-gold" id="manualDoneBtn">Done — I'll Pay via Email Instructions</button>

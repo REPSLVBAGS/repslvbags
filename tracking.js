@@ -62,8 +62,9 @@ function renderTracking(order){
   </div>`;
 }
 
-// track page wiring
-document.getElementById('trackForm').onsubmit=e=>{
+// track page wiring (only runs where #trackForm exists — not on admin.html)
+const _trackForm=document.getElementById('trackForm');
+if(_trackForm)_trackForm.onsubmit=e=>{
   e.preventDefault();
   const order=findOrder(document.getElementById('tOrder').value, document.getElementById('tEmail').value);
   document.getElementById('trackError').classList.add('hidden');

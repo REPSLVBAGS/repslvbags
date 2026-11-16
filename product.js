@@ -52,7 +52,7 @@ function render(){
         <details open><summary>Product Details</summary><p>${p.desc} Crafted for the modern wardrobe — a silhouette that moves effortlessly from day to evening.</p></details>
         <details><summary>Materials & Dimensions</summary><p>Premium textured finish with coordinated hardware. Approx. 11" W × 8" H × 4" D. Interior pocket and magnetic closure.</p></details>
         <details><summary>Shipping Information</summary><p>Orders ship within 1–2 business days via USPS, UPS, FedEx or DHL. Free US shipping on orders over $150; otherwise $9.99 standard or $19.99 express. Track your order any time at <a href="track-order.html">Track Order</a>.</p></details>
-        <details><summary>Returns Information</summary><p>30-day returns on unworn items in original condition. Start a return by emailing <a href="mailto:support@repslvbags.com">support@repslvbags.com</a> with your order number.</p></details>
+        <details><summary>Returns Information</summary><p>30-day returns on unworn items in original condition. Start a return by emailing <a href="mailto:supportrepslvbags@gmail.com">supportrepslvbags@gmail.com</a> with your order number.</p></details>
       </div>
     </div>
   </div>`;

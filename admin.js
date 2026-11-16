@@ -430,7 +430,7 @@ function adminRequestInfo(no){
   const note=prompt('What additional info do you need from the customer?')||'';
   requestMoreInfo(no,note);
   const o=getOrders().find(x=>x.orderNo===no);
-  if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact support@repslvbags.com'}\n\n— Reps LV Bags`);}
+  if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\n— Reps LV Bags`);}
   renderPayments();
 }
 function resendInstructions(no){

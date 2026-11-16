@@ -137,7 +137,7 @@ async function notifyOrderConfirmation(order){
   if(alreadySent(order,'order_confirmation'))return;
   await sendEmail(order.email,
     `Order Confirmed — Reps LV Bags #${order.orderNo}`,
-    `Hi ${order.name},\n\nThank you for your order! Your order has been received and is awaiting payment verification.\n\nOrder Number: ${order.orderNo}\nPayment Method: ${order.paymentMethod}\nTotal: $${order.total.toFixed(2)}\n\nItems:\n${orderItemsText(order)}\n\n${orderTotalsText(order)}\n\nDelivery address:\n${order.address}, ${order.city}, ${order.state} ${order.zip}\n\nWe will email you payment instructions and tracking updates as your order progresses.\n\n— Reps LV Bags\nsupport@repslvbags.com`);
+    `Hi ${order.name},\n\nThank you for your order! Your order has been received and is awaiting payment verification.\n\nOrder Number: ${order.orderNo}\nPayment Method: ${order.paymentMethod}\nTotal: $${order.total.toFixed(2)}\n\nItems:\n${orderItemsText(order)}\n\n${orderTotalsText(order)}\n\nDelivery address:\n${order.address}, ${order.city}, ${order.state} ${order.zip}\n\nWe will email you payment instructions and tracking updates as your order progresses.\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'order_confirmation');
 }
 
@@ -148,7 +148,7 @@ async function notifyPaymentInstructions(order){
   const key=methodKey==='cashapp'?'cashapp':methodKey;
   await sendEmail(order.email,
     `Payment Instructions — Order #${order.orderNo}`,
-    `Hi ${order.name},\n\nYour order #${order.orderNo} is awaiting payment.\n\nAmount to pay: $${order.total.toFixed(2)}\nPayment method: ${order.paymentMethod}\nRequired payment reference: ${order.orderNo}\n\n${paymentDetailsText(key)}\n\nHow to pay:\n1. Send exactly $${order.total.toFixed(2)} using ${order.paymentMethod}.\n2. Include "${order.orderNo}" as the payment reference/note.\n3. After paying, submit your payment screenshot here:\n   https://repslvbags.com/payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}\n\nOur team verifies every payment manually before dispatch. You will receive a confirmation email once payment is verified.\n\nQuestions? support@repslvbags.com\n\n— Reps LV Bags`);
+    `Hi ${order.name},\n\nYour order #${order.orderNo} is awaiting payment.\n\nAmount to pay: $${order.total.toFixed(2)}\nPayment method: ${order.paymentMethod}\nRequired payment reference: ${order.orderNo}\n\n${paymentDetailsText(key)}\n\nHow to pay:\n1. Send exactly $${order.total.toFixed(2)} using ${order.paymentMethod}.\n2. Include "${order.orderNo}" as the payment reference/note.\n3. After paying, submit your payment screenshot here:\n   https://repslvbags.com/payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}\n\nOur team verifies every payment manually before dispatch. You will receive a confirmation email once payment is verified.\n\nQuestions? supportrepslvbags@gmail.com\n\n— Reps LV Bags`);
   markSent(order.orderNo,'payment_instructions');
 }
 
@@ -192,7 +192,7 @@ async function notifyPaymentVerified(order){
   if(alreadySent(order,'payment_verified'))return;
   await sendEmail(order.email,
     `Payment Verified — Order #${order.orderNo}`,
-    `Hi ${order.name},\n\nGreat news — we've verified your payment for order #${order.orderNo}.\n\nYour order is now being prepared for shipment. We'll email you tracking details as soon as it ships.\n\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupport@repslvbags.com`);
+    `Hi ${order.name},\n\nGreat news — we've verified your payment for order #${order.orderNo}.\n\nYour order is now being prepared for shipment. We'll email you tracking details as soon as it ships.\n\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'payment_verified');
 }
 
@@ -201,7 +201,7 @@ async function notifyShipping(order){
   if(alreadySent(order,'shipping_'+order.status))return;
   await sendEmail(order.email,
     `Your Order #${order.orderNo} — ${order.status}`,
-    `Hi ${order.name},\n\nYour order #${order.orderNo} is now: ${order.status}.\n\n${order.carrier?'Carrier: '+order.carrier+'\n':''}${order.tracking?'Tracking: '+order.tracking+'\n\nTrack it here: '+carrierTrackUrl(order.carrier,order.tracking)+'\n':''}\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupport@repslvbags.com`);
+    `Hi ${order.name},\n\nYour order #${order.orderNo} is now: ${order.status}.\n\n${order.carrier?'Carrier: '+order.carrier+'\n':''}${order.tracking?'Tracking: '+order.tracking+'\n\nTrack it here: '+carrierTrackUrl(order.carrier,order.tracking)+'\n':''}\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'shipping_'+order.status);
 }
 function carrierTrackUrl(carrier,tracking){

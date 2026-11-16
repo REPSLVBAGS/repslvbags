@@ -31,22 +31,38 @@ async function doLogin(){
   const pass=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');
   err.classList.add('hidden');
+  console.log('[Admin] Login attempt for:', email);
+  console.log('[Admin] sbAdminSignIn available:', typeof sbAdminSignIn);
+  console.log('[Admin] window.supabase available:', typeof window.supabase);
   if(typeof sbAdminSignIn==='function'){
-    const {data,error}=await sbAdminSignIn(email,pass);
-    if(!error&&data&&data.session){
-      sessionStorage.setItem('vr_admin','1');
-      enterAdmin();
+    try{
+      const {data,error}=await sbAdminSignIn(email,pass);
+      console.log('[Admin] SignIn result:', {hasData:!!data, hasError:!!error, errorMsg:error?error.message:null});
+      if(!error&&data&&data.session){
+        sessionStorage.setItem('vr_admin','1');
+        enterAdmin();
+        return;
+      }
+      const msg=error?(error.message||'Login failed'):'Login failed - no session returned';
+      err.textContent=msg;
+      err.classList.remove('hidden');
+      return;
+    }catch(e){
+      console.error('[Admin] Login exception:', e);
+      err.textContent='Login error: '+(e.message||e);
+      err.classList.remove('hidden');
       return;
     }
-    err.textContent=error?(error.message||'Login failed'):'Login failed';
-    err.classList.remove('hidden');
-    return;
   }
   // Fallback when Supabase isn't configured (local dev only)
+  console.log('[Admin] Falling back to local checkAdmin');
   if(checkAdmin(email,pass)){
     sessionStorage.setItem('vr_admin','1');
     enterAdmin();
-  } else err.classList.remove('hidden');
+  } else {
+    err.textContent='Supabase not configured and local auth failed';
+    err.classList.remove('hidden');
+  }
 }
 async function doLogout(){ if(typeof sbAdminSignOut==='function') await sbAdminSignOut(); sessionStorage.removeItem('vr_admin'); location.reload(); }
 function enterAdmin(){

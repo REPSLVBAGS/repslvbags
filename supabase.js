@@ -1,9 +1,9 @@
 // ---------- Supabase integration ----------
 // Paste your project URL + anon key below (Supabase Dashboard → Project Settings → API).
 // Leave blank to run in localStorage-only mode — everything keeps working.
-const SUPABASE_URL = '';   // e.g. 'https://abcdefgh.supabase.co'
-const SUPABASE_ANON_KEY = ''; // e.g. 'eyJhbGciOi...'
-const EMAIL_SECRET = '';   // must match the EMAIL_SECRET edge function secret
+const SUPABASE_URL = 'https://wetxlhacaeakstqwqtdh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndldHhsaGFjYWVha3N0cXdxdGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3ODUzNjUsImV4cCI6MjExMDM2MTM2NX0.kd1s2dKHfN3HCl5gT09hoyyLjk5-pbJy42p9BJjqD3g';
+const EMAIL_SECRET = 'vr7f2k9xQm4Lp8Rw3Ty6';   // must match the EMAIL_SECRET edge function secret
 
 let _sb = null;
 function supabase(){

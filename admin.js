@@ -5,7 +5,14 @@ let pendingImages=[]; // dataURLs for product form
 // ---------- ORDER SOURCE (Supabase mirror with localStorage fallback) ----------
 let adminOrdersCache=null; // null = not loaded yet
 const _ordersLocal=getOrders;
-function adminGetOrders(){ return adminOrdersCache || _ordersLocal(); }
+function adminGetOrders(){
+  const local=_ordersLocal();
+  if(!adminOrdersCache) return local;
+  // Merge: Supabase orders take priority, but include localStorage-only orders
+  const remoteNos=new Set(adminOrdersCache.map(o=>o.orderNo));
+  const localOnly=local.filter(o=>!remoteNos.has(o.orderNo));
+  return [...adminOrdersCache, ...localOnly];
+}
 async function refreshAdminOrders(){
   if(typeof sbAdminListOrders!=='function') return;
   const remote=await sbAdminListOrders();
@@ -14,7 +21,10 @@ async function refreshAdminOrders(){
 // Push a localStorage order's mutable fields to Supabase after admin edits.
 function adminPushOrder(no){
   if(typeof sbAdminUpdateOrder!=='function') return;
-  const o=_ordersLocal().find(x=>x.orderNo===no); if(!o) return;
+  // Try localStorage first, then merged view (Supabase orders)
+  let o=_ordersLocal().find(x=>x.orderNo===no);
+  if(!o && adminOrdersCache) o=adminOrdersCache.find(x=>x.orderNo===no);
+  if(!o) return;
   sbAdminUpdateOrder(no,{
     status:o.status, carrier:o.carrier, tracking:o.tracking,
     paymentStatus:o.paymentStatus, transactionRef:o.transactionRef,

@@ -296,14 +296,28 @@ function renderPayAction(){
 function showConfirmation(order,methodKey){
   document.getElementById('checkoutSteps').classList.add('hidden');
   document.getElementById('confirmation').classList.remove('hidden');
+  const isCash=methodKey==='cashapp';
+  document.getElementById('confTitle').textContent=isCash?'Thank You! Order Received':'🎉 Thank You for Your Order!';
   document.getElementById('confOrderNo').textContent=order.orderNo;
   const d=new Date(Date.now()+5*864e5);
   document.getElementById('confDelivery').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  const isCash=methodKey==='cashapp';
   document.getElementById('confPayMsg').innerHTML=isCash
     ?'Thank you! Complete your Cash App payment using the link — your order is <b>awaiting payment verification</b>.'
-    :'Your order has been received and is awaiting payment verification. Payment instructions were sent to your email.';
+    :'🎉 Your order has been successfully received!<br><br>'+
+     '<b>⚠️ IMPORTANT: PLEASE TAKE A SCREENSHOT OF YOUR ORDER NUMBER</b> and keep it safe for your records. You may need it when communicating with our customer care team.<br><br>'+
+     '📧 <b>CHECK YOUR EMAIL FOR PAYMENT INSTRUCTIONS!</b><br>'+
+     'Our team will send you a follow-up email shortly with the necessary payment instructions for your selected payment method.<br>'+
+     'Please check your <b>Inbox, Spam/Junk and Promotions</b> folders if you don\'t see our email in your main inbox.<br><br>'+
+     '<b>PLEASE NOTE:</b> Your order will remain <b>pending</b> until your payment has been successfully verified by our team.<br><br>'+
+     'Thank you for choosing Reps LV Bags. We truly appreciate your trust and look forward to serving you!<br>'+
+     '<i>Elegance in Every Detail.</i>';
   document.getElementById('confPayLink').innerHTML=`<a href="payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}" style="color:var(--espresso);text-decoration:underline;font-weight:600">Submit Payment Screenshot →</a>`;
+  const copyBtn=document.getElementById('confCopyBtn');
+  copyBtn.onclick=()=>{
+    const done=()=>{copyBtn.textContent='Copied ✓';setTimeout(()=>copyBtn.textContent='Copy Order Number',2000);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(order.orderNo).then(done).catch(done);
+    else done();
+  };
   if(window.trackEvent) trackEvent('Purchase',{value:order.total,num_items:cartCount(),order_id:order.orderNo});
   cart=[];saveCart();renderCart();
 }

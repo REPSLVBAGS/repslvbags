@@ -266,6 +266,12 @@ img{max-width:100%}
 .confirm-check{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--ivory);font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
 .confirm h3{font-size:30px;margin-bottom:12px}
 .confirm p{color:var(--muted);margin-bottom:8px}
+.conf-onum-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.conf-onum{font-size:32px;font-weight:700;letter-spacing:2px;color:var(--espresso);margin:0 0 14px}
+.conf-copy{font-size:12px;padding:9px 22px;margin-bottom:6px}
+#confPayMsg{font-size:15px;line-height:1.75;color:var(--espresso);margin:18px auto;max-width:520px;text-align:left}
+#confPayMsg b{color:var(--espresso)}
+#confPayLink{font-size:14px}
 
 /* ---------- Product page ---------- */
 .pd{max-width:1440px;margin:auto;padding:60px 48px;display:grid;grid-template-columns:1fr 1fr;gap:72px}

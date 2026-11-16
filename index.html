@@ -260,9 +260,12 @@
     <div id="confirmation" class="hidden">
       <div class="confirm">
         <div class="confirm-check">✓</div>
-        <h3>Thank You! Order Received</h3>
-        <p>Order Number: <b id="confOrderNo"></b></p>
-        <p>We will confirm your Cash App payment within 1 hour.</p>
+        <h3 id="confTitle">Thank You! Order Received</h3>
+        <p class="conf-onum-label">Your Order Number</p>
+        <p class="conf-onum" id="confOrderNo"></p>
+        <button class="btn-ghost conf-copy" id="confCopyBtn" type="button">Copy Order Number</button>
+        <div id="confPayMsg"></div>
+        <p id="confPayLink" style="margin:10px 0 8px"></p>
         <p>Estimated delivery: <b id="confDelivery"></b></p>
         <button class="btn-gold" id="doneBtn">Continue Shopping</button>
       </div>

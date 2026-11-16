@@ -16,6 +16,8 @@ function supabase(){
 function isSupabaseEnabled(){ return !!supabase(); }
 
 // ---------- Order sync (fire-and-forget, localStorage stays source of truth) ----------
+// All order writes go through the 'sync-order' Edge Function (service role).
+// The anon key has NO table access — orders are only readable/writable server-side.
 function sbUpsertOrder(order){
   const sb=supabase(); if(!sb) return;
   const row={
@@ -30,9 +32,12 @@ function sbUpsertOrder(order){
     payment_notes:order.paymentNotes||'', notes:order.notes||'',
     emails_sent:order.emailsSent||[], order_date:order.orderDate, est_delivery:order.estDelivery||null
   };
-  sb.from('orders').upsert(row,{onConflict:'order_no'}).then(({error})=>{
+  sb.functions.invoke('sync-order',{
+    body:row,
+    headers: EMAIL_SECRET ? {'x-email-secret':EMAIL_SECRET} : {}
+  }).then(({error})=>{
     if(error) console.warn('Supabase order sync failed:', error.message);
-  });
+  }).catch(e=>console.warn('Supabase order sync error:', e));
 }
 
 // ---------- Payment evidence → private storage bucket ----------

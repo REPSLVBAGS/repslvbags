@@ -61,6 +61,31 @@ async function sbEvidenceUrl(path, expiresIn=300){
   return error?null:data.signedUrl;
 }
 
+// ---------- Admin (authenticated via Supabase Auth) ----------
+async function sbAdminSignIn(email,password){
+  const sb=supabase(); if(!sb) return {error:'supabase not configured'};
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  return {data,error};
+}
+async function sbAdminSignOut(){ const sb=supabase(); if(sb) await sb.auth.signOut(); }
+async function sbAdminSession(){
+  const sb=supabase(); if(!sb) return null;
+  const {data}=await sb.auth.getSession();
+  return data.session||null;
+}
+async function sbAdminListOrders(){
+  const sb=supabase(); if(!sb) return null;
+  const {data,error}=await sb.functions.invoke('admin-orders',{method:'GET'});
+  if(error){console.warn('admin-orders list failed:',error.message);return null;}
+  return (data&&data.orders)?data.orders:null;
+}
+async function sbAdminUpdateOrder(orderNo, patch){
+  const sb=supabase(); if(!sb) return false;
+  const {error}=await sb.functions.invoke('admin-orders',{method:'PATCH',body:{order_no:orderNo,patch}});
+  if(error){console.warn('admin-orders update failed:',error.message);return false;}
+  return true;
+}
+
 // ---------- Email via Edge Function ----------
 // Calls the 'send-email' Edge Function (see supabase/functions/send-email).
 // Falls back to local logging when Supabase isn't configured.

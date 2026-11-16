@@ -2,14 +2,53 @@
 const ALL_COLORS=['Black','Beige','Brown','White','Red'];
 let pendingImages=[]; // dataURLs for product form
 
-// ---------- AUTH ----------
-function doLogin(){
-  if(checkAdmin(document.getElementById('loginEmail').value, document.getElementById('loginPass').value)){
+// ---------- ORDER SOURCE (Supabase mirror with localStorage fallback) ----------
+let adminOrdersCache=null; // null = not loaded yet
+const _ordersLocal=getOrders;
+function adminGetOrders(){ return adminOrdersCache || _ordersLocal(); }
+async function refreshAdminOrders(){
+  if(typeof sbAdminListOrders!=='function') return;
+  const remote=await sbAdminListOrders();
+  if(remote) adminOrdersCache=remote;
+}
+// Push a localStorage order's mutable fields to Supabase after admin edits.
+function adminPushOrder(no){
+  if(typeof sbAdminUpdateOrder!=='function') return;
+  const o=_ordersLocal().find(x=>x.orderNo===no); if(!o) return;
+  sbAdminUpdateOrder(no,{
+    status:o.status, carrier:o.carrier, tracking:o.tracking,
+    paymentStatus:o.paymentStatus, transactionRef:o.transactionRef,
+    evidencePath:o.evidencePath, evidenceSubmittedAt:o.evidenceSubmittedAt,
+    verifiedAt:o.verifiedAt, verifiedBy:o.verifiedBy,
+    paymentNotes:o.paymentNotes, notes:o.notes, emailsSent:o.emailsSent,
+    estDelivery:o.estDelivery
+  });
+}
+
+// ---------- AUTH (Supabase Auth — real authentication) ----------
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginErr');
+  err.classList.add('hidden');
+  if(typeof sbAdminSignIn==='function'){
+    const {data,error}=await sbAdminSignIn(email,pass);
+    if(!error&&data&&data.session){
+      sessionStorage.setItem('vr_admin','1');
+      enterAdmin();
+      return;
+    }
+    err.textContent=error?(error.message||'Login failed'):'Login failed';
+    err.classList.remove('hidden');
+    return;
+  }
+  // Fallback when Supabase isn't configured (local dev only)
+  if(checkAdmin(email,pass)){
     sessionStorage.setItem('vr_admin','1');
     enterAdmin();
-  } else document.getElementById('loginErr').classList.remove('hidden');
+  } else err.classList.remove('hidden');
 }
-function doLogout(){sessionStorage.removeItem('vr_admin');location.reload();}
+async function doLogout(){ if(typeof sbAdminSignOut==='function') await sbAdminSignOut(); sessionStorage.removeItem('vr_admin'); location.reload(); }
 function enterAdmin(){
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('adminShell').classList.remove('hidden');
@@ -17,12 +56,13 @@ function enterAdmin(){
 }
 
 // ---------- ROUTER ----------
-function route(){
+async function route(){
   const h=(location.hash||'#/dashboard').replace('#/','');
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
   document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===h));
   const view=document.getElementById('view-'+h)||document.getElementById('view-dashboard');
   view.classList.remove('hidden');
+  await refreshAdminOrders();
   if(h==='dashboard') renderDashboard();
   if(h==='products') renderProductList();
   if(h==='orders') renderOrdersTable();
@@ -33,7 +73,7 @@ function route(){
   updateNavBadges();
 }
 function updateNavBadges(){
-  const orders=getOrders();
+  const orders=adminGetOrders();
   const set=(id,n)=>{const el=document.getElementById(id);if(el){el.textContent=n||'';el.style.display=n?'inline-flex':'none';}};
   set('badge-orders',orders.length);
   set('badge-tracking',orders.filter(needsAction).length);
@@ -43,7 +83,7 @@ window.addEventListener('hashchange',route);
 
 // ---------- DASHBOARD ----------
 function renderDashboard(){
-  const orders=getOrders(), products=getProducts();
+  const orders=adminGetOrders(), products=getProducts();
   const now=new Date(), monthStart=new Date(now.getFullYear(),now.getMonth(),1);
   const monthOrders=orders.filter(o=>new Date(o.orderDate)>=monthStart);
   const sales=monthOrders.reduce((s,o)=>s+o.total,0);
@@ -160,7 +200,7 @@ function deleteProduct(id){
 
 // ---------- ORDERS ----------
 function renderOrdersTable(){
-  const orders=getOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
+  const orders=adminGetOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
   document.getElementById('ordersBody').innerHTML=orders.map(o=>`
     <tr>
       <td><b>${o.orderNo}</b></td><td>${o.name}</td>
@@ -174,7 +214,7 @@ function renderOrdersTable(){
 }
 function viewShot(no){viewEvidence(no);}
 function openOrder(no){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o)return;
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   document.getElementById('orderDetail').innerHTML=`
     <h2 style="font-size:22px;margin-bottom:4px">Order ${o.orderNo}</h2>
     <p style="color:var(--gray);font-size:13px;margin-bottom:18px">${fmtDate(o.orderDate)} · $${o.total.toFixed(2)}${o.discount?' · Discount: '+o.discount:''}</p>
@@ -211,6 +251,7 @@ function openOrder(no){
 }
 function markPaid(no){
   const res=verifyPayment(no,'admin');
+  adminPushOrder(no);
   if(res&&!res.alreadyPaid){notifyPaymentVerified(res.order);notifyStatusChange(res.order,res.order.status);}
   alert('Order marked as paid.');openOrder(no);renderOrdersTable();
 }
@@ -219,6 +260,7 @@ function saveOrder(no){
   const carrier=document.getElementById('oCarrier').value;
   const tracking=document.getElementById('oTracking').value.trim();
   const order=updateOrder(no,{status,carrier,tracking});
+  adminPushOrder(no);
   if(order){notifyStatusChange(order,status);if(['Shipped','Out for Delivery','Delivered'].includes(status))notifyShipping(order);}
   alert(`Order ${no} → ${status}. Email notification queued.`);
   document.getElementById('orderModal').classList.add('hidden');
@@ -238,7 +280,7 @@ function needsAction(o){
 }
 function renderTrackingView(){
   const q=(document.getElementById('trackSearch').value||'').toLowerCase();
-  let orders=getOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
+  let orders=adminGetOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
   if(trackTab==='action') orders=orders.filter(needsAction);
   else if(trackTab==='transit') orders=orders.filter(o=>['Shipped','Out for Delivery'].includes(o.status));
   else if(trackTab==='delivered') orders=orders.filter(o=>o.status==='Delivered');
@@ -312,8 +354,9 @@ function renderTrackingView(){
   }).join('');
 }
 function confirmPayment(no){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o)return;
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   const res=verifyPayment(no,'admin');
+  adminPushOrder(no);
   if(res&&!res.alreadyPaid){notifyPaymentVerified(res.order);notifyStatusChange(res.order,res.order.status);}
   renderTrackingView();
 }
@@ -321,21 +364,25 @@ function saveShipInfo(no){
   const carrier=document.getElementById('tc-'+no).value;
   const tracking=document.getElementById('tt-'+no).value.trim();
   updateOrder(no,{carrier,tracking});
+  adminPushOrder(no);
   renderTrackingView();
 }
 function saveNote(no){
   updateOrder(no,{notes:document.getElementById('tn-'+no).value});
+  adminPushOrder(no);
   renderTrackingView();
 }
 function quickShipUpdate(no){
   const status=document.getElementById('ts-'+no).value;
   const o=updateOrder(no,{status});
+  adminPushOrder(no);
   if(o){notifyStatusChange(o,status);if(['Shipped','Out for Delivery','Delivered'].includes(status))notifyShipping(o);}
   renderTrackingView();
 }
 function quickAdvance(no,status){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o)return;
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   updateOrder(no,{status});
+  adminPushOrder(no);
   notifyStatusChange(o,status);
   if(['Shipped','Out for Delivery','Delivered'].includes(status))notifyShipping(o);
   renderTrackingView();
@@ -355,7 +402,7 @@ function renderPayments(){
   document.getElementById('payMethodTabs').innerHTML=methods.map(m=>`<button class="track-tab ${payMethodFilter===m?'active':''}" data-pm="${m}" onclick="setPayMethod('${m}')">${m==='all'?'All Methods':m}</button>`).join('');
 
   const q=(document.getElementById('paySearch').value||'').toLowerCase();
-  let orders=getOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
+  let orders=adminGetOrders().slice().sort((a,b)=>b.orderNo.localeCompare(a.orderNo));
   if(payTab==='pending') orders=orders.filter(o=>!['Paid','Rejected','Cancelled','Refunded'].includes(payStatusOf(o)));
   else if(payTab==='paid') orders=orders.filter(o=>payStatusOf(o)==='Paid');
   else if(payTab==='rejected') orders=orders.filter(o=>['Rejected','Cancelled','Refunded'].includes(payStatusOf(o)));
@@ -402,7 +449,7 @@ function renderPayments(){
   }).join('');
 }
 async function viewEvidence(no){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o){alert('Order not found.');return;}
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o){alert('Order not found.');return;}
   let src=o.evidence||'';
   if(o.evidencePath&&typeof sbEvidenceUrl==='function'){
     src=await sbEvidenceUrl(o.evidencePath)||src;
@@ -418,32 +465,37 @@ async function viewEvidence(no){
 function adminVerifyPayment(no){
   if(!confirm('Confirm you have verified the actual incoming payment for '+no+'?'))return;
   const res=verifyPayment(no,'admin');
+  adminPushOrder(no);
   if(res){if(!res.alreadyPaid){notifyPaymentVerified(res.order);notifyStatusChange(res.order,res.order.status);}alert('Order '+no+' marked as Paid.');}
   renderPayments();
 }
 function adminRejectPayment(no){
   const reason=prompt('Reason for rejection (optional):')||'';
   rejectPayment(no,reason);
+  adminPushOrder(no);
   renderPayments();
 }
 function adminRequestInfo(no){
   const note=prompt('What additional info do you need from the customer?')||'';
   requestMoreInfo(no,note);
-  const o=getOrders().find(x=>x.orderNo===no);
+  adminPushOrder(no);
+  const o=adminGetOrders().find(x=>x.orderNo===no);
   if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\n— Reps LV Bags`);}
   renderPayments();
 }
 function resendInstructions(no){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o)return;
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   // force resend by clearing the sent flag
   updateOrder(no,{emailsSent:(o.emailsSent||[]).filter(k=>k!=='payment_instructions')});
-  notifyPaymentInstructions(getOrders().find(x=>x.orderNo===no));
+  adminPushOrder(no);
+  notifyPaymentInstructions(adminGetOrders().find(x=>x.orderNo===no));
   alert('Payment instructions re-queued for '+o.email+'.');
 }
 function resendConfirmation(no){
-  const o=getOrders().find(x=>x.orderNo===no);if(!o)return;
+  const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   updateOrder(no,{emailsSent:(o.emailsSent||[]).filter(k=>k!=='order_confirmation')});
-  notifyOrderConfirmation(getOrders().find(x=>x.orderNo===no));
+  adminPushOrder(no);
+  notifyOrderConfirmation(adminGetOrders().find(x=>x.orderNo===no));
   alert('Order confirmation re-queued for '+o.email+'.');
 }
 
@@ -517,4 +569,12 @@ function addDiscount(){
 function delDiscount(i){const d=getDiscounts();d.splice(i,1);saveDiscounts(d);renderDiscTable();}
 
 // ---------- INIT ----------
-if(sessionStorage.getItem('vr_admin')==='1') enterAdmin();
+(async()=>{
+  if(sessionStorage.getItem('vr_admin')!=='1') return;
+  // Verify the Supabase session is still valid before entering admin.
+  if(typeof sbAdminSession==='function'){
+    const s=await sbAdminSession();
+    if(!s){ sessionStorage.removeItem('vr_admin'); return; }
+  }
+  enterAdmin();
+})();

@@ -6,34 +6,28 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const EMAIL_SECRET = 'vr7f2k9xQm4Lp8Rw3Ty6';   // must match the EMAIL_SECRET edge function secret
 
 let _sb = null;
-function supabase(){
+function getSb(){
   if(_sb !== null) return _sb;
   if(!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase){ _sb = false; return null; }
   try{
-    // Handle UMD wrapper variations: window.supabase might be the module itself,
-    // a function that returns the module, or an object with createClient.
-    let sbLib = window.supabase;
-    if(typeof sbLib === 'function' && !sbLib.createClient){
-      // It's a factory function — call it to get the module
-      try{ sbLib = sbLib(); }catch(e){ /* ignore */ }
-    }
-    if(sbLib && typeof sbLib.createClient === 'function'){
-      _sb = sbLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // window.supabase is the UMD library global — use it directly
+    if(window.supabase && typeof window.supabase.createClient === 'function'){
+      _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } else {
-      console.warn('Supabase lib loaded but createClient not found. Type:', typeof sbLib, 'Keys:', sbLib?Object.keys(sbLib):'none');
+      console.warn('Supabase lib not loaded properly. Type:', typeof window.supabase);
       _sb = false;
     }
   }
   catch(e){ console.warn('Supabase init failed:', e); _sb = false; }
   return _sb || null;
 }
-function isSupabaseEnabled(){ return !!supabase(); }
+function isSupabaseEnabled(){ return !!getSb(); }
 
 // ---------- Order sync (fire-and-forget, localStorage stays source of truth) ----------
 // All order writes go through the 'sync-order' Edge Function (service role).
 // The anon key has NO table access — orders are only readable/writable server-side.
 function sbUpsertOrder(order){
-  const sb=supabase(); if(!sb) return;
+  const sb=getSb(); if(!sb) return;
   const row={
     order_no:order.orderNo, email:order.email, name:order.name, phone:order.phone||'',
     address:order.address, city:order.city, state:order.state, zip:order.zip,
@@ -58,7 +52,7 @@ function sbUpsertOrder(order){
 // Returns {path} on success, null on failure. Path is stored on the order;
 // the dataURL is kept locally as fallback.
 async function sbUploadEvidence(orderNo, dataURL){
-  const sb=supabase(); if(!sb) return null;
+  const sb=getSb(); if(!sb) return null;
   try{
     const blob=await (await fetch(dataURL)).blob();
     const ext=(blob.type.split('/')[1]||'jpg').replace('jpeg','jpg');
@@ -70,31 +64,31 @@ async function sbUploadEvidence(orderNo, dataURL){
 }
 // Admin-only: create a short-lived signed URL for a stored evidence path.
 async function sbEvidenceUrl(path, expiresIn=300){
-  const sb=supabase(); if(!sb||!path) return null;
+  const sb=getSb(); if(!sb||!path) return null;
   const {data,error}=await sb.storage.from('payment-evidence').createSignedUrl(path, expiresIn);
   return error?null:data.signedUrl;
 }
 
 // ---------- Admin (authenticated via Supabase Auth) ----------
 async function sbAdminSignIn(email,password){
-  const sb=supabase(); if(!sb) return {error:'supabase not configured'};
+  const sb=getSb(); if(!sb) return {error:'supabase not configured'};
   const {data,error}=await sb.auth.signInWithPassword({email,password});
   return {data,error};
 }
-async function sbAdminSignOut(){ const sb=supabase(); if(sb) await sb.auth.signOut(); }
+async function sbAdminSignOut(){ const sb=getSb(); if(sb) await sb.auth.signOut(); }
 async function sbAdminSession(){
-  const sb=supabase(); if(!sb) return null;
+  const sb=getSb(); if(!sb) return null;
   const {data}=await sb.auth.getSession();
   return data.session||null;
 }
 async function sbAdminListOrders(){
-  const sb=supabase(); if(!sb) return null;
+  const sb=getSb(); if(!sb) return null;
   const {data,error}=await sb.functions.invoke('admin-orders',{method:'GET'});
   if(error){console.warn('admin-orders list failed:',error.message);return null;}
   return (data&&data.orders)?data.orders:null;
 }
 async function sbAdminUpdateOrder(orderNo, patch){
-  const sb=supabase(); if(!sb) return false;
+  const sb=getSb(); if(!sb) return false;
   const {error}=await sb.functions.invoke('admin-orders',{method:'PATCH',body:{order_no:orderNo,patch}});
   if(error){console.warn('admin-orders update failed:',error.message);return false;}
   return true;
@@ -104,7 +98,7 @@ async function sbAdminUpdateOrder(orderNo, patch){
 // Calls the 'send-email' Edge Function (see supabase/functions/send-email).
 // Falls back to local logging when Supabase isn't configured.
 async function sbSendEmail(to, subject, body, html){
-  const sb=supabase();
+  const sb=getSb();
   if(!sb) return {sent:false,reason:'supabase_not_configured'};
   try{
     const payload={to,subject,body};

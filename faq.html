@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Reps LV Bags</title>
+<meta name="description" content="Frequently asked questions about Reps LV Bags — shipping, returns, payment, order tracking and product care.">
+<link rel="canonical" href="https://repslvbags.com/faq.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <nav class="nav-left">
+      <a href="index.html#shop">Shop All</a>
+      <a href="index.html#collections">Collections</a>
+      <a href="index.html#new">New Arrivals</a>
+      <a href="index.html#bestsellers">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <div class="header-right">
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="index.html#new">New Arrivals</a>
+  <a href="index.html#bestsellers">Best Sellers</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<main class="policy-page">
+  <p class="hero-kicker">Help Center</p>
+  <h1>Frequently Asked Questions</h1>
+  <p class="last-updated">Can't find your answer? <a href="contact.html" style="color:var(--espresso);text-decoration:underline">Contact us</a> — we reply within 24 hours.</p>
+
+  <div class="faq">
+    <details open><summary>How do I pay for my order?</summary><p>We accept Cash App. At checkout you'll receive an order number — send the total to <b>$RepsLVBags</b> with your order number in the note, then upload your payment screenshot. We verify every payment personally before dispatch.</p></details>
+    <details><summary>How long does shipping take?</summary><p>Orders ship within 1–2 business days after payment confirmation. Standard shipping takes 3–5 business days; express takes 1–2 business days. See our <a href="shipping-policy.html">Shipping Policy</a> for full details.</p></details>
+    <details><summary>Is shipping really free?</summary><p>Yes — complimentary US shipping on orders over $150. Orders under $150 ship for $9.99 standard or $19.99 express.</p></details>
+    <details><summary>How do I track my order?</summary><p>Once your order ships you'll receive a tracking number. You can check status anytime at our <a href="track-order.html">Track Order</a> page using your order number and email.</p></details>
+    <details><summary>What is your return policy?</summary><p>30-day returns on unworn items in original condition. Email <a href="mailto:support@repslvbags.com">support@repslvbags.com</a> with your order number to start a return. See our <a href="returns.html">Returns & Refunds</a> page for full details.</p></details>
+    <details><summary>How do I care for my bag?</summary><p>Keep it away from direct sunlight and moisture. Wipe gently with a soft dry cloth. Store stuffed in the dust bag when not in use.</p></details>
+    <details><summary>Do you ship internationally?</summary><p>Currently we ship within the United States only.</p></details>
+    <details><summary>Are your bags authentic designer products?</summary><p>Reps LV Bags is an independent brand. Our bags are original designs inspired by timeless silhouettes — not affiliated with or endorsed by any designer house.</p></details>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><img src="logo.jpg" alt="Reps LV Bags" class="logo-img"><p>Thoughtfully selected handbags for the modern wardrobe.</p></div>
+    <div><h4>Shop</h4><a href="index.html#shop">All Bags</a><a href="index.html#collections">Collections</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a></div>
+    <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p></div>
+  </div>
+  <p class="copy">© <span class="yr"></span> Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<script>
+const cart=JSON.parse(localStorage.getItem('vr_cart')||'[]');
+document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+document.getElementById('cartBtn').onclick=()=>location.href='index.html#cart';
+document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+</script>
+<script src="analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Reps LV Bags</title>
+<meta name="description" content="Learn about Reps LV Bags — thoughtfully selected handbags for the modern wardrobe. Our philosophy, craftsmanship and commitment to everyday luxury.">
+<link rel="canonical" href="https://repslvbags.com/about.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <nav class="nav-left">
+      <a href="index.html#shop">Shop All</a>
+      <a href="index.html#collections">Collections</a>
+      <a href="index.html#new">New Arrivals</a>
+      <a href="index.html#bestsellers">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <div class="header-right">
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="index.html#new">New Arrivals</a>
+  <a href="index.html#bestsellers">Best Sellers</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<main class="policy-page">
+  <p class="hero-kicker">Our Story</p>
+  <h1>About Reps LV Bags</h1>
+  <p class="last-updated">Quiet luxury, honestly made.</p>
+
+  <figure class="policy-hero-img">
+    <img src="photo_2026-11-14_01-28-21.jpg" alt="Reps LV Bags campaign — luxury handbag editorial">
+  </figure>
+
+  <div class="policy-section">
+    <h2><span class="num">01</span> What We Believe</h2>
+    <p>A great handbag shouldn't need a logo to be recognised. We started Reps LV Bags because we believed women deserved beautiful, well-made bags at prices that didn't require a sacrifice. Every piece in our collection is chosen for its silhouette, its colour story and the way it carries you through real life — work, weekends, dinners and everything between.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">02</span> How We Select</h2>
+    <p>We don't chase trends. Each bag is evaluated for proportion, material quality, hardware finish and everyday practicality before it earns a place in the collection. If a piece doesn't feel right in the hand, it doesn't make the cut.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">03</span> Our Commitment</h2>
+    <ul>
+      <li>Transparent pricing with no hidden fees</li>
+      <li>Personal order verification before dispatch</li>
+      <li>Live order tracking from checkout to doorstep</li>
+      <li>30-day returns on unworn items</li>
+      <li>Real humans answering <a href="mailto:support@repslvbags.com">support@repslvbags.com</a> within 24 hours</li>
+    </ul>
+  </div>
+
+  <div class="contact-box">
+    <h3 style="font-size:24px;margin-bottom:10px">Come Say Hello</h3>
+    <p style="color:var(--muted)">Questions about a piece, sizing or styling? We'd love to hear from you.</p>
+    <a href="contact.html" class="btn-gold" style="margin-top:18px;display:inline-block">Contact Us</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><img src="logo.jpg" alt="Reps LV Bags" class="logo-img"><p>Thoughtfully selected handbags for the modern wardrobe.</p></div>
+    <div><h4>Shop</h4><a href="index.html#shop">All Bags</a><a href="index.html#collections">Collections</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a></div>
+    <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p></div>
+  </div>
+  <p class="copy">© <span class="yr"></span> Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<script>
+const cart=JSON.parse(localStorage.getItem('vr_cart')||'[]');
+document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+document.getElementById('cartBtn').onclick=()=>location.href='index.html#cart';
+document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+</script>
+<script src="analytics.js"></script>
+</body>
+</html>

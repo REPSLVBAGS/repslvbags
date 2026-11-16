@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reps LV Bags — Elegance in Every Detail | Premium Handbags</title>
+<meta name="description" content="Discover thoughtfully selected handbags designed to complement your everyday style. Timeless silhouettes, considered details, and modern luxury — shipped across the US.">
+<link rel="canonical" href="https://repslvbags.com/">
+<meta property="og:title" content="Reps LV Bags — Elegance in Every Detail">
+<meta property="og:description" content="Thoughtfully selected handbags designed to complement your everyday style.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="logo.jpg">
+<meta name="theme-color" content="#252525">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Announcement bar -->
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+
+<!-- Header -->
+<header class="header" id="siteHeader">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <nav class="nav-left" aria-label="Primary">
+      <a href="#shop">Shop All</a>
+      <a href="#collections">Collections</a>
+      <a href="#new">New Arrivals</a>
+      <a href="#bestsellers">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <div class="header-right">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button>
+      <button class="icon-btn" id="wishlistBtn" aria-label="Wishlist">♡ <span class="badge" id="wishCount">0</span></button>
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+    </div>
+  </div>
+  <div class="search-bar hidden" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Search the collection…">
+  </div>
+</header>
+
+<!-- Mobile slide-out menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="#shop">Shop All</a>
+  <a href="#collections">Collections</a>
+  <a href="#new">New Arrivals</a>
+  <a href="#bestsellers">Best Sellers</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-kicker">The Reps LV Bags Collection</p>
+    <h1>Elegance in<br><em>Every Detail.</em></h1>
+    <p class="hero-sub">Discover thoughtfully selected handbags designed to complement your everyday style.</p>
+    <div class="hero-ctas">
+      <a href="#shop" class="btn-gold">Shop the Collection</a>
+      <a href="#new" class="btn-ghost">Explore New Arrivals</a>
+    </div>
+  </div>
+  <div class="hero-img" id="heroImg"></div>
+  <span class="hero-scroll">Scroll</span>
+</section>
+
+<!-- Collections -->
+<section class="section" id="collections">
+  <div class="section-head reveal">
+    <div>
+      <h2 class="section-title">The Collections</h2>
+      <p class="section-sub">Four edits of considered silhouettes — each one made to be lived in.</p>
+    </div>
+    <a href="#shop" class="link-more">View All Bags</a>
+  </div>
+  <div class="collections" id="collectionGrid"></div>
+</section>
+
+<!-- Bestsellers / Shop -->
+<section class="section" id="shop">
+  <span id="new" style="display:block;height:0"></span>
+  <div class="section-head reveal">
+    <div>
+      <h2 class="section-title" id="bestsellers">The Edit</h2>
+      <p class="section-sub">Handpicked pieces, chosen for their silhouette, colour and everyday versatility.</p>
+    </div>
+  </div>
+  <div class="filters reveal">
+    <select id="filterPrice" aria-label="Filter by price"><option value="">All Prices</option><option value="0-100">Under $100</option><option value="100-130">$100 – $130</option><option value="130-999">$130+</option></select>
+    <select id="filterColor" aria-label="Filter by color"><option value="">All Colors</option><option>Black</option><option>Beige</option><option>Brown</option><option>White</option><option>Red</option></select>
+    <select id="filterStyle" aria-label="Filter by style"><option value="">All Styles</option><option>Tote</option><option>Crossbody</option><option>Clutch</option><option>Shoulder Bag</option><option>Mini Bag</option></select>
+    <select id="sortBy" aria-label="Sort products"><option value="bestseller">Sort: Bestsellers</option><option value="new">Sort: Newest</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option></select>
+  </div>
+  <div class="grid" id="productGrid"></div>
+  <p class="no-results hidden" id="noResults">No bags match your filters — try widening your search.</p>
+</section>
+
+<!-- Brand story -->
+<section class="section story" id="why">
+  <div class="story-img reveal" id="storyImg"></div>
+  <div class="story-text reveal">
+    <p class="hero-kicker">Our Philosophy</p>
+    <h2>Style That Speaks Without Saying a Word.</h2>
+    <p>We believe a great bag is quiet luxury — considered proportions, honest materials and details that reward a second look. Every piece in our collection is selected for the way it carries you through the day: to work, to dinner, to everywhere in between.</p>
+    <p>No logos shouting for attention. Just silhouette, texture and colour doing the talking.</p>
+    <div class="story-points">
+      <div><b>Considered Design</b><span>Timeless shapes chosen to outlast trends.</span></div>
+      <div><b>Honest Materials</b><span>Quality textures and finishes you can feel.</span></div>
+      <div><b>Everyday Versatility</b><span>One bag, every occasion — morning to midnight.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Editorial -->
+<section class="section editorial" id="editorial">
+  <div class="section-head reveal">
+    <div>
+      <h2 class="section-title">The Journal</h2>
+      <p class="section-sub">Style notes, styling ideas and a closer look at the pieces we love.</p>
+    </div>
+  </div>
+  <div class="ed-grid">
+    <a href="#shop" class="ed-card reveal"><div class="ed-img" data-ed="0"></div><div class="ed-label"><h3>The Everyday Tote</h3><span>Styling Notes</span></div></a>
+    <a href="#shop" class="ed-card reveal"><div class="ed-img" data-ed="1"></div><div class="ed-label"><h3>Quiet Luxury</h3><span>Our Philosophy</span></div></a>
+    <a href="#shop" class="ed-card reveal"><div class="ed-img" data-ed="2"></div><div class="ed-label"><h3>Neutrals, Elevated</h3><span>Colour Stories</span></div></a>
+  </div>
+</section>
+
+<!-- Trust -->
+<section class="section">
+  <div class="trust reveal">
+    <div class="trust-item"><div class="t-icon">🔒</div><h3>Secure Checkout</h3><p>Encrypted checkout with Cash App verification on every order.</p></div>
+    <div class="trust-item"><div class="t-icon">🚚</div><h3>Transparent Shipping</h3><p>Free US shipping over $150. Live tracking on every order.</p></div>
+    <div class="trust-item"><div class="t-icon">↩</div><h3>Easy Returns</h3><p>30-day returns on unworn items. See our <a href="returns.html" style="text-decoration:underline">policy</a>.</p></div>
+    <div class="trust-item"><div class="t-icon">✉</div><h3>Real Support</h3><p>Questions? Our team replies within 24 hours at <a href="mailto:support@repslvbags.com" style="text-decoration:underline">support@repslvbags.com</a>.</p></div>
+  </div>
+</section>
+
+<!-- Instagram -->
+<section class="section insta">
+  <h2 class="section-title reveal">@repslvbags</h2>
+  <p class="section-sub reveal">Styled by you, loved by us. Tag us to be featured.</p>
+  <div class="insta-grid" id="instaGrid"></div>
+</section>
+
+<!-- Newsletter -->
+<section class="section newsletter">
+  <h2 class="reveal">A Little Something Beautiful in Your Inbox.</h2>
+  <p class="reveal">Be the first to discover new arrivals, exclusive updates and curated style inspiration.</p>
+  <form id="newsForm" class="reveal"><input type="email" id="newsEmail" placeholder="Your email address" required aria-label="Email address"><button type="submit">Subscribe</button></form>
+  <p class="news-done hidden" id="newsDone">You're on the list. Welcome to Reps LV Bags.</p>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <img src="logo.jpg" alt="Reps LV Bags" class="logo-img">
+      <p>Thoughtfully selected handbags for the modern wardrobe. Timeless silhouettes, considered details, everyday luxury.</p>
+      <p class="socials" style="margin-top:16px"><a href="#" style="display:inline">Instagram</a> · <a href="#" style="display:inline">TikTok</a> · <a href="#" style="display:inline">Pinterest</a></p>
+    </div>
+    <div><h4>Shop</h4><a href="#shop">All Bags</a><a href="#collections">Collections</a><a href="#new">New Arrivals</a><a href="#bestsellers">Best Sellers</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track-order.html">Track Order</a></div>
+    <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p><p>We reply within 24 hours.</p><p class="pay-note">We accept Cash App payments, confirmed personally before dispatch.</p></div>
+  </div>
+  <p class="copy">© <span id="year"></span> Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<!-- Cart Drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="cartDrawer" aria-label="Shopping bag">
+  <div class="drawer-head"><h3>Your Bag</h3><button class="close" data-close aria-label="Close">✕</button></div>
+  <div class="ship-progress">
+    <p id="shipMsg">Add $150 more for complimentary shipping</p>
+    <div class="bar"><div class="bar-fill" id="shipBar"></div></div>
+  </div>
+  <div class="drawer-items" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="row"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
+    <button class="btn-gold full" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<!-- Wishlist Drawer -->
+<aside class="drawer wish-drawer" id="wishDrawer" aria-label="Wishlist">
+  <div class="drawer-head"><h3>Wishlist</h3><button class="close" data-close aria-label="Close">✕</button></div>
+  <div class="drawer-items" id="wishItems"></div>
+</aside>
+
+<!-- Product Quick-View Modal -->
+<div class="modal" id="productModal">
+  <div class="modal-box">
+    <button class="close" data-close aria-label="Close">✕</button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Checkout -->
+<div class="modal checkout-modal" id="checkoutModal">
+  <div class="checkout-box">
+    <button class="close" data-close aria-label="Close">✕</button>
+    <div id="checkoutSteps">
+      <div class="steps-bar"><span class="step-dot active" data-step="1">1</span><span class="step-dot" data-step="2">2</span><span class="step-dot" data-step="3">3</span><span class="step-dot" data-step="4">4</span></div>
+
+      <!-- Step 1: Information -->
+      <section class="step" id="step1">
+        <h3>Information</h3>
+        <form id="form1">
+          <input required placeholder="Full Name" id="fName" autocomplete="name">
+          <input required type="email" placeholder="Email" id="fEmail" autocomplete="email">
+          <input required placeholder="Phone" id="fPhone" autocomplete="tel">
+          <input required placeholder="Shipping Address" id="fAddr" autocomplete="street-address">
+          <div class="two-col"><input required placeholder="City" id="fCity" autocomplete="address-level2"><input required placeholder="State" id="fState" autocomplete="address-level1"></div>
+          <input required placeholder="Zip Code" id="fZip" autocomplete="postal-code">
+          <button class="btn-gold full" type="submit">Continue to Shipping</button>
+        </form>
+      </section>
+
+      <!-- Step 2: Shipping Method -->
+      <section class="step hidden" id="step2">
+        <h3>Shipping Method</h3>
+        <label class="ship-opt"><input type="radio" name="ship" value="standard" checked>
+          <span>Standard — 3-5 business days <b id="stdPrice">FREE</b></span></label>
+        <label class="ship-opt"><input type="radio" name="ship" value="express">
+          <span>Express — 1-2 business days <b>$19.99</b></span></label>
+        <div class="step-nav">
+          <button class="btn-ghost" id="backTo1">Back</button>
+          <button class="btn-gold" id="toStep3">Continue to Payment</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Payment Method -->
+      <section class="step hidden" id="step3">
+        <h3>Payment Method</h3>
+        <div id="payMethods"></div>
+        <div class="step-nav">
+          <button class="btn-ghost" id="backTo2">Back</button>
+          <button class="btn-gold" id="toStep4">Continue</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Payment Action (rendered per method) -->
+      <section class="step hidden" id="step4">
+        <div id="payAction"></div>
+      </section>
+    </div>
+
+    <!-- Confirmation -->
+    <div id="confirmation" class="hidden">
+      <div class="confirm">
+        <div class="confirm-check">✓</div>
+        <h3>Thank You! Order Received</h3>
+        <p>Order Number: <b id="confOrderNo"></b></p>
+        <p>We will confirm your Cash App payment within 1 hour.</p>
+        <p>Estimated delivery: <b id="confDelivery"></b></p>
+        <button class="btn-gold" id="doneBtn">Continue Shopping</button>
+      </div>
+    </div>
+
+    <aside class="summary">
+      <h4>Order Summary</h4>
+      <div id="summaryItems"></div>
+      <div class="row"><span>Subtotal</span><span id="sumSub">$0</span></div>
+      <div class="row"><span>Shipping</span><span id="sumShip">—</span></div>
+      <div class="row"><span>Discount Code</span><span id="sumDisc">—</span></div>
+      <div class="row total"><span>Total</span><span id="sumTotal">$0</span></div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="orders.js"></script>
+<script src="db.js"></script>
+<script src="email.js"></script>
+<script src="app.js"></script>
+<script src="analytics.js"></script>
+</body>
+</html>

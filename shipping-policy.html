@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shipping Policy — Reps LV Bags</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="policy.css">
+</head>
+<body>
+<div class="announce">Free US Shipping Over $150 &nbsp;|&nbsp; 30-Day Easy Returns</div>
+<header class="header">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"></a>
+    <nav class="nav-left">
+      <a href="index.html#shop">Shop</a>
+      <a href="track-order.html">Track Order</a>
+    </nav>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<main class="policy-page">
+  <p class="hero-kicker">Customer Care</p>
+  <h1>Shipping Policy</h1>
+  <p class="policy-sub">Everything you need to know about how we ship your order.</p>
+
+  <div class="policy-body">
+    <section class="policy-section">
+      <h2><span class="num">1</span> Processing Time</h2>
+      <p>All orders are processed within <b>1–2 business days</b> after your Cash App payment is confirmed. Orders placed on weekends are processed on Monday.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">2</span> Shipping Options</h2>
+      <ul class="policy-list">
+        <li><b>Standard Shipping</b> (3–5 business days) — <b>FREE</b> on orders over $150, otherwise $9.99</li>
+        <li><b>Express Shipping</b> (1–2 business days) — $19.99</li>
+      </ul>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">3</span> Carriers</h2>
+      <p>We ship via <b>USPS, UPS, and FedEx</b>. You will receive a tracking number by email once your order ships.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">4</span> Delivery</h2>
+      <p>We currently ship to all <b>50 US states</b>. Delivery times are estimates and may vary during holidays.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">5</span> Order Tracking</h2>
+      <p>Track your order anytime at <a href="track-order.html">repslvbags.com/track-order</a> using your order number and email.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">6</span> Wrong Address</h2>
+      <p>Please double-check your address at checkout. We are not responsible for orders shipped to an incorrect address provided by the customer.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><span class="num">7</span> Contact</h2>
+      <p>If your package is delayed over 7 days, email us at <a href="mailto:support@repslvbags.com">support@repslvbags.com</a></p>
+    </section>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details><summary>How long does shipping take?</summary><p>Standard shipping takes 3–5 business days after processing (1–2 business days). Express takes 1–2 business days. Total time from order to door is typically 4–7 business days.</p></details>
+    <details><summary>How do I return?</summary><p>Email <a href="mailto:support@repslvbags.com">support@repslvbags.com</a> with your order number and reason within 30 days of delivery. We'll send a return label within 24 hours.</p></details>
+    <details><summary>When will I get my refund?</summary><p>Once we receive and inspect your return (2–3 business days), your refund is sent via Cash App within 3–5 business days.</p></details>
+  </div>
+</main>
+script>
+document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+</script>
+<script src="analytics.js"></script>
+<
+<footer class="footer">
+  <div class="footer-grid">
+    <div><img src="logo.jpg" alt="Reps LV Bags" class="logo-img"><p>Luxury, Reimagined.</p></div>
+    <div><h4>Shop</h4><a href="index.html#shop">Bestsellers</a><a href="index.html#styles">All Styles</a></div>
+    <div><h4>Customer Care</h4><a href="track-order.html">Track Order</a><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a></div>
+    <div><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="mailto:support@repslvbags.com">Contact Us</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p></div>
+  </div>
+  <p class="copy">© 2026 Reps LV Bags. All rights reserved.</p>
+</footer>
+</body>
+</html>

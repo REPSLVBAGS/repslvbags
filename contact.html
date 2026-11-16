@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Reps LV Bags</title>
+<meta name="description" content="Get in touch with the Reps LV Bags team. We reply within 24 hours to questions about orders, products, shipping and returns.">
+<link rel="canonical" href="https://repslvbags.com/contact.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <nav class="nav-left">
+      <a href="index.html#shop">Shop All</a>
+      <a href="index.html#collections">Collections</a>
+      <a href="index.html#new">New Arrivals</a>
+      <a href="index.html#bestsellers">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <div class="header-right">
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="index.html#new">New Arrivals</a>
+  <a href="index.html#bestsellers">Best Sellers</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<main class="policy-page">
+  <p class="hero-kicker">We'd Love to Hear From You</p>
+  <h1>Contact Us</h1>
+  <p class="last-updated">We reply within 24 hours, Monday–Friday.</p>
+
+  <div class="contact-box">
+    <h3 style="font-size:22px;margin-bottom:8px">Email</h3>
+    <p><a href="mailto:support@repslvbags.com" style="color:var(--espresso);font-size:18px">support@repslvbags.com</a></p>
+    <p style="margin-top:8px;font-size:13px;color:var(--muted)">For order issues, include your order number (e.g. ORD-1001).</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">01</span> Before You Write</h2>
+    <p>Many questions are answered in our <a href="faq.html">FAQ</a> — shipping times, returns, payment verification and order tracking are all covered there.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">02</span> Send Us a Message</h2>
+    <form id="contactForm" style="display:grid;gap:12px;max-width:520px">
+      <input required placeholder="Your Name" style="padding:14px;border:1px solid var(--line);font-family:inherit">
+      <input required type="email" placeholder="Email Address" style="padding:14px;border:1px solid var(--line);font-family:inherit">
+      <input required placeholder="Order Number (if applicable)" style="padding:14px;border:1px solid var(--line);font-family:inherit">
+      <textarea required rows="5" placeholder="How can we help?" style="padding:14px;border:1px solid var(--line);font-family:inherit;resize:vertical"></textarea>
+      <button class="btn-gold" type="submit" style="justify-self:start">Send Message</button>
+    </form>
+    <p class="hidden" id="contactDone" style="margin-top:14px;color:#2e7d32;font-weight:600">Thank you — your message is on its way. We'll reply within 24 hours.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><img src="logo.jpg" alt="Reps LV Bags" class="logo-img"><p>Thoughtfully selected handbags for the modern wardrobe.</p></div>
+    <div><h4>Shop</h4><a href="index.html#shop">All Bags</a><a href="index.html#collections">Collections</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a></div>
+    <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p></div>
+  </div>
+  <p class="copy">© <span class="yr"></span> Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="email.js"></script>
+<script>
+const cart=JSON.parse(localStorage.getItem('vr_cart')||'[]');
+document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+document.getElementById('cartBtn').onclick=()=>location.href='index.html#cart';
+document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+document.getElementById('contactForm').onsubmit=async e=>{
+  e.preventDefault();
+  const f=e.target, btn=f.querySelector('button[type=submit]');
+  btn.disabled=true; btn.textContent='Sending…';
+  const name=f[0].value.trim(), email=f[1].value.trim(), order=f[2].value.trim(), msg=f[3].value.trim();
+  try{
+    const res=await notifyCustomerMessage({name,email,orderNo:order,message:msg,type:'contact'});
+    f.classList.add('hidden');
+    const done=document.getElementById('contactDone');
+    done.textContent=`Thank you — your message has been received (ref ${res.ref}). We'll reply within 24 hours.`;
+    done.classList.remove('hidden');
+  }catch(err){
+    btn.disabled=false; btn.textContent='Send Message';
+    alert('Sorry, your message could not be sent. Please email support@repslvbags.com directly.');
+    console.error('Contact form error:',err);
+  }
+};
+</script>
+<script src="analytics.js"></script>
+</body>
+</html>

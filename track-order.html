@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — Reps LV Bags</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tracking.css">
+</head>
+<body>
+<div class="announce">Free US Shipping Over $150 &nbsp;|&nbsp; 30-Day Easy Returns</div>
+<header class="header">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <nav class="nav-left">
+      <a href="index.html#shop">Shop</a>
+      <a href="track-order.html">Track Order</a>
+    </nav>
+    <div class="header-right">
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="about.html">About Us</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<main class="track-page">
+  <p class="hero-kicker">Order Tracking</p>
+  <h1>Track Your Order</h1>
+  <p class="track-sub">Enter your order number and email to see your delivery status.</p>
+
+  <form class="track-form" id="trackForm">
+    <input required placeholder="Order Number (e.g. ORD-1001)" id="tOrder">
+    <input required type="email" placeholder="Email Address" id="tEmail">
+    <button class="btn-gold" type="submit">Track Order</button>
+  </form>
+  <p class="track-error hidden" id="trackError">Order not found. Check your order number and email.</p>
+
+  <div id="trackResult" class="hidden"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><img src="logo.jpg" alt="Reps LV Bags" class="logo-img"><p>Luxury, Reimagined.</p></div>
+    <div><h4>Customer Care</h4><a href="track-order.html">Track Order</a><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a></div>
+    <div><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="mailto:support@repslvbags.com">Contact Us</a></div>
+    <div><h4>Contact</h4><p>support@repslvbags.com</p></div>
+  </div>
+  <p class="copy">© 2026 Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<script src="orders.js"></script>
+<script src="tracking.js"></script>
+<script>
+document.getElementById('cartCount').textContent=JSON.parse(localStorage.getItem('vr_cart')||'[]').reduce((s,i)=>s+i.qty,0);
+document.getElementById('cartBtn').onclick=()=>location.href='index.html#cart';
+document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+</script>
+<script src="analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Reps LV Bags</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tracking.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <img src="logo.jpg" alt="Reps LV Bags" style="height:64px;margin-bottom:14px">
+    <p>Admin Dashboard</p>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-gold full" onclick="doLogin()">Log In</button>
+    <a href="mailto:support@repslvbags.com?subject=Admin%20Password%20Reset" class="forgot">Forgot Password?</a>
+    <p class="login-err hidden" id="loginErr">Invalid email or password.</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="admin-shell hidden" id="adminShell">
+  <aside class="sidebar">
+    <div class="side-logo"><img src="logo.jpg" alt="Reps LV Bags" style="height:40px"></div>
+    <nav>
+      <a href="#/dashboard" data-nav="dashboard" class="active">◈ Dashboard</a>
+      <a href="#/products" data-nav="products">▣ Products</a>
+      <a href="#/orders" data-nav="orders">✉ Orders <span class="nav-badge" id="badge-orders"></span></a>
+      <a href="#/tracking" data-nav="tracking">➤ Order Desk <span class="nav-badge gold" id="badge-tracking"></span></a>
+      <a href="#/payments" data-nav="payments">$ Payments <span class="nav-badge" id="badge-payments"></span></a>
+      <a href="#/settings" data-nav="settings">⚙ Settings</a>
+      <a href="#/content" data-nav="content">✎ Content</a>
+    </nav>
+    <div class="side-foot">
+      <a href="index.html" target="_blank">View Store ↗</a>
+      <button onclick="doLogout()">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <!-- DASHBOARD VIEW -->
+    <section class="view" id="view-dashboard">
+      <h1>Dashboard</h1>
+      <div class="quick-actions">
+        <a href="#/tracking" class="qa-card"><b>➤ Order Desk</b><span>Confirm payments & update shipments</span></a>
+        <a href="#/products" class="qa-card"><b>▣ Add Product</b><span>Publish a new bag to the shop</span></a>
+        <a href="#/orders" class="qa-card"><b>✉ View Orders</b><span>All customer orders</span></a>
+        <a href="#/content" class="qa-card"><b>✎ Edit Content</b><span>Hero, announcement & discount codes</span></a>
+        <a href="index.html" target="_blank" class="qa-card"><b>↗ View Store</b><span>See what customers see</span></a>
+      </div>
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="dash-cols">
+        <div class="panel">
+          <h3>⚠ Needs Your Attention</h3>
+          <div id="attentionList"></div>
+        </div>
+        <div class="panel">
+          <h3>Recent Orders</h3>
+          <table class="mini-table" id="recentOrders"></table>
+        </div>
+      </div>
+      <div class="dash-cols" style="margin-top:20px">
+        <div class="panel">
+          <h3>⚠ Low Stock Alerts</h3>
+          <div id="lowStock"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS VIEW -->
+    <section class="view hidden" id="view-products">
+      <div class="view-head">
+        <h1>Products</h1>
+        <button class="btn-gold" onclick="openProductForm()">+ Add New Product</button>
+      </div>
+      <div class="prod-tools">
+        <input type="text" id="prodSearch" placeholder="Search products…" oninput="renderProductList()">
+        <select id="prodFilter" onchange="renderProductList()">
+          <option value="">All Categories</option>
+          <option>Tote</option><option>Crossbody</option><option>Clutch</option><option>Shoulder Bag</option><option>Mini Bag</option>
+        </select>
+      </div>
+      <div id="productList"></div>
+    </section>
+
+    <!-- PRODUCT FORM (modal) -->
+    <div class="modal hidden" id="prodModal">
+      <div class="modal-box" style="max-width:640px">
+        <button class="close" onclick="closeProductForm()">✕</button>
+        <h2 id="prodFormTitle">Add New Product</h2>
+        <form id="prodForm" class="prod-form">
+          <input type="hidden" id="pfId">
+          <label>Product Name<input required id="pfName" placeholder="e.g. The Paris Tote"></label>
+          <div class="two-col">
+            <label>Price (USD)<input required type="number" step="0.01" id="pfPrice" placeholder="129"></label>
+            <label>Compare Price (optional)<input type="number" step="0.01" id="pfCompare" placeholder="179"></label>
+          </div>
+          <label>Category / Style
+            <select id="pfStyle"><option>Tote</option><option>Crossbody</option><option>Clutch</option><option>Shoulder Bag</option><option>Mini Bag</option></select>
+          </label>
+          <label>Colors</label>
+          <div class="color-checks" id="pfColors"></div>
+          <label>Stock Quantity<input required type="number" id="pfStock" placeholder="10" min="0"></label>
+          <label>Description<textarea id="pfDesc" rows="3" placeholder="Describe the bag…"></textarea></label>
+          <label>Photos (up to 5 — first is main)</label>
+          <div class="dropzone" id="dropzone">Drag & drop images here or <b>click to browse</b><input type="file" id="pfImages" accept="image/*" multiple hidden></div>
+          <div class="img-preview" id="imgPreview"></div>
+          <label>Status
+            <select id="pfStatus"><option value="active">Active (live in shop)</option><option value="draft">Draft (hidden)</option><option value="soldout">Sold Out</option></select>
+          </label>
+          <button class="btn-gold full" type="submit">Publish Product</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ORDERS VIEW -->
+    <section class="view hidden" id="view-orders">
+      <h1>Orders</h1>
+      <div style="overflow-x:auto">
+        <table class="orders-table">
+          <thead><tr><th>Order #</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th></th></tr></thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TRACKING VIEW -->
+    <section class="view hidden" id="view-tracking">
+      <div class="view-head">
+        <h1>Order Desk</h1>
+        <input id="trackSearch" placeholder="Search order #, name, email…" oninput="renderTrackingView()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
+      </div>
+      <div class="track-tabs">
+        <button class="track-tab active" data-tt="all" onclick="setTrackTab('all')">All Orders</button>
+        <button class="track-tab" data-tt="action" onclick="setTrackTab('action')">⚠ Needs Action</button>
+        <button class="track-tab" data-tt="transit" onclick="setTrackTab('transit')">📦 In Transit</button>
+        <button class="track-tab" data-tt="delivered" onclick="setTrackTab('delivered')">✓ Delivered</button>
+        <button class="track-tab" data-tt="cancelled" onclick="setTrackTab('cancelled')">✕ Cancelled</button>
+      </div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Real-time order supervision — confirm Cash App payments, advance shipping status, edit carrier & tracking. Customers see changes instantly.</p>
+      <div id="trackingList"></div>
+    </section>
+
+    <!-- ORDER DETAIL MODAL -->
+    <div class="modal hidden" id="orderModal">
+      <div class="modal-box" style="max-width:560px">
+        <button class="close" onclick="document.getElementById('orderModal').classList.add('hidden')">✕</button>
+        <div id="orderDetail"></div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS VIEW -->
+    <section class="view hidden" id="view-payments">
+      <div class="view-head">
+        <h1>Payment Verification</h1>
+        <input id="paySearch" placeholder="Search order #, name, email…" oninput="renderPayments()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
+      </div>
+      <div class="track-tabs" id="payTabs"></div>
+      <div class="track-tabs" id="payMethodTabs"></div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Verify actual incoming payments in your business account before marking orders as Paid. Screenshots are supporting evidence only — never auto-confirmed.</p>
+      <div id="paymentsList"></div>
+    </section>
+
+    <!-- SETTINGS VIEW -->
+    <section class="view hidden" id="view-settings">
+      <h1>Payment Settings</h1>
+      <div class="content-grid">
+        <div class="panel" style="grid-column:1/-1">
+          <h3>Business Notification Email</h3>
+          <label>All new orders & payment evidence alerts are sent here<input id="setBizEmail" type="email"></label>
+        </div>
+        <div class="panel">
+          <h3>💵 Cash App <span style="font-size:11px;color:var(--gray)">(primary)</span></h3>
+          <label><input type="checkbox" id="setCashEnabled"> Enabled</label>
+          <label>Cash App Payment URL<input id="setCashUrl" placeholder="https://cash.app/$YourTag/…"></label>
+          <label>Note shown to customers<textarea id="setCashNote" rows="2" placeholder="Optional instructions"></textarea></label>
+        </div>
+        <div class="panel">
+          <h3>🏦 Chime</h3>
+          <label><input type="checkbox" id="setChimeEnabled"> Enabled</label>
+          <label>Payment details sent by email<textarea id="setChimeDetails" rows="3" placeholder="e.g. Chime handle / phone / instructions"></textarea></label>
+        </div>
+        <div class="panel">
+          <h3db.js"></scrip>>
+<scipt sr ="emaele</h3>
+          <latrackingl><input type="checkbox" id="setZelleEnabled"> Enabled</label>
+          <label>Payment details sent by email<textarea id="setZelleDetails" rows="3" placeholder="e.g. Zelle email / phone / instructions"></textarea></label>
+        </div>
+        <div class="panel">
+          <h3>🍎 Apple Pay <span style="font-size:11px;color:var(--gray)">(alternative arrangement)</span></h3>
+          <label><input type="checkbox" id="setAppleEnabled"> Enabled</label>
+          <label>Arrangement details sent by email<textarea id="setAppleDetails" rows="3" placeholder="e.g. How customers pay via Apple Pay"></textarea></label>
+        </div>
+      </div>
+      <button class="btn-gold" style="margin-top:20px" onclick="savePaymentSettings()">Save Payment Settings</button>
+      <p style="color:var(--gray);font-size:12px;margin-top:10px">Only enabled methods with complete details appear at checkout. Cash App requires a valid https:// payment URL.</p>
+    </section>
+
+    <!-- CONTENT VIEW -->
+    <section class="view hidden" id="view-content">
+      <h1>Content & Marketing</h1>
+      <div class="content-grid">
+        <div class="panel">
+          <h3>Homepage</h3>
+          <label>Announcement Bar<input id="cAnnounce"></label>
+          <label>Hero Kicker<input id="cKicker"></label>
+          <label>Hero Title (HTML ok)<input id="cTitle"></label>
+          <label>Hero Subtitle<textarea id="cSub" rows="2"></textarea></label>
+          <label>Hero Button Text<input id="cBtn"></label>
+        </div>
+        <div class="panel">
+          <h3>Instagram Links</h3>
+          <div id="cInsta"></div>
+          <button class="btn-ghost" onclick="addInstaField()">+ Add Link</button>
+        </div>
+        <div class="panel" style="grid-column:1/-1">
+          <h3>Discount Codes</h3>
+          <table class="mini-table" id="discTable"></table>
+          <div class="disc-add">
+            <input id="dCode" placeholder="CODE">
+            <input id="dPercent" type="number" placeholder="% off" min="1" max="100">
+            <input id="dExpiry" type="date" title="Expiry (optional)">
+            <button class="btn-gold" onclick="addDiscount()">Add Code</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn-gold" style="margin-top:20px" onclick="saveContent()">Save All Content</button>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="orders.js"></script>
+<script src="db.js"></script>
+<script src="email.js"></script>
+<script src="tracking.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

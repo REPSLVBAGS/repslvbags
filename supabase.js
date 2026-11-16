@@ -9,7 +9,21 @@ let _sb = null;
 function supabase(){
   if(_sb !== null) return _sb;
   if(!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase){ _sb = false; return null; }
-  try{ _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
+  try{
+    // Handle UMD wrapper variations: window.supabase might be the module itself,
+    // a function that returns the module, or an object with createClient.
+    let sbLib = window.supabase;
+    if(typeof sbLib === 'function' && !sbLib.createClient){
+      // It's a factory function — call it to get the module
+      try{ sbLib = sbLib(); }catch(e){ /* ignore */ }
+    }
+    if(sbLib && typeof sbLib.createClient === 'function'){
+      _sb = sbLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      console.warn('Supabase lib loaded but createClient not found. Type:', typeof sbLib, 'Keys:', sbLib?Object.keys(sbLib):'none');
+      _sb = false;
+    }
+  }
   catch(e){ console.warn('Supabase init failed:', e); _sb = false; }
   return _sb || null;
 }

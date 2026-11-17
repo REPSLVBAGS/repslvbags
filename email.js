@@ -141,7 +141,7 @@ async function notifyOrderConfirmation(order){
   markSent(order.orderNo,'order_confirmation');
 }
 
-// B. Payment instructions → customer (Chime / Zelle / manual Apple Pay)
+// B. Payment instructions → customer (Chime / Zelle)
 async function notifyPaymentInstructions(order){
   if(alreadySent(order,'payment_instructions'))return;
   const methodKey=(order.paymentMethod||'').toLowerCase().replace(/\s/g,'');

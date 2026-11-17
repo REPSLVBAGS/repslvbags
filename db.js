@@ -110,8 +110,7 @@ const SEED_PAYMENTS={
   methods:{
     cashapp:{enabled:true, url:'', note:'', label:'Cash App'},
     chime:{enabled:true, details:'', label:'Chime'},
-    zelle:{enabled:true, details:'', label:'Zelle'},
-    applepay:{enabled:true, details:'', label:'Apple Pay'}
+    zelle:{enabled:true, details:'', label:'Zelle'}
   }
 };
 function getPaymentConfig(){
@@ -128,7 +127,7 @@ function getPaymentConfig(){
   c.businessEmail='supportrepslvbags@gmail.com';
   // One-time upgrade: enable all four methods for configs saved before they existed.
   if(c._v!==2){
-    ['cashapp','chime','zelle','applepay'].forEach(k=>{if(c.methods[k])c.methods[k].enabled=true;});
+    ['cashapp','chime','zelle'].forEach(k=>{if(c.methods[k])c.methods[k].enabled=true;});
     c._v=2; localStorage.setItem(DB_PAYMENTS,JSON.stringify(c));
   }
   return c;
@@ -138,7 +137,7 @@ function savePaymentConfig(c){localStorage.setItem(DB_PAYMENTS,JSON.stringify(c)
 // manual methods work with or without pre-filled details (instructions are emailed).
 function getActivePaymentMethods(){
   const cfg=getPaymentConfig(), out=[];
-  const order=['cashapp','chime','zelle','applepay'];
+  const order=['cashapp','chime','zelle'];
   order.forEach(k=>{
     const m=cfg.methods[k]; if(!m||!m.enabled) return;
     out.push({key:k,...m});

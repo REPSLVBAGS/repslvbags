@@ -272,7 +272,7 @@ function renderPayAction(){
     const payBtn=document.getElementById('cashAppPayBtn');if(payBtn)payBtn.onclick=()=>{if(window.trackEvent)trackEvent('InitiateCheckout',{value:total,order_id:order.orderNo});};
     document.getElementById('paidDoneBtn').onclick=()=>showConfirmation(order,'cashapp');
   } else {
-    // Chime / Zelle / Apple Pay (manual arrangement): create order + email instructions.
+    // Chime / Zelle (manual arrangement): create order + email instructions.
     const order=ensureOrder(m.key,'Payment Instructions Sent');
     notifyPaymentInstructions(order);
     const cfg=getPaymentConfig();

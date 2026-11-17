@@ -1,4 +1,4 @@
-// ---------- Admin CMS ----------
+﻿// ---------- Admin CMS ----------
 const ALL_COLORS=['Black','Beige','Brown','White','Red'];
 let pendingImages=[]; // dataURLs for product form
 
@@ -35,7 +35,7 @@ function adminPushOrder(no){
   });
 }
 
-// ---------- AUTH (Supabase Auth — real authentication) ----------
+// ---------- AUTH (Supabase Auth â€” real authentication) ----------
 async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pass=document.getElementById('loginPass').value;
@@ -127,11 +127,11 @@ function renderDashboard(){
   const attention=orders.filter(needsAction).sort((a,b)=>a.orderDate.localeCompare(b.orderDate));
   document.getElementById('attentionList').innerHTML=attention.length?attention.map(o=>{
     const why=payStatusOf(o)!=='Paid'?'Payment not verified':!o.tracking?'Missing tracking #':'Needs update';
-    return `<a href="#/tracking" class="attn-item"><span><b>${o.orderNo}</b> — ${o.name}<br><small>${why}</small></span><span class="attn-go">Open →</span></a>`;
-  }).join(''):'<p class="all-good">✓ Nothing needs attention right now</p>';
+    return `<a href="#/tracking" class="attn-item"><span><b>${o.orderNo}</b> â€” ${o.name}<br><small>${why}</small></span><span class="attn-go">Open â†’</span></a>`;
+  }).join(''):'<p class="all-good">âœ“ Nothing needs attention right now</p>';
 
   const low=products.filter(p=>p.stock<3&&p.status==='active');
-  document.getElementById('lowStock').innerHTML=low.length?low.map(p=>`<div class="low-stock-item"><span>${p.name}</span><b>${p.stock} left</b></div>`).join(''):'<p class="all-good">✓ All products well stocked</p>';
+  document.getElementById('lowStock').innerHTML=low.length?low.map(p=>`<div class="low-stock-item"><span>${p.name}</span><b>${p.stock} left</b></div>`).join(''):'<p class="all-good">âœ“ All products well stocked</p>';
 }
 
 // ---------- PRODUCTS ----------
@@ -143,7 +143,7 @@ function renderProductList(){
     <div class="prod-card">
       <div class="pc-img">${p.images&&p.images.length?`<img src="${p.images[0]}">`:bagSVG(p,0)}</div>
       <h4>${p.name}</h4>
-      <div class="pc-meta">$${p.price} · ${p.style} · Stock: ${p.stock} · <span class="status-pill ${p.status}">${p.status}</span></div>
+      <div class="pc-meta">$${p.price} Â· ${p.style} Â· Stock: ${p.stock} Â· <span class="status-pill ${p.status}">${p.status}</span></div>
       <div class="pc-actions">
         <button onclick="editProduct(${p.id})">Edit</button>
         <button onclick="duplicateProduct(${p.id})">Duplicate</button>
@@ -169,7 +169,7 @@ function openProductForm(p){
 }
 function closeProductForm(){document.getElementById('prodModal').classList.add('hidden');}
 function renderImgPreview(){
-  document.getElementById('imgPreview').innerHTML=pendingImages.map((s,i)=>`<img src="${s}"><button type="button" onclick="pendingImages.splice(${i},1);renderImgPreview()" style="position:absolute">✕</button>`).join('');
+  document.getElementById('imgPreview').innerHTML=pendingImages.map((s,i)=>`<img src="${s}"><button type="button" onclick="pendingImages.splice(${i},1);renderImgPreview()" style="position:absolute">âœ•</button>`).join('');
 }
 // color checkboxes built once
 document.getElementById('pfColors').innerHTML=ALL_COLORS.map(c=>`<label><input type="checkbox" value="${c}"> ${c}</label>`).join('');
@@ -230,9 +230,9 @@ function renderOrdersTable(){
   document.getElementById('ordersBody').innerHTML=orders.map(o=>`
     <tr>
       <td><b>${o.orderNo}</b></td><td>${o.name}</td>
-      <td>${o.items.map(i=>`${i.qty}× ${i.name}`).join('<br>')}</td>
+      <td>${o.items.map(i=>`${i.qty}Ã— ${i.name}`).join('<br>')}</td>
       <td>$${o.total.toFixed(2)}</td>
-      <td>${(o.evidence||o.evidencePath)?`<a href="#" onclick="viewEvidence('${o.orderNo}');return false" style="color:var(--gold)">📎 View</a>`:'—'}</td>
+      <td>${(o.evidence||o.evidencePath)?`<a href="#" onclick="viewEvidence('${o.orderNo}');return false" style="color:var(--gold)">ðŸ“Ž View</a>`:'â€”'}</td>
       <td><span class="status-pill ${o.status==='Delivered'?'active':o.status==='Cancelled'?'soldout':'draft'}">${o.status}</span></td>
       <td>${fmtDate(o.orderDate)}</td>
       <td><button class="btn-ghost" style="padding:6px 12px;font-size:11px" onclick="openOrder('${o.orderNo}')">Manage</button></td>
@@ -243,20 +243,20 @@ function openOrder(no){
   const o=adminGetOrders().find(x=>x.orderNo===no);if(!o)return;
   document.getElementById('orderDetail').innerHTML=`
     <h2 style="font-size:22px;margin-bottom:4px">Order ${o.orderNo}</h2>
-    <p style="color:var(--gray);font-size:13px;margin-bottom:18px">${fmtDate(o.orderDate)} · $${o.total.toFixed(2)}${o.discount?' · Discount: '+o.discount:''}</p>
+    <p style="color:var(--gray);font-size:13px;margin-bottom:18px">${fmtDate(o.orderDate)} Â· $${o.total.toFixed(2)}${o.discount?' Â· Discount: '+o.discount:''}</p>
     <div class="panel" style="margin-bottom:14px">
       <h3>Customer</h3>
       <p style="font-size:14px">${o.name}<br>${o.email}<br>${o.phone||''}<br>${o.address}, ${o.city}, ${o.state} ${o.zip}</p>
     </div>
     <div class="panel" style="margin-bottom:14px">
       <h3>Items</h3>
-      ${o.items.map(i=>`<p style="font-size:14px">${i.qty}× ${i.name} — $${(i.price*i.qty).toFixed(2)}</p>`).join('')}
+      ${o.items.map(i=>`<p style="font-size:14px">${i.qty}Ã— ${i.name} â€” $${(i.price*i.qty).toFixed(2)}</p>`).join('')}
     </div>
     <div class="panel" style="margin-bottom:14px">
       <h3>Payment</h3>
-      <p style="font-size:14px">Method: <b>${o.paymentMethod||'—'}</b><br>Status: <b>${o.paymentStatus||'Awaiting Payment'}</b>${o.transactionRef?'<br>Ref: '+o.transactionRef:''}${o.verifiedAt?'<br>Verified: '+fmtDate(o.verifiedAt):''}</p>
-      ${(o.evidence||o.evidencePath)?`<button class="btn-ghost" style="margin-top:8px;padding:8px 14px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">🖼 View Screenshot</button>`:'<p style="font-size:13px;color:var(--gray);margin-top:6px">No screenshot uploaded</p>'}
-      ${o.paymentStatus!=='Paid'?`<button class="btn-gold" style="margin-top:10px;padding:10px 18px;font-size:12px" onclick="adminVerifyPayment('${o.orderNo}');document.getElementById('orderModal').classList.add('hidden')">✓ Mark as Paid (verified in ${o.paymentMethod||'account'})</button>`:''}
+      <p style="font-size:14px">Method: <b>${o.paymentMethod||'â€”'}</b><br>Status: <b>${o.paymentStatus||'Awaiting Payment'}</b>${o.transactionRef?'<br>Ref: '+o.transactionRef:''}${o.verifiedAt?'<br>Verified: '+fmtDate(o.verifiedAt):''}</p>
+      ${(o.evidence||o.evidencePath)?`<button class="btn-ghost" style="margin-top:8px;padding:8px 14px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">ðŸ–¼ View Screenshot</button>`:'<p style="font-size:13px;color:var(--gray);margin-top:6px">No screenshot uploaded</p>'}
+      ${o.paymentStatus!=='Paid'?`<button class="btn-gold" style="margin-top:10px;padding:10px 18px;font-size:12px" onclick="adminVerifyPayment('${o.orderNo}');document.getElementById('orderModal').classList.add('hidden')">âœ“ Mark as Paid (verified in ${o.paymentMethod||'account'})</button>`:''}
     </div>
     <div class="panel">
       <h3>Shipping & Status</h3>
@@ -265,7 +265,7 @@ function openOrder(no){
       </label>
       <div class="two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
         <label style="font-size:12px">Carrier
-          <select id="oCarrier" style="display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #d8cfc0">${['','USPS','UPS','FedEx','DHL'].map(c=>`<option ${c===o.carrier?'selected':''}>${c||'—'}</option>`).join('')}</select>
+          <select id="oCarrier" style="display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #d8cfc0">${['','USPS','UPS','FedEx','DHL'].map(c=>`<option ${c===o.carrier?'selected':''}>${c||'â€”'}</option>`).join('')}</select>
         </label>
         <label style="font-size:12px">Tracking Number
           <input id="oTracking" value="${o.tracking||''}" style="display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #d8cfc0">
@@ -288,7 +288,7 @@ function saveOrder(no){
   const order=updateOrder(no,{status,carrier,tracking});
   adminPushOrder(no);
   if(order){notifyStatusChange(order,status);if(['Shipped','Out for Delivery','Delivered'].includes(status))notifyShipping(order);}
-  alert(`Order ${no} → ${status}. Email notification queued.`);
+  alert(`Order ${no} â†’ ${status}. Email notification queued.`);
   document.getElementById('orderModal').classList.add('hidden');
   renderOrdersTable();
 }
@@ -314,7 +314,7 @@ function renderTrackingView(){
   if(q) orders=orders.filter(o=>(o.orderNo+o.name+o.email+(o.tracking||'')).toLowerCase().includes(q));
 
   const box=document.getElementById('trackingList');
-  if(!orders.length){box.innerHTML='<p class="all-good">Nothing here — all caught up. ✓</p>';return;}
+  if(!orders.length){box.innerHTML='<p class="all-good">Nothing here â€” all caught up. âœ“</p>';return;}
 
   box.innerHTML=orders.map(o=>{
     const idx=ORDER_STATUSES.indexOf(o.status);
@@ -325,33 +325,33 @@ function renderTrackingView(){
     return `<div class="ship-card ${needsAction(o)?'needs':''}">
       <div class="ship-head">
         <div>
-          <b style="font-size:16px">${o.orderNo}</b> — ${o.name}
-          <span style="color:var(--gray);font-size:12px"> · ${o.email} · ${fmtDate(o.orderDate)}</span><br>
-          <span style="font-size:12px;color:var(--gray)">${o.city}, ${o.state} ${o.zip||''} · $${o.total.toFixed(2)}</span>
+          <b style="font-size:16px">${o.orderNo}</b> â€” ${o.name}
+          <span style="color:var(--gray);font-size:12px"> Â· ${o.email} Â· ${fmtDate(o.orderDate)}</span><br>
+          <span style="font-size:12px;color:var(--gray)">${o.city}, ${o.state} ${o.zip||''} Â· $${o.total.toFixed(2)}</span>
         </div>
         <span class="status-pill ${o.status==='Delivered'?'active':o.status==='Cancelled'?'soldout':'draft'}">${o.status}</span>
       </div>
 
-      <div class="ship-items">${o.items.map(i=>`${i.qty}× ${i.name}`).join(' · ')}</div>
+      <div class="ship-items">${o.items.map(i=>`${i.qty}Ã— ${i.name}`).join(' Â· ')}</div>
 
       <div class="ship-grid">
         <div class="ship-block">
           <h5>Payment</h5>
           ${paid
-            ?`<span class="pay-ok">✓ ${o.paymentMethod||'Payment'} Confirmed</span>`
-            :`<span class="pay-wait">⏳ Awaiting verification</span>
-              ${(o.evidence||o.evidencePath)?`<button class="btn-ghost" style="margin-top:6px;padding:6px 12px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">🖼 View screenshot</button>`:'<span style="font-size:12px;color:#b8860b">No screenshot uploaded</span>'}
-              <button class="btn-gold" style="margin-top:8px;padding:8px 14px;font-size:12px" onclick="confirmPayment('${o.orderNo}')">✓ Confirm ${o.paymentMethod||'Payment'} Received</button>`}
+            ?`<span class="pay-ok">âœ“ ${o.paymentMethod||'Payment'} Confirmed</span>`
+            :`<span class="pay-wait">â³ Awaiting verification</span>
+              ${(o.evidence||o.evidencePath)?`<button class="btn-ghost" style="margin-top:6px;padding:6px 12px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">ðŸ–¼ View screenshot</button>`:'<span style="font-size:12px;color:#b8860b">No screenshot uploaded</span>'}
+              <button class="btn-gold" style="margin-top:8px;padding:8px 14px;font-size:12px" onclick="confirmPayment('${o.orderNo}')">âœ“ Confirm ${o.paymentMethod||'Payment'} Received</button>`}
         </div>
         <div class="ship-block">
           <h5>Shipping</h5>
           <div class="ship-meta">
-            ${o.carrier?`<span>📦 ${o.carrier}</span>`:'<span class="miss">No carrier</span>'}
-            ${o.tracking?`<span>🔢 ${o.tracking}</span>`:'<span class="miss">No tracking #</span>'}
-            ${o.tracking?`<a href="${carrierLink(o.carrier,o.tracking)}" target="_blank" rel="noopener" style="color:var(--gold);font-size:12px">Track parcel ↗</a>`:''}
+            ${o.carrier?`<span>ðŸ“¦ ${o.carrier}</span>`:'<span class="miss">No carrier</span>'}
+            ${o.tracking?`<span>ðŸ”¢ ${o.tracking}</span>`:'<span class="miss">No tracking #</span>'}
+            ${o.tracking?`<a href="${carrierLink(o.carrier,o.tracking)}" target="_blank" rel="noopener" style="color:var(--gold);font-size:12px">Track parcel â†—</a>`:''}
           </div>
           <div class="ship-actions">
-            <select id="tc-${o.orderNo}">${['','USPS','UPS','FedEx','DHL'].map(c=>`<option ${c===(o.carrier||'')?'selected':''}>${c||'Carrier…'}</option>`).join('')}</select>
+            <select id="tc-${o.orderNo}">${['','USPS','UPS','FedEx','DHL'].map(c=>`<option ${c===(o.carrier||'')?'selected':''}>${c||'Carrierâ€¦'}</option>`).join('')}</select>
             <input id="tt-${o.orderNo}" placeholder="Tracking number" value="${o.tracking||''}">
             <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveShipInfo('${o.orderNo}')">Save</button>
           </div>
@@ -363,16 +363,16 @@ function renderTrackingView(){
         <div class="ship-actions">
           <select id="ts-${o.orderNo}">${ORDER_STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select>
           <button class="btn-gold" style="padding:9px 16px;font-size:12px" onclick="quickShipUpdate('${o.orderNo}')">Update Status</button>
-          ${next&&!['Delivered','Cancelled'].includes(o.status)?`<button class="btn-ghost" style="padding:9px 14px;font-size:12px" onclick="quickAdvance('${o.orderNo}','${next}')">→ ${next}</button>`:''}
+          ${next&&!['Delivered','Cancelled'].includes(o.status)?`<button class="btn-ghost" style="padding:9px 14px;font-size:12px" onclick="quickAdvance('${o.orderNo}','${next}')">â†’ ${next}</button>`:''}
           <button class="btn-ghost" style="padding:9px 14px;font-size:12px" onclick="openOrder('${o.orderNo}')">Full Details</button>
         </div>
-        <div class="mini-steps">${shipSteps.map((s,i)=>`<span class="mini-step ${shipIdx>=i?'done':o.status==='Cancelled'?'':'pending'}">${s}</span>`).join('<span class="mini-arrow">→</span>')}</div>
+        <div class="mini-steps">${shipSteps.map((s,i)=>`<span class="mini-step ${shipIdx>=i?'done':o.status==='Cancelled'?'':'pending'}">${s}</span>`).join('<span class="mini-arrow">â†’</span>')}</div>
       </div>
 
       <div class="ship-block" style="margin-top:14px">
         <h5>Internal Notes</h5>
         <div class="ship-actions">
-          <input id="tn-${o.orderNo}" placeholder="e.g. Customer called, prefers Saturday delivery…" value="${o.notes||''}">
+          <input id="tn-${o.orderNo}" placeholder="e.g. Customer called, prefers Saturday deliveryâ€¦" value="${o.notes||''}">
           <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="saveNote('${o.orderNo}')">Save Note</button>
         </div>
       </div>
@@ -436,7 +436,7 @@ function renderPayments(){
   if(q) orders=orders.filter(o=>(o.orderNo+o.name+o.email+(o.transactionRef||'')).toLowerCase().includes(q));
 
   const box=document.getElementById('paymentsList');
-  if(!orders.length){box.innerHTML='<p class="all-good">Nothing here — all caught up. ✓</p>';return;}
+  if(!orders.length){box.innerHTML='<p class="all-good">Nothing here â€” all caught up. âœ“</p>';return;}
 
   box.innerHTML=orders.map(o=>{
     const ps=payStatusOf(o);
@@ -444,30 +444,30 @@ function renderPayments(){
     return `<div class="ship-card ${ps!=='Paid'?'needs':''}">
       <div class="ship-head">
         <div>
-          <b style="font-size:16px">${o.orderNo}</b> — ${o.name}
-          <span style="color:var(--gray);font-size:12px"> · ${o.email} · ${o.paymentMethod||'—'} · $${o.total.toFixed(2)}</span><br>
-          <span style="font-size:12px;color:var(--gray)">${fmtDate(o.orderDate)}${o.transactionRef?' · Ref: '+o.transactionRef:''}</span>
+          <b style="font-size:16px">${o.orderNo}</b> â€” ${o.name}
+          <span style="color:var(--gray);font-size:12px"> Â· ${o.email} Â· ${o.paymentMethod||'â€”'} Â· $${o.total.toFixed(2)}</span><br>
+          <span style="font-size:12px;color:var(--gray)">${fmtDate(o.orderDate)}${o.transactionRef?' Â· Ref: '+o.transactionRef:''}</span>
         </div>
         <span class="status-pill ${ps==='Paid'?'active':ps==='Rejected'?'soldout':'draft'}">${ps}</span>
       </div>
-      <div class="ship-items">${o.items.map(i=>`${i.qty}× ${i.name}`).join(' · ')}</div>
+      <div class="ship-items">${o.items.map(i=>`${i.qty}Ã— ${i.name}`).join(' Â· ')}</div>
       <div class="ship-grid">
         <div class="ship-block">
           <h5>Evidence</h5>
           ${hasEvidence
-            ?`<button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">🖼 View Screenshot</button>
-              <span style="font-size:12px;color:var(--gray);display:block;margin-top:6px">Submitted ${o.evidenceSubmittedAt?fmtDate(o.evidenceSubmittedAt):'—'}</span>`
+            ?`<button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="viewEvidence('${o.orderNo}')">ðŸ–¼ View Screenshot</button>
+              <span style="font-size:12px;color:var(--gray);display:block;margin-top:6px">Submitted ${o.evidenceSubmittedAt?fmtDate(o.evidenceSubmittedAt):'â€”'}</span>`
             :'<span style="font-size:12px;color:#b8860b">No screenshot submitted</span>'}
           ${o.paymentNotes?`<p style="font-size:12px;color:var(--gray);margin-top:6px">Note: ${o.paymentNotes}</p>`:''}
         </div>
         <div class="ship-block">
           <h5>Actions</h5>
           <div class="ship-actions" style="flex-wrap:wrap">
-            ${ps!=='Paid'?`<button class="btn-gold" style="padding:8px 14px;font-size:12px" onclick="adminVerifyPayment('${o.orderNo}')">✓ Mark Paid</button>`:''}
-            ${['Evidence Submitted','Pending Verification','Awaiting Payment','Payment Instructions Sent'].includes(ps)?`<button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="adminRejectPayment('${o.orderNo}')">✕ Reject</button>`:''}
+            ${ps!=='Paid'?`<button class="btn-gold" style="padding:8px 14px;font-size:12px" onclick="adminVerifyPayment('${o.orderNo}')">âœ“ Mark Paid</button>`:''}
+            ${['Evidence Submitted','Pending Verification','Awaiting Payment','Payment Instructions Sent'].includes(ps)?`<button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="adminRejectPayment('${o.orderNo}')">âœ• Reject</button>`:''}
             ${ps!=='Paid'?`<button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="adminRequestInfo('${o.orderNo}')">? Request Info</button>`:''}
-            <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="resendInstructions('${o.orderNo}')">↻ Resend Instructions</button>
-            <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="resendConfirmation('${o.orderNo}')">✉ Resend Confirmation</button>
+            <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="resendInstructions('${o.orderNo}')">â†» Resend Instructions</button>
+            <button class="btn-ghost" style="padding:8px 14px;font-size:12px" onclick="resendConfirmation('${o.orderNo}')">âœ‰ Resend Confirmation</button>
           </div>
         </div>
       </div>
@@ -482,8 +482,8 @@ async function viewEvidence(no){
   }
   if(!src){alert('No evidence uploaded.');return;}
   document.getElementById('orderDetail').innerHTML=`
-    <h2 style="font-size:22px;margin-bottom:14px">Payment Evidence — ${o.orderNo}</h2>
-    <p style="font-size:13px;color:var(--gray);margin-bottom:14px">${o.paymentMethod} · $${o.total.toFixed(2)} · Ref: ${o.transactionRef||'—'}</p>
+    <h2 style="font-size:22px;margin-bottom:14px">Payment Evidence â€” ${o.orderNo}</h2>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:14px">${o.paymentMethod} Â· $${o.total.toFixed(2)} Â· Ref: ${o.transactionRef||'â€”'}</p>
     <img src="${src}" style="width:100%;border:1px solid #d8cfc0;margin-bottom:14px">
     <button class="btn-gold" onclick="document.getElementById('orderModal').classList.add('hidden')">Close</button>`;
   document.getElementById('orderModal').classList.remove('hidden');
@@ -506,7 +506,7 @@ function adminRequestInfo(no){
   requestMoreInfo(no,note);
   adminPushOrder(no);
   const o=adminGetOrders().find(x=>x.orderNo===no);
-  if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\n— Reps LV Bags`);}
+  if(o){sendEmail(o.email,`Payment Info Needed â€” Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\nâ€” Reps LV Bags`);}
   renderPayments();
 }
 function resendInstructions(no){
@@ -563,7 +563,7 @@ function loadContentForm(){
   renderDiscTable();
 }
 function addInstaField(){
-  const d=document.createElement('input');d.dataset.insta='new';d.placeholder='https://instagram.com/…';
+  const d=document.createElement('input');d.dataset.insta='new';d.placeholder='https://instagram.com/â€¦';
   d.style.cssText='width:100%;margin-bottom:8px;padding:10px;border:1px solid #d8cfc0';
   document.getElementById('cInsta').appendChild(d);
 }
@@ -582,7 +582,7 @@ function saveContent_(c){localStorage.setItem(DB_CONTENT,JSON.stringify(c));}
 function renderDiscTable(){
   const d=getDiscounts();
   document.getElementById('discTable').innerHTML=`<tr><th>Code</th><th>Discount</th><th>Expiry</th><th></th></tr>`+
-    d.map((x,i)=>`<tr><td><b>${x.code}</b></td><td>${x.percent}%</td><td>${x.expiry||'Never'}</td><td><button onclick="delDiscount(${i})" style="color:#a33;background:none;border:none;cursor:pointer">✕</button></td></tr>`).join('');
+    d.map((x,i)=>`<tr><td><b>${x.code}</b></td><td>${x.percent}%</td><td>${x.expiry||'Never'}</td><td><button onclick="delDiscount(${i})" style="color:#a33;background:none;border:none;cursor:pointer">âœ•</button></td></tr>`).join('');
 }
 function addDiscount(){
   const code=document.getElementById('dCode').value.trim().toUpperCase();
@@ -604,3 +604,128 @@ function delDiscount(i){const d=getDiscounts();d.splice(i,1);saveDiscounts(d);re
   }
   enterAdmin();
 })();
+
+// ---------- REVIEWS MANAGEMENT ----------
+let adminReviewsCache = [];
+
+async function loadAdminReviews() {
+  try {
+    const res = await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews?status=all', {
+      headers: { 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    adminReviewsCache = data.reviews || [];
+    renderReviewsAdmin();
+    updateReviewBadge();
+  } catch (e) {
+    console.error('Failed to load reviews:', e);
+    adminReviewsCache = [];
+    renderReviewsAdmin();
+  }
+}
+
+function updateReviewBadge() {
+  const pending = adminReviewsCache.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('badge-reviews');
+  if (badge) {
+    badge.textContent = pending > 0 ? pending : '';
+    badge.style.display = pending > 0 ? 'inline' : 'none';
+  }
+}
+
+function renderReviewsAdmin() {
+  const container = document.getElementById('reviewsAdminList');
+  if (!container) return;
+  
+  const statusFilter = document.getElementById('reviewStatusFilter')?.value || 'all';
+  let reviews = adminReviewsCache;
+  
+  if (statusFilter !== 'all') {
+    reviews = reviews.filter(r => r.status === statusFilter);
+  }
+  
+  if (reviews.length === 0) {
+    container.innerHTML = '<p style="color:var(--gray);text-align:center;padding:40px">No reviews found.</p>';
+    return;
+  }
+  
+  container.innerHTML = reviews.map(r => `
+    <div class="review-admin-card" style="background:var(--white);border:1px solid var(--line);padding:20px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:12px">
+        <div>
+          <strong>${r.name}</strong>
+          ${r.verified_purchase ? '<span style="background:var(--espresso);color:var(--ivory);font-size:10px;padding:2px 6px;margin-left:8px">✓ Verified</span>' : ''}
+          <span style="color:var(--muted);font-size:12px;margin-left:12px">${new Date(r.created_at).toLocaleDateString()}</span>
+        </div>
+        <div style="color:var(--gold)">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      </div>
+      ${r.product_name ? `<p style="font-size:12px;color:var(--muted);margin-bottom:8px">Product: ${r.product_name}</p>` : ''}
+      ${r.title ? `<h4 style="margin-bottom:8px">${r.title}</h4>` : ''}
+      <p style="margin-bottom:12px;line-height:1.6">${r.body}</p>
+      ${r.photo_url ? `<img src="${r.photo_url}" style="max-width:150px;height:auto;margin-bottom:12px;border:1px solid var(--line)">` : ''}
+      ${r.admin_reply ? `<div style="background:var(--cream);padding:12px;margin-bottom:12px;border-left:3px solid var(--espresso)"><strong>Admin Reply:</strong> ${r.admin_reply}</div>` : ''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${r.status === 'pending' ? `
+          <button class="btn-gold" style="padding:8px 16px;font-size:12px" onclick="adminApproveReview(${r.id})">Approve</button>
+          <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminRejectReview(${r.id})">Reject</button>
+        ` : ''}
+        ${r.status === 'approved' ? `
+          <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminRejectReview(${r.id})">Unpublish</button>
+        ` : ''}
+        ${r.status === 'rejected' ? `
+          <button class="btn-gold" style="padding:8px 16px;font-size:12px" onclick="adminApproveReview(${r.id})">Approve</button>
+        ` : ''}
+        <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminReplyReview(${r.id})">Reply</button>
+        <button class="btn-ghost" style="padding:8px 16px;font-size:12px;color:red" onclick="adminDeleteReview(${r.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function adminApproveReview(id) {
+  try {
+    await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' },
+      body: JSON.stringify({ id, status: 'approved' })
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to approve review'); }
+}
+
+async function adminRejectReview(id) {
+  try {
+    await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' },
+      body: JSON.stringify({ id, status: 'rejected' })
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to reject review'); }
+}
+
+async function adminReplyReview(id) {
+  const reply = prompt('Enter your reply to this review:');
+  if (!reply) return;
+  try {
+    await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' },
+      body: JSON.stringify({ id, admin_reply: reply })
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to reply to review'); }
+}
+
+async function adminDeleteReview(id) {
+  if (!confirm('Delete this review permanently?')) return;
+  try {
+    await fetch(`https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews?id=${id}`, {
+      method: 'DELETE',
+      headers: { 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' }
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to delete review'); }
+}
+

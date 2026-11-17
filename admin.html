@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Reps LV Bags</title>
+<title>Admin â€” Reps LV Bags</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="tracking.css">
@@ -29,16 +29,17 @@
   <aside class="sidebar">
     <div class="side-logo"><img src="logo.jpg" alt="Reps LV Bags" style="height:40px"></div>
     <nav>
-      <a href="#/dashboard" data-nav="dashboard" class="active">◈ Dashboard</a>
-      <a href="#/products" data-nav="products">▣ Products</a>
-      <a href="#/orders" data-nav="orders">✉ Orders <span class="nav-badge" id="badge-orders"></span></a>
-      <a href="#/tracking" data-nav="tracking">➤ Order Desk <span class="nav-badge gold" id="badge-tracking"></span></a>
+      <a href="#/dashboard" data-nav="dashboard" class="active">â—ˆ Dashboard</a>
+      <a href="#/products" data-nav="products">â–£ Products</a>
+      <a href="#/orders" data-nav="orders">âœ‰ Orders <span class="nav-badge" id="badge-orders"></span></a>
+      <a href="#/tracking" data-nav="tracking">âž¤ Order Desk <span class="nav-badge gold" id="badge-tracking"></span></a>
       <a href="#/payments" data-nav="payments">$ Payments <span class="nav-badge" id="badge-payments"></span></a>
-      <a href="#/settings" data-nav="settings">⚙ Settings</a>
-      <a href="#/content" data-nav="content">✎ Content</a>
+      <a href="#/reviews" data-nav="reviews">â˜… Reviews <span class="nav-badge" id="badge-reviews"></span></a>
+      <a href="#/settings" data-nav="settings">âš™ Settings</a>
+      <a href="#/content" data-nav="content">âœŽ Content</a>
     </nav>
     <div class="side-foot">
-      <a href="index.html" target="_blank">View Store ↗</a>
+      <a href="index.html" target="_blank">View Store â†—</a>
       <button onclick="doLogout()">Log Out</button>
     </div>
   </aside>
@@ -48,16 +49,16 @@
     <section class="view" id="view-dashboard">
       <h1>Dashboard</h1>
       <div class="quick-actions">
-        <a href="#/tracking" class="qa-card"><b>➤ Order Desk</b><span>Confirm payments & update shipments</span></a>
-        <a href="#/products" class="qa-card"><b>▣ Add Product</b><span>Publish a new bag to the shop</span></a>
-        <a href="#/orders" class="qa-card"><b>✉ View Orders</b><span>All customer orders</span></a>
-        <a href="#/content" class="qa-card"><b>✎ Edit Content</b><span>Hero, announcement & discount codes</span></a>
-        <a href="index.html" target="_blank" class="qa-card"><b>↗ View Store</b><span>See what customers see</span></a>
+        <a href="#/tracking" class="qa-card"><b>âž¤ Order Desk</b><span>Confirm payments & update shipments</span></a>
+        <a href="#/products" class="qa-card"><b>â–£ Add Product</b><span>Publish a new bag to the shop</span></a>
+        <a href="#/orders" class="qa-card"><b>âœ‰ View Orders</b><span>All customer orders</span></a>
+        <a href="#/content" class="qa-card"><b>âœŽ Edit Content</b><span>Hero, announcement & discount codes</span></a>
+        <a href="index.html" target="_blank" class="qa-card"><b>â†— View Store</b><span>See what customers see</span></a>
       </div>
       <div class="stat-grid" id="statGrid"></div>
       <div class="dash-cols">
         <div class="panel">
-          <h3>⚠ Needs Your Attention</h3>
+          <h3>âš  Needs Your Attention</h3>
           <div id="attentionList"></div>
         </div>
         <div class="panel">
@@ -67,7 +68,7 @@
       </div>
       <div class="dash-cols" style="margin-top:20px">
         <div class="panel">
-          <h3>⚠ Low Stock Alerts</h3>
+          <h3>âš  Low Stock Alerts</h3>
           <div id="lowStock"></div>
         </div>
       </div>
@@ -80,7 +81,7 @@
         <button class="btn-gold" onclick="openProductForm()">+ Add New Product</button>
       </div>
       <div class="prod-tools">
-        <input type="text" id="prodSearch" placeholder="Search products…" oninput="renderProductList()">
+        <input type="text" id="prodSearch" placeholder="Search productsâ€¦" oninput="renderProductList()">
         <select id="prodFilter" onchange="renderProductList()">
           <option value="">All Categories</option>
           <option>Tote</option><option>Crossbody</option><option>Clutch</option><option>Shoulder Bag</option><option>Mini Bag</option>
@@ -92,7 +93,7 @@
     <!-- PRODUCT FORM (modal) -->
     <div class="modal hidden" id="prodModal">
       <div class="modal-box" style="max-width:640px">
-        <button class="close" onclick="closeProductForm()">✕</button>
+        <button class="close" onclick="closeProductForm()">âœ•</button>
         <h2 id="prodFormTitle">Add New Product</h2>
         <form id="prodForm" class="prod-form">
           <input type="hidden" id="pfId">
@@ -107,8 +108,8 @@
           <label>Colors</label>
           <div class="color-checks" id="pfColors"></div>
           <label>Stock Quantity<input required type="number" id="pfStock" placeholder="10" min="0"></label>
-          <label>Description<textarea id="pfDesc" rows="3" placeholder="Describe the bag…"></textarea></label>
-          <label>Photos (up to 5 — first is main)</label>
+          <label>Description<textarea id="pfDesc" rows="3" placeholder="Describe the bagâ€¦"></textarea></label>
+          <label>Photos (up to 5 â€” first is main)</label>
           <div class="dropzone" id="dropzone">Drag & drop images here or <b>click to browse</b><input type="file" id="pfImages" accept="image/*" multiple hidden></div>
           <div class="img-preview" id="imgPreview"></div>
           <label>Status
@@ -134,23 +135,23 @@
     <section class="view hidden" id="view-tracking">
       <div class="view-head">
         <h1>Order Desk</h1>
-        <input id="trackSearch" placeholder="Search order #, name, email…" oninput="renderTrackingView()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
+        <input id="trackSearch" placeholder="Search order #, name, emailâ€¦" oninput="renderTrackingView()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
       </div>
       <div class="track-tabs">
         <button class="track-tab active" data-tt="all" onclick="setTrackTab('all')">All Orders</button>
-        <button class="track-tab" data-tt="action" onclick="setTrackTab('action')">⚠ Needs Action</button>
-        <button class="track-tab" data-tt="transit" onclick="setTrackTab('transit')">📦 In Transit</button>
-        <button class="track-tab" data-tt="delivered" onclick="setTrackTab('delivered')">✓ Delivered</button>
-        <button class="track-tab" data-tt="cancelled" onclick="setTrackTab('cancelled')">✕ Cancelled</button>
+        <button class="track-tab" data-tt="action" onclick="setTrackTab('action')">âš  Needs Action</button>
+        <button class="track-tab" data-tt="transit" onclick="setTrackTab('transit')">ðŸ“¦ In Transit</button>
+        <button class="track-tab" data-tt="delivered" onclick="setTrackTab('delivered')">âœ“ Delivered</button>
+        <button class="track-tab" data-tt="cancelled" onclick="setTrackTab('cancelled')">âœ• Cancelled</button>
       </div>
-      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Real-time order supervision — confirm Cash App payments, advance shipping status, edit carrier & tracking. Customers see changes instantly.</p>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Real-time order supervision â€” confirm Cash App payments, advance shipping status, edit carrier & tracking. Customers see changes instantly.</p>
       <div id="trackingList"></div>
     </section>
 
     <!-- ORDER DETAIL MODAL -->
     <div class="modal hidden" id="orderModal">
       <div class="modal-box" style="max-width:560px">
-        <button class="close" onclick="document.getElementById('orderModal').classList.add('hidden')">✕</button>
+        <button class="close" onclick="document.getElementById('orderModal').classList.add('hidden')">âœ•</button>
         <div id="orderDetail"></div>
       </div>
     </div>
@@ -159,12 +160,27 @@
     <section class="view hidden" id="view-payments">
       <div class="view-head">
         <h1>Payment Verification</h1>
-        <input id="paySearch" placeholder="Search order #, name, email…" oninput="renderPayments()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
+        <input id="paySearch" placeholder="Search order #, name, emailâ€¦" oninput="renderPayments()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
       </div>
       <div class="track-tabs" id="payTabs"></div>
       <div class="track-tabs" id="payMethodTabs"></div>
-      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Verify actual incoming payments in your business account before marking orders as Paid. Screenshots are supporting evidence only — never auto-confirmed.</p>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Verify actual incoming payments in your business account before marking orders as Paid. Screenshots are supporting evidence only â€” never auto-confirmed.</p>
       <div id="paymentsList"></div>
+    </section>
+
+    <!-- REVIEWS VIEW -->
+    <section class="view hidden" id="view-reviews">
+      <div class="view-head">
+        <h1>Customer Reviews</h1>
+        <select id="reviewStatusFilter" onchange="renderReviewsAdmin()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit">
+          <option value="all">All Reviews</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Moderate customer reviews. Approve to publish, reject to hide, or reply to customers.</p>
+      <div id="reviewsAdminList"></div>
     </section>
 
     <!-- SETTINGS VIEW -->
@@ -176,23 +192,23 @@
           <label>All new orders & payment evidence alerts are sent here<input id="setBizEmail" type="email"></label>
         </div>
         <div class="panel">
-          <h3>💵 Cash App <span style="font-size:11px;color:var(--gray)">(primary)</span></h3>
+          <h3>ðŸ’µ Cash App <span style="font-size:11px;color:var(--gray)">(primary)</span></h3>
           <label><input type="checkbox" id="setCashEnabled"> Enabled</label>
-          <label>Cash App Payment URL<input id="setCashUrl" placeholder="https://cash.app/$YourTag/…"></label>
+          <label>Cash App Payment URL<input id="setCashUrl" placeholder="https://cash.app/$YourTag/â€¦"></label>
           <label>Note shown to customers<textarea id="setCashNote" rows="2" placeholder="Optional instructions"></textarea></label>
         </div>
         <div class="panel">
-          <h3>🏦 Chime</h3>
+          <h3>ðŸ¦ Chime</h3>
           <label><input type="checkbox" id="setChimeEnabled"> Enabled</label>
           <label>Payment details sent by email<textarea id="setChimeDetails" rows="3" placeholder="e.g. Chime handle / phone / instructions"></textarea></label>
         </div>
         <div class="panel">
-          <h3>⚡ Zelle</h3>
+          <h3>âš¡ Zelle</h3>
           <label><input type="checkbox" id="setZelleEnabled"> Enabled</label>
           <label>Payment details sent by email<textarea id="setZelleDetails" rows="3" placeholder="e.g. Zelle email / phone / instructions"></textarea></label>
         </div>
         <div class="panel">
-          <h3>🍎 Apple Pay <span style="font-size:11px;color:var(--gray)">(alternative arrangement)</span></h3>
+          <h3>ðŸŽ Apple Pay <span style="font-size:11px;color:var(--gray)">(alternative arrangement)</span></h3>
           <label><input type="checkbox" id="setAppleEnabled"> Enabled</label>
           <label>Arrangement details sent by email<textarea id="setAppleDetails" rows="3" placeholder="e.g. How customers pay via Apple Pay"></textarea></label>
         </div>
@@ -240,6 +256,8 @@
 <script src="db.js?v=2"></script>
 <script src="email.js?v=2"></script>
 <script src="tracking.js?v=2"></script>
-<script src="admin.js?v=3"></script>
+<script src="reviews.js"></script><script src="admin.js?v=4"></script>
 </body>
 </html>
+
+

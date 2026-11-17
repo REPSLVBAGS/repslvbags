@@ -61,6 +61,30 @@ create policy "anon can submit evidence" on orders for update
   with check (payment_status in ('Evidence Submitted','Awaiting Payment','Payment Instructions Sent','Pending Verification','Rejected','Paid','Cancelled','Refunded'));
 -- NO anon SELECT policy — reads happen via service role / admin backend only.
 
+-- Reviews (customer testimonials)
+create table if not exists reviews (
+  id bigint generated always as identity primary key,
+  product_id int,
+  product_name text default '',
+  name text not null,
+  email text default '',
+  rating int not null check (rating between 1 and 5),
+  title text default '',
+  body text not null,
+  photo_url text default '',
+  verified_purchase boolean default false,
+  status text default 'pending' check (status in ('pending','approved','rejected')),
+  admin_reply text default '',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+alter table reviews enable row level security;
+-- Public can read approved reviews only
+create policy "public reads approved reviews" on reviews for select using (status = 'approved');
+-- Anyone can submit a review (pending until admin approves)
+create policy "public submits reviews" on reviews for insert with check (true);
+-- Admin manages all reviews via service role / edge function
+
 -- Email log (audit trail)
 create table if not exists email_log (
   id bigint generated always as identity primary key,

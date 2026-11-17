@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us — Reps LV Bags</title>
+<title>Contact Us â€” Reps LV Bags</title>
 <meta name="description" content="Get in touch with the Reps LV Bags team. We reply within 24 hours to questions about orders, products, shipping and returns.">
 <link rel="canonical" href="https://repslvbags.com/contact.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,11 +13,11 @@
 </head>
 <body>
 
-<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;Â·&nbsp; Secure checkout &nbsp;Â·&nbsp; 30-day returns</div>
 
 <header class="header">
   <div class="header-inner">
-    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">â˜°</button>
     <nav class="nav-left">
       <a href="index.html#shop">Shop All</a>
       <a href="index.html#collections">Collections</a>
@@ -28,13 +28,13 @@
     </nav>
     <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
     <div class="header-right">
-      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">🛍 <span class="badge" id="cartCount">0</span></button>
+      <button class="icon-btn" id="cartBtn" aria-label="Shopping bag">ðŸ› <span class="badge" id="cartCount">0</span></button>
     </div>
   </div>
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
-  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <button class="menu-close" id="menuClose" aria-label="Close menu">âœ•</button>
   <a href="index.html">Home</a>
   <a href="index.html#shop">Shop All</a>
   <a href="index.html#collections">Collections</a>
@@ -49,7 +49,7 @@
 <main class="policy-page">
   <p class="hero-kicker">We'd Love to Hear From You</p>
   <h1>Contact Us</h1>
-  <p class="last-updated">We reply within 24 hours, Monday–Friday.</p>
+  <p class="last-updated">We reply within 24 hours, Mondayâ€“Friday.</p>
 
   <div class="contact-box">
     <h3 style="font-size:22px;margin-bottom:8px">Email</h3>
@@ -59,7 +59,7 @@
 
   <div class="policy-section">
     <h2><span class="num">01</span> Before You Write</h2>
-    <p>Many questions are answered in our <a href="faq.html">FAQ</a> — shipping times, returns, payment verification and order tracking are all covered there.</p>
+    <p>Many questions are answered in our <a href="faq.html">FAQ</a> â€” shipping times, returns, payment verification and order tracking are all covered there.</p>
   </div>
 
   <div class="policy-section">
@@ -71,7 +71,7 @@
       <textarea required rows="5" placeholder="How can we help?" style="padding:14px;border:1px solid var(--line);font-family:inherit;resize:vertical"></textarea>
       <button class="btn-gold" type="submit" style="justify-self:start">Send Message</button>
     </form>
-    <p class="hidden" id="contactDone" style="margin-top:14px;color:#2e7d32;font-weight:600">Thank you — your message is on its way. We'll reply within 24 hours.</p>
+    <p class="hidden" id="contactDone" style="margin-top:14px;color:#2e7d32;font-weight:600">Thank you â€” your message is on its way. We'll reply within 24 hours.</p>
   </div>
 </main>
 
@@ -83,7 +83,7 @@
     <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
     <div><h4>Contact</h4><p>supportrepslvbags@gmail.com</p></div>
   </div>
-  <p class="copy">© <span class="yr"></span> Reps LV Bags. All rights reserved.</p>
+  <p class="copy">Â© <span class="yr"></span> Reps LV Bags. All rights reserved.</p>
 </footer>
 
 <script src="supabase-js.min.js"></script>
@@ -100,13 +100,13 @@ document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.get
 document.getElementById('contactForm').onsubmit=async e=>{
   e.preventDefault();
   const f=e.target, btn=f.querySelector('button[type=submit]');
-  btn.disabled=true; btn.textContent='Sending…';
+  btn.disabled=true; btn.textContent='Sendingâ€¦';
   const name=f[0].value.trim(), email=f[1].value.trim(), order=f[2].value.trim(), msg=f[3].value.trim();
   try{
     const res=await notifyCustomerMessage({name,email,orderNo:order,message:msg,type:'contact'});
     f.classList.add('hidden');
     const done=document.getElementById('contactDone');
-    done.textContent=`Thank you — your message has been received (ref ${res.ref}). We'll reply within 24 hours.`;
+    done.textContent=`Thank you â€” your message has been received (ref ${res.ref}). We'll reply within 24 hours.`;
     done.classList.remove('hidden');
   }catch(err){
     btn.disabled=false; btn.textContent='Send Message';
@@ -116,5 +116,6 @@ document.getElementById('contactForm').onsubmit=async e=>{
 };
 </script>
 <script src="analytics.js"></script>
-</body>
+<script src="chat.js"></script></body>
 </html>
+

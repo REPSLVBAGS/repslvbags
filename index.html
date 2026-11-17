@@ -153,6 +153,17 @@
   <div class="insta-grid" id="instaGrid"></div>
 </section>
 
+<!-- Reviews -->
+<section class="section reviews-section">
+  <div class="section-head reveal">
+    <div>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-sub">Real reviews from real customers. Share your experience with us.</p>
+    </div>
+  </div>
+  <div id="reviewsContainer" class="reviews-container"></div>
+</section>
+
 <!-- Newsletter -->
 <section class="section newsletter">
   <h2 class="reveal">A Little Something Beautiful in Your Inbox.</h2>
@@ -203,6 +214,58 @@
   <div class="modal-box">
     <button class="close" data-close aria-label="Close">✕</button>
     <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal hidden" id="reviewModal">
+  <div class="modal-box review-modal-box">
+    <button class="close" onclick="closeReviewForm()">✕</button>
+    <h2>Write a Review</h2>
+    <form id="reviewForm" class="review-form">
+      <input type="hidden" id="reviewProductId">
+      <input type="hidden" id="reviewProductName">
+      
+      <div class="form-row">
+        <label>Your Name *</label>
+        <input required id="reviewName" placeholder="Jane Doe" maxlength="100">
+      </div>
+      
+      <div class="form-row">
+        <label>Email (optional)</label>
+        <input type="email" id="reviewEmail" placeholder="jane@example.com">
+      </div>
+      
+      <div class="form-row">
+        <label>Rating *</label>
+        <div id="starRating" class="star-rating">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <input type="hidden" id="reviewRating" value="5">
+      </div>
+      
+      <div class="form-row">
+        <label>Review Title (optional)</label>
+        <input id="reviewTitle" placeholder="Sum it up in a few words" maxlength="100">
+      </div>
+      
+      <div class="form-row">
+        <label>Your Review *</label>
+        <textarea required id="reviewBody" rows="4" placeholder="Share your experience with this product..." maxlength="2000"></textarea>
+      </div>
+      
+      <div class="form-row">
+        <label>Photo (optional)</label>
+        <input type="file" id="reviewPhoto" accept="image/*">
+      </div>
+      
+      <button class="btn-gold full" type="submit">Submit Review</button>
+      <p class="review-note">Reviews are moderated before publishing. We may contact you for verification.</p>
+    </form>
   </div>
 </div>
 
@@ -288,6 +351,8 @@
 <script src="db.js"></script>
 <script src="email.js"></script>
 <script src="app.js"></script>
+<script src="reviews.js"></script>
+<script src="chat.js"></script>
 <script src="analytics.js"></script>
 </body>
 </html>

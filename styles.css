@@ -446,3 +446,87 @@ img{max-width:100%}
   .logo-text{letter-spacing:2px}
   .section-title{font-size:26px}
 }
+
+/* ============================================================
+   REVIEWS & CHAT STYLES
+   ============================================================ */
+
+/* ---------- Reviews ---------- */
+.reviews-section{background:var(--cream);padding:80px 48px}
+.reviews-container{max-width:900px;margin:0 auto}
+.reviews-summary{display:flex;gap:40px;margin-bottom:48px;padding:32px;background:var(--white);border:1px solid var(--line)}
+.avg-rating{text-align:center;min-width:120px}
+.avg-number{font-family:var(--serif);font-size:48px;font-weight:500;display:block;color:var(--espresso)}
+.avg-stars{color:var(--gold);font-size:18px;margin:8px 0}
+.review-count{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.rating-dist{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.dist-row{display:flex;align-items:center;gap:12px;font-size:13px}
+.dist-star{width:30px;color:var(--gold)}
+.dist-bar{flex:1;height:6px;background:var(--cream);border-radius:3px;overflow:hidden}
+.dist-fill{height:100%;background:var(--espresso);border-radius:3px}
+.dist-count{width:30px;text-align:right;color:var(--muted)}
+.reviews-list{display:flex;flex-direction:column;gap:24px}
+.review-card{background:var(--white);padding:28px;border:1px solid var(--line)}
+.review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.review-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.review-name{font-weight:600;font-size:15px}
+.verified-badge{background:var(--espresso);color:var(--ivory);font-size:10px;padding:3px 8px;letter-spacing:1px;text-transform:uppercase}
+.review-date{font-size:12px;color:var(--muted)}
+.review-rating{color:var(--gold);font-size:16px}
+.review-title{font-family:var(--serif);font-size:20px;margin-bottom:8px;color:var(--espresso)}
+.review-body{font-size:14px;line-height:1.7;color:var(--ink);margin-bottom:16px}
+.review-photo{max-width:200px;height:auto;border:1px solid var(--line);margin-top:12px}
+.admin-reply{margin-top:16px;padding:16px;background:var(--cream);border-left:3px solid var(--espresso);font-size:13px}
+.no-reviews{text-align:center;padding:60px;color:var(--muted);font-style:italic}
+.write-review-btn{margin-top:32px}
+
+/* Review Form */
+.review-modal-box{max-width:560px}
+.review-form{display:flex;flex-direction:column;gap:20px}
+.form-row{display:flex;flex-direction:column;gap:8px}
+.form-row label{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.form-row input,.form-row textarea{padding:12px 16px;border:1px solid var(--line);font-family:var(--sans);font-size:14px;background:var(--white)}
+.form-row input:focus,.form-row textarea:focus{outline:none;border-color:var(--taupe)}
+.star-rating{display:flex;gap:8px;font-size:28px;cursor:pointer}
+.star-rating .star{color:var(--line);transition:color .2s}
+.star-rating .star.active,.star-rating .star:hover{color:var(--gold)}
+.review-note{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+
+/* ---------- Chat Widget ---------- */
+.chat-button{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--espresso);color:var(--ivory);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:1000;transition:transform .2s,box-shadow .2s}
+.chat-button:hover{transform:scale(1.05);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.chat-button.active{transform:scale(1.1)}
+.chat-icon{font-size:24px}
+.chat-label{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.chat-status{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--ivory)}
+.chat-status.online{background:#4CAF50}
+.chat-status.offline{background:#9E9E9E}
+
+.chat-window{position:fixed;bottom:100px;right:24px;width:360px;max-width:calc(100vw - 48px);height:500px;max-height:calc(100vh - 140px);background:var(--white);border:1px solid var(--line);box-shadow:0 8px 32px rgba(0,0,0,.15);z-index:1000;display:flex;flex-direction:column}
+.chat-window.hidden{display:none}
+.chat-header{padding:16px 20px;background:var(--espresso);color:var(--ivory);display:flex;justify-content:space-between;align-items:center}
+.chat-header-info h4{font-family:var(--serif);font-size:18px;margin:0}
+.chat-status-text{font-size:12px;opacity:.8;margin:4px 0 0}
+.chat-close{background:none;border:none;color:var(--ivory);font-size:20px;cursor:pointer;padding:4px}
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.chat-message{max-width:80%;padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.5}
+.chat-message.bot{background:var(--cream);color:var(--ink);align-self:flex-start;border-bottom-left-radius:4px}
+.chat-message.user{background:var(--espresso);color:var(--ivory);align-self:flex-end;border-bottom-right-radius:4px}
+.chat-quick-questions{padding:12px 20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px}
+.quick-q{padding:6px 12px;font-size:11px;background:var(--cream);border:1px solid var(--line);cursor:pointer;transition:background .2s}
+.quick-q:hover{background:var(--espresso);color:var(--ivory);border-color:var(--espresso)}
+.chat-input-area{padding:16px 20px;border-top:1px solid var(--line);display:flex;gap:8px}
+.chat-input-area input{flex:1;padding:10px 14px;border:1px solid var(--line);font-family:var(--sans);font-size:14px}
+.chat-input-area input:focus{outline:none;border-color:var(--taupe)}
+.chat-input-area button{padding:10px 20px;background:var(--espresso);color:var(--ivory);border:none;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.chat-footer{padding:12px 20px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--muted)}
+.chat-footer a{color:var(--espresso);text-decoration:underline}
+.chat-hours{font-size:11px;margin-top:4px}
+
+/* Mobile responsive */
+@media(max-width:768px){
+  .reviews-section{padding:60px 24px}
+  .reviews-summary{flex-direction:column;gap:24px;padding:24px}
+  .chat-window{width:calc(100vw - 32px);right:16px;bottom:90px;height:400px}
+  .chat-button{bottom:16px;right:16px;width:56px;height:56px}
+}

@@ -96,3 +96,70 @@ create table if not exists email_log (
 );
 alter table email_log enable row level security;
 create policy "service manages email log" on email_log for all using (true) with check (true);
+
+-- ============================================================
+-- INVOICES & PAYMENT MANAGEMENT
+-- ============================================================
+
+-- Invoices (one per order, unique invoice number + secure access token)
+create table if not exists invoices (
+  id bigint generated always as identity primary key,
+  invoice_no text unique not null,               -- INV-XXXXXX
+  order_no text not null,
+  customer_name text not null,
+  customer_email text not null,
+  customer_phone text default '',
+  shipping_address jsonb default '{}',
+  items jsonb not null default '[]',             -- [{name,price,qty,color}]
+  subtotal numeric not null default 0,
+  shipping numeric not null default 0,
+  discount numeric not null default 0,
+  discount_code text default '',
+  total numeric not null default 0,
+  currency text default 'USD',
+  payment_method text default '',
+  payment_method_label text default '',
+  payment_details text default '',               -- snapshot of instructions at order time
+  payment_status text not null default 'PENDING' check (payment_status in ('PENDING','PAID','CANCELLED','REFUNDED')),
+  access_token text unique not null,             -- secure customer link token
+  email_sent_at timestamptz,
+  paid_email_sent_at timestamptz,
+  paid_at timestamptz,
+  paid_by text default '',
+  cancelled_at timestamptz,
+  cancelled_by text default '',
+  refunded_at timestamptz,
+  refunded_by text default '',
+  notes text default '',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+create index if not exists idx_invoices_order_no on invoices(order_no);
+create index if not exists idx_invoices_email on invoices(customer_email);
+create index if not exists idx_invoices_status on invoices(payment_status);
+alter table invoices enable row level security;
+-- No public access — all reads/writes go through the invoices edge function (service role)
+
+-- Invoice line items (normalized copy for reporting)
+create table if not exists invoice_items (
+  id bigint generated always as identity primary key,
+  invoice_id bigint not null references invoices(id) on delete cascade,
+  product_name text not null,
+  unit_price numeric not null,
+  quantity int not null,
+  line_total numeric not null,
+  color text default ''
+);
+alter table invoice_items enable row level security;
+
+-- Payment status history (audit trail — who changed what, when)
+create table if not exists payment_status_history (
+  id bigint generated always as identity primary key,
+  invoice_id bigint not null references invoices(id) on delete cascade,
+  from_status text,
+  to_status text not null,
+  changed_by text not null,
+  note text default '',
+  created_at timestamptz default now()
+);
+alter table payment_status_history enable row level security;

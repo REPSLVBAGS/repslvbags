@@ -31,7 +31,7 @@ serve(async (req) => {
       if (provided !== EMAIL_SECRET) return json({ error: 'Unauthorized' }, 401);
     }
 
-    const { to, subject, body, html } = await req.json();
+    const { to, subject, body, html, reply_to } = await req.json();
     if (!to || !subject || !body) return json({ error: 'missing fields' }, 400);
     if (typeof to !== 'string' || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) return json({ error: 'invalid recipient' }, 400);
     if (body.length > 20000 || (html && html.length > 100000)) return json({ error: 'body too large' }, 400);
@@ -41,10 +41,16 @@ serve(async (req) => {
       return json({ sent: false, reason: 'no_provider' });
     }
 
+    const payload: Record<string, unknown> = { from: EMAIL_FROM, to, subject, text: body };
+    if (html) payload.html = html;
+    if (reply_to && typeof reply_to === 'string' && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(reply_to)) {
+      payload.reply_to = reply_to;
+    }
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: EMAIL_FROM, to, subject, text: body, ...(html ? { html } : {}) })
+      body: JSON.stringify(payload)
     });
     const data = await res.json();
     return json({ sent: res.ok, data }, res.ok ? 200 : 502);

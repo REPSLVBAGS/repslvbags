@@ -94,6 +94,7 @@ async function route(){
   if(h==='orders') renderOrdersTable();
   if(h==='tracking') renderTrackingView();
   if(h==='payments') renderPayments();
+  if(h==='invoices') loadInvoicesAdmin();
   if(h==='settings') loadPaymentSettings();
   if(h==='content') loadContentForm();
   updateNavBadges();
@@ -492,7 +493,7 @@ function adminVerifyPayment(no){
   if(!confirm('Confirm you have verified the actual incoming payment for '+no+'?'))return;
   const res=verifyPayment(no,'admin');
   adminPushOrder(no);
-  if(res){if(!res.alreadyPaid){notifyPaymentVerified(res.order);notifyStatusChange(res.order,res.order.status);}alert('Order '+no+' marked as Paid.');}
+  if(res){if(!res.alreadyPaid){notifyPaymentVerified(res.order);notifyStatusChange(res.order,res.order.status);if(typeof syncInvoiceFromOrder==='function')syncInvoiceFromOrder(no,'PAID');}alert('Order '+no+' marked as Paid.');}
   renderPayments();
 }
 function adminRejectPayment(no){
@@ -727,5 +728,117 @@ async function adminDeleteReview(id) {
     });
     await loadAdminReviews();
   } catch (e) { alert('Failed to delete review'); }
+}
+
+
+// ---------- INVOICES ADMIN ----------
+let _adminInvoices=[];
+async function loadInvoicesAdmin(){
+  const box=document.getElementById('invoicesAdminList');
+  if(box)box.innerHTML='<p style="color:var(--gray)">Loading invoices…</p>';
+  const status=(document.getElementById('invStatusFilter')||{}).value||'all';
+  const q=(document.getElementById('invSearch')||{}).value||'';
+  _adminInvoices=await adminListInvoices(status,q)||[];
+  renderInvoicesAdmin();
+}
+function invStatusBadge(s){
+  const colors={PENDING:'#8a5a00',PAID:'#2e7d32',CANCELLED:'#8a8177',REFUNDED:'#8a8177'};
+  return `<span style="display:inline-block;padding:4px 10px;border:1px solid ${colors[s]||'#8a8177'};color:${colors[s]||'#8a8177'};font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600">${s}</span>`;
+}
+function renderInvoicesAdmin(){
+  const box=document.getElementById('invoicesAdminList');if(!box)return;
+  const q=((document.getElementById('invSearch')||{}).value||'').toLowerCase();
+  const status=(document.getElementById('invStatusFilter')||{}).value||'all';
+  let list=_adminInvoices;
+  if(status!=='all')list=list.filter(i=>i.payment_status===status);
+  if(q)list=list.filter(i=>(i.invoice_no+i.order_no+i.customer_name+i.customer_email).toLowerCase().includes(q));
+  if(!list.length){box.innerHTML='<p style="color:var(--gray);padding:30px 0">No invoices found.</p>';return;}
+  box.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead><tr style="text-align:left;border-bottom:2px solid #252525">
+      <th style="padding:10px 8px">Invoice</th><th style="padding:10px 8px">Order</th><th style="padding:10px 8px">Customer</th>
+      <th style="padding:10px 8px">Total</th><th style="padding:10px 8px">Method</th><th style="padding:10px 8px">Status</th>
+      <th style="padding:10px 8px">Date</th><th style="padding:10px 8px">Actions</th>
+    </tr></thead><tbody>
+    ${list.map(i=>`<tr style="border-bottom:1px solid #ece4d6">
+      <td style="padding:10px 8px;font-weight:600">${i.invoice_no}</td>
+      <td style="padding:10px 8px">${i.order_no}</td>
+      <td style="padding:10px 8px">${i.customer_name}<br><span style="color:var(--gray);font-size:11px">${i.customer_email}</span></td>
+      <td style="padding:10px 8px;font-weight:600">$${Number(i.total).toFixed(2)}</td>
+      <td style="padding:10px 8px">${i.payment_method_label||i.payment_method||'—'}</td>
+      <td style="padding:10px 8px">${invStatusBadge(i.payment_status)}</td>
+      <td style="padding:10px 8px;font-size:11px;color:var(--gray)">${new Date(i.created_at).toLocaleDateString()}</td>
+      <td style="padding:10px 8px;white-space:nowrap">
+        <button class="btn-ghost" style="padding:5px 10px;font-size:11px" onclick="adminViewInvoice(${i.id})">View</button>
+        ${i.payment_status==='PENDING'?`<button class="btn-gold" style="padding:5px 10px;font-size:11px;margin-left:4px" onclick="adminInvoiceMarkPaid(${i.id},'${i.invoice_no}')">Mark Paid</button>`:''}
+        ${i.payment_status==='PAID'?`<button class="btn-ghost" style="padding:5px 10px;font-size:11px;margin-left:4px" onclick="adminInvoiceSetStatus(${i.id},'REFUNDED','${i.invoice_no}')">Refund</button>`:''}
+        ${i.payment_status==='PENDING'?`<button class="btn-ghost" style="padding:5px 10px;font-size:11px;margin-left:4px" onclick="adminInvoiceSetStatus(${i.id},'CANCELLED','${i.invoice_no}')">Cancel</button>`:''}
+        <button class="btn-ghost" style="padding:5px 10px;font-size:11px;margin-left:4px" onclick="adminInvoiceResend(${i.id},'${i.invoice_no}')">Resend</button>
+      </td>
+    </tr>`).join('')}
+    </tbody></table>`;
+  // Update badge
+  const pending=_adminInvoices.filter(i=>i.payment_status==='PENDING').length;
+  const badge=document.getElementById('badge-invoices');
+  if(badge){badge.textContent=pending||'';badge.style.display=pending?'inline-flex':'none';}
+}
+async function adminViewInvoice(id){
+  const inv=await adminGetInvoice(id);
+  if(!inv){alert('Invoice not found');return;}
+  const addr=inv.shipping_address||{};
+  const items=(inv.items||[]).map(i=>`<tr><td style="padding:6px 0;border-bottom:1px solid #ece4d6">${i.qty}× ${i.name}</td><td style="text-align:right;padding:6px 0;border-bottom:1px solid #ece4d6">$${(i.price*i.qty).toFixed(2)}</td></tr>`).join('');
+  const html=`<div style="text-align:left">
+    <h2 style="margin:0 0 4px">${inv.invoice_no}</h2>
+    <p style="color:var(--gray);font-size:13px;margin:0 0 16px">Order ${inv.order_no} · ${new Date(inv.created_at).toLocaleString()}</p>
+    ${invStatusBadge(inv.payment_status)}
+    <h3 style="margin:20px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gray)">Customer</h3>
+    <p style="font-size:14px;margin:0">${inv.customer_name}<br>${inv.customer_email}${inv.customer_phone?' · '+inv.customer_phone:''}</p>
+    <h3 style="margin:20px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gray)">Delivery</h3>
+    <p style="font-size:14px;margin:0">${addr.address||''}<br>${addr.city||''}, ${addr.state||''} ${addr.zip||''}</p>
+    <h3 style="margin:20px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gray)">Items</h3>
+    <table style="width:100%;font-size:14px">${items}</table>
+    <p style="font-size:14px;margin-top:10px"><b>Total: $${Number(inv.total).toFixed(2)}</b> · ${inv.payment_method_label||inv.payment_method}</p>
+    ${inv.payment_details?`<h3 style="margin:20px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gray)">Payment Instructions</h3><div style="background:#f8f6f2;padding:12px;font-size:13px;white-space:pre-line">${inv.payment_details}</div>`:''}
+    ${inv.paid_at?`<p style="font-size:12px;color:var(--gray);margin-top:14px">Paid ${new Date(inv.paid_at).toLocaleString()} by ${inv.paid_by||'admin'}</p>`:''}
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn-ghost" href="invoice.html?token=${inv.access_token}" target="_blank" style="padding:10px 16px;font-size:12px">View / Print Invoice</a>
+      <button class="btn-ghost" onclick="adminInvoiceResend(${inv.id},'${inv.invoice_no}')" style="padding:10px 16px;font-size:12px">Resend Email</button>
+    </div>
+  </div>`;
+  // Reuse orderModal if present, else create overlay
+  let modal=document.getElementById('invModal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='invModal';
+    modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999';
+    modal.innerHTML='<div id="invModalBody" style="background:#fff;max-width:640px;width:92%;max-height:85vh;overflow:auto;padding:30px;position:relative"><button onclick="document.getElementById(\'invModal\').remove()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer">&times;</button></div>';
+    document.body.appendChild(modal);
+  }
+  document.getElementById('invModalBody').innerHTML=html;
+  modal.style.display='flex';
+}
+async function adminInvoiceMarkPaid(id,invNo){
+  if(!confirm('Mark invoice '+invNo+' as PAID? This will email the customer a receipt.'))return;
+  try{
+    const r=await adminSetInvoiceStatus(id,'PAID','Marked as paid by admin');
+    alert('Invoice '+invNo+' marked as PAID.'+(r.paid_email_sent?' Receipt email sent.':''));
+    loadInvoicesAdmin();
+  }catch(e){alert('Error: '+e.message);}
+}
+async function adminInvoiceSetStatus(id,status,invNo){
+  const labels={CANCELLED:'cancel',REFUNDED:'refund',PENDING:'reopen'};
+  const note=prompt('Note for '+labels[status]+' (optional):')||'';
+  if(status==='CANCELLED'&&!confirm('Cancel invoice '+invNo+'?'))return;
+  if(status==='REFUNDED'&&!confirm('Mark invoice '+invNo+' as REFUNDED?'))return;
+  try{
+    await adminSetInvoiceStatus(id,status,note);
+    alert('Invoice '+invNo+' → '+status);
+    loadInvoicesAdmin();
+  }catch(e){alert('Error: '+e.message);}
+}
+async function adminInvoiceResend(id,invNo){
+  try{
+    const r=await adminResendInvoice(id);
+    alert(r.sent?('Invoice '+invNo+' re-sent to customer.'):('Email queued locally — provider may be offline.'));
+  }catch(e){alert('Error: '+e.message);}
 }
 

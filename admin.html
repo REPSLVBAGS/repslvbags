@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -34,6 +34,7 @@
       <a href="#/orders" data-nav="orders">âœ‰ Orders <span class="nav-badge" id="badge-orders"></span></a>
       <a href="#/tracking" data-nav="tracking">âž¤ Order Desk <span class="nav-badge gold" id="badge-tracking"></span></a>
       <a href="#/payments" data-nav="payments">$ Payments <span class="nav-badge" id="badge-payments"></span></a>
+      <a href="#/invoices" data-nav="invoices">&#x1F9FE; Invoices <span class="nav-badge" id="badge-invoices"></span></a>
       <a href="#/reviews" data-nav="reviews">â˜… Reviews <span class="nav-badge" id="badge-reviews"></span></a>
       <a href="#/settings" data-nav="settings">âš™ Settings</a>
       <a href="#/content" data-nav="content">âœŽ Content</a>
@@ -168,7 +169,26 @@
       <div id="paymentsList"></div>
     </section>
 
-    <!-- REVIEWS VIEW -->
+        <!-- INVOICES VIEW -->
+    <section class="view hidden" id="view-invoices">
+      <div class="view-head">
+        <h1>Invoices</h1>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="invSearch" placeholder="Search invoice #, order, name, email…" oninput="renderInvoicesAdmin()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit;min-width:240px">
+          <select id="invStatusFilter" onchange="renderInvoicesAdmin()" style="padding:10px 14px;border:1px solid #d8cfc0;font-family:inherit">
+            <option value="all">All Statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="PAID">Paid</option>
+            <option value="CANCELLED">Cancelled</option>
+            <option value="REFUNDED">Refunded</option>
+          </select>
+          <button class="btn-ghost" onclick="loadInvoicesAdmin()" style="padding:10px 16px">Refresh</button>
+        </div>
+      </div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">Manage customer invoices. Mark payments as Paid after verifying funds, resend invoices, or view details.</p>
+      <div id="invoicesAdminList"></div>
+    </section>
+<!-- REVIEWS VIEW -->
     <section class="view hidden" id="view-reviews">
       <div class="view-head">
         <h1>Customer Reviews</h1>
@@ -256,7 +276,7 @@
 <script src="db.js?v=2"></script>
 <script src="email.js?v=2"></script>
 <script src="tracking.js?v=2"></script>
-<script src="reviews.js"></script><script src="admin.js?v=4"></script>
+<script src="invoices.js"></script><script src="reviews.js"></script><script src="admin.js?v=4"></script>
 </body>
 </html>
 

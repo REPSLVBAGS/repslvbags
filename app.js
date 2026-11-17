@@ -225,6 +225,8 @@ function ensureOrder(methodKey,paymentStatus){
   orderCreated=true;
   notifyNewOrderToBusiness(order);
   notifyOrderConfirmation(order);
+  // Generate invoice + send invoice email (idempotent server-side)
+  if(typeof createInvoiceForOrder==='function') createInvoiceForOrder(order);
   return order;
 }
 
@@ -311,6 +313,8 @@ function showConfirmation(order,methodKey){
      'Thank you for choosing Reps LV Bags. We truly appreciate your trust and look forward to serving you!<br>'+
      '<i>Elegance in Every Detail.</i>';
   document.getElementById('confPayLink').innerHTML=`<a href="payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}" style="color:var(--espresso);text-decoration:underline;font-weight:600">Submit Payment Screenshot →</a>`;
+  const invLink=document.getElementById('confInvoiceLink');
+  if(invLink){const o=findOrderByNo(order.orderNo);invLink.innerHTML=(o&&o.invoiceUrl)?'<a href="'+o.invoiceUrl+'" style="color:var(--espresso);text-decoration:underline;font-weight:600">View Your Invoice &rarr;</a>':'';}
   const copyBtn=document.getElementById('confCopyBtn');
   copyBtn.onclick=()=>{
     const done=()=>{copyBtn.textContent='Copied ✓';setTimeout(()=>copyBtn.textContent='Copy Order Number',2000);};

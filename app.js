@@ -365,8 +365,9 @@ window.addEventListener('scroll',()=>document.getElementById('siteHeader').class
 document.getElementById('checkoutBtn').onclick=openCheckout;
 document.getElementById('doneBtn').onclick=()=>{closeAll();cart=[];saveCart();renderCart();};
 
-// Hash deep-links: #cart opens drawer
+// Hash deep-links: #cart opens drawer, #checkout opens checkout modal
 if(location.hash==='#cart'){document.getElementById('cartBtn').click();}
+if(location.hash==='#checkout'){openCheckout();}
 
 ['filterPrice','filterColor','filterStyle','sortBy'].forEach(id=>document.getElementById(id).onchange=renderProducts);
 document.getElementById('searchInput').oninput=renderProducts;

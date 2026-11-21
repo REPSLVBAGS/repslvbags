@@ -724,6 +724,10 @@ function renderReviewsAdmin() {
           <button class="btn-gold" style="padding:8px 16px;font-size:12px" onclick="adminApproveReview(${r.id})">Approve</button>
         ` : ''}
         <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminReplyReview(${r.id})">Reply</button>
+        ${r.status === 'approved' ? `
+          <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminToggleFeatured(${r.id},${!!r.featured})">${r.featured ? 'Unfeature' : 'Feature'}</button>
+          <button class="btn-ghost" style="padding:8px 16px;font-size:12px" onclick="adminToggleVerified(${r.id},${!!r.verified_purchase})">${r.verified_purchase ? 'Unverify' : 'Verify Purchase'}</button>
+        ` : ''}
         <button class="btn-ghost" style="padding:8px 16px;font-size:12px;color:red" onclick="adminDeleteReview(${r.id})">Delete</button>
       </div>
     </div>
@@ -763,6 +767,28 @@ async function adminReplyReview(id) {
     });
     await loadAdminReviews();
   } catch (e) { alert('Failed to reply to review'); }
+}
+
+async function adminToggleFeatured(id, current) {
+  try {
+    await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' },
+      body: JSON.stringify({ id, featured: !current })
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to update featured status'); }
+}
+
+async function adminToggleVerified(id, current) {
+  try {
+    await fetch('https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-email-secret': 'vr7f2k9xQm4Lp8Rw3Ty6' },
+      body: JSON.stringify({ id, verified_purchase: !current })
+    });
+    await loadAdminReviews();
+  } catch (e) { alert('Failed to update verification'); }
 }
 
 async function adminDeleteReview(id) {

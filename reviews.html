@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Reviews — Reps LV Bags</title>
+<meta name="description" content="Real experiences. Honest opinions. Stories from our customers — read and share reviews of Reps LV Bags products.">
+<link rel="canonical" href="https://repslvbags.com/reviews">
+<meta property="og:title" content="Customer Reviews — Reps LV Bags">
+<meta property="og:description" content="Real experiences. Honest opinions. Stories from our customers.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="logo.jpg">
+<meta name="theme-color" content="#252525">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="reviews-page.css">
+</head>
+<body>
+
+<!-- Announcement bar -->
+<div class="announce">Complimentary US shipping on qualifying orders &nbsp;·&nbsp; Secure checkout &nbsp;·&nbsp; 30-day returns</div>
+
+<!-- Header -->
+<header class="header" id="siteHeader">
+  <div class="header-inner">
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <nav class="nav-left" aria-label="Primary">
+      <a href="index.html#shop">Shop All</a>
+      <a href="index.html#collections">Collections</a>
+      <a href="index.html#new">New Arrivals</a>
+      <a href="index.html#bestsellers">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="index.html" class="logo"><img src="logo.jpg" alt="Reps LV Bags"><span class="logo-text">REPS <em>LV</em> BAGS</span></a>
+    <div class="header-right">
+      <a class="icon-btn" href="index.html#cart" aria-label="Shopping bag">🛍</a>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile slide-out menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop All</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="index.html#new">New Arrivals</a>
+  <a href="index.html#bestsellers">Best Sellers</a>
+  <a href="about.html">About Us</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="track-order.html">Track Order</a>
+</div>
+
+<!-- Hero -->
+<section class="rv-hero">
+  <p class="hero-kicker">Customer Reviews</p>
+  <h1>Customer Reviews</h1>
+  <p class="rv-sub">Real experiences. Honest opinions. Stories from our customers.</p>
+  <button class="btn-gold" id="rvWriteTop">Write a Review</button>
+</section>
+
+<!-- Overview -->
+<section class="rv-overview">
+  <div class="rv-overview-card">
+    <div class="rv-score">
+      <span class="avg-number" id="rvAvg">—</span>
+      <div class="avg-stars" id="rvAvgStars">★★★★★</div>
+      <span class="review-count" id="rvCount">Loading…</span>
+    </div>
+    <div class="rv-dist">
+      <div class="dist-row"><span class="dist-star">5★</span><div class="dist-bar"><div class="dist-fill" id="rvBar5"></div></div><span class="dist-count" id="rvNum5">0</span></div>
+      <div class="dist-row"><span class="dist-star">4★</span><div class="dist-bar"><div class="dist-fill" id="rvBar4"></div></div><span class="dist-count" id="rvNum4">0</span></div>
+      <div class="dist-row"><span class="dist-star">3★</span><div class="dist-bar"><div class="dist-fill" id="rvBar3"></div></div><span class="dist-count" id="rvNum3">0</span></div>
+      <div class="dist-row"><span class="dist-star">2★</span><div class="dist-bar"><div class="dist-fill" id="rvBar2"></div></div><span class="dist-count" id="rvNum2">0</span></div>
+      <div class="dist-row"><span class="dist-star">1★</span><div class="dist-bar"><div class="dist-fill" id="rvBar1"></div></div><span class="dist-count" id="rvNum1">0</span></div>
+    </div>
+    <div class="rv-overview-cta">
+      <button class="btn-gold" id="rvWriteTop2">Write a Review</button>
+    </div>
+  </div>
+</section>
+
+<!-- Toolbar -->
+<section class="rv-toolbar">
+  <div class="rv-filters" id="rvStarFilters">
+    <button class="rv-chip active" data-star="0">All Ratings</button>
+    <button class="rv-chip" data-star="5">5 Stars</button>
+    <button class="rv-chip" data-star="4">4 Stars</button>
+    <button class="rv-chip" data-star="3">3 Stars</button>
+    <button class="rv-chip" data-star="2">2 Stars</button>
+    <button class="rv-chip" data-star="1">1 Star</button>
+  </div>
+  <div class="rv-sort">
+    <span id="rvResultCount" style="font-size:13px;color:var(--muted);margin-right:10px"></span>
+    <select id="rvSort" aria-label="Sort reviews">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="rating">Highest Rated</option>
+    </select>
+  </div>
+</section>
+
+<!-- Review list -->
+<section class="rv-list" id="rvList" aria-live="polite"></section>
+
+<button class="btn-ghost rv-load-more hidden" id="rvLoadMore">Load More Reviews</button>
+
+<div style="text-align:center;padding:0 32px 80px">
+  <button class="btn-gold" id="rvWriteBottom">Write a Review</button>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <img src="logo.jpg" alt="Reps LV Bags" class="logo-img">
+      <p>Thoughtfully selected handbags for the modern wardrobe. Timeless silhouettes, considered details, everyday luxury.</p>
+      <p class="socials" style="margin-top:16px"><a href="https://instagram.com/repslvbags" target="_blank" rel="noopener" style="display:inline">Instagram</a></p>
+    </div>
+    <div><h4>Shop</h4><a href="index.html#shop">All Bags</a><a href="index.html#collections">Collections</a><a href="index.html#new">New Arrivals</a><a href="index.html#bestsellers">Best Sellers</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="reviews.html">Reviews</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track-order.html">Track Order</a></div>
+    <div><h4>Support</h4><a href="shipping-policy.html">Shipping Policy</a><a href="returns.html">Returns & Refunds</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+    <div><h4>Contact</h4><p>supportrepslvbags@gmail.com</p><p>We reply within 24 hours.</p><p class="pay-note">We accept Cash App payments, confirmed personally before dispatch.</p></div>
+  </div>
+  <p class="copy">© <span id="year"></span> Reps LV Bags. All rights reserved.</p>
+</footer>
+
+<!-- Review Modal -->
+<div class="modal hidden" id="reviewModal">
+  <div class="modal-box review-modal-box">
+    <button class="close" onclick="closeReviewForm()">✕</button>
+    <h2>Write a Review</h2>
+    <form id="reviewForm" class="review-form">
+      <input type="hidden" id="reviewProductId">
+      <input type="hidden" id="reviewProductName">
+      <input type="text" id="reviewWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+
+      <div class="form-row">
+        <label>Your Name *</label>
+        <input required id="reviewName" placeholder="Jane Doe" maxlength="100">
+      </div>
+
+      <div class="form-row">
+        <label>Email (optional)</label>
+        <input type="email" id="reviewEmail" placeholder="jane@example.com">
+      </div>
+
+      <div class="form-row">
+        <label>Rating *</label>
+        <div id="starRating" class="star-rating">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <input type="hidden" id="reviewRating" value="5">
+      </div>
+
+      <div class="form-row">
+        <label>Review Title (optional)</label>
+        <input id="reviewTitle" placeholder="Sum it up in a few words" maxlength="100">
+      </div>
+
+      <div class="form-row">
+        <label>Your Review *</label>
+        <textarea required id="reviewBody" rows="4" placeholder="Share your experience with this product..." maxlength="2000"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Photo (optional)</label>
+        <input type="file" id="reviewPhoto" accept="image/*">
+      </div>
+
+      <button class="btn-gold full" type="submit">Submit Review</button>
+      <p class="review-note">Reviews are moderated before publishing. We may contact you for verification.</p>
+    </form>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<script src="supabase-js.min.js"></script>
+<script src="supabase.js?v=4"></script>
+<script src="reviews.js"></script>
+<script src="reviews-page.js"></script>
+<script src="chat.js"></script>
+<script src="analytics.js"></script>
+<script src="tracker.js"></script>
+<script>
+  document.getElementById('hamburger').onclick=()=>document.getElementById('mobileMenu').classList.add('open');
+  document.getElementById('menuClose').onclick=()=>document.getElementById('mobileMenu').classList.remove('open');
+  document.querySelectorAll('#mobileMenu a').forEach(a=>a.onclick=()=>document.getElementById('mobileMenu').classList.remove('open'));
+  document.getElementById('year').textContent=new Date().getFullYear();
+  window.addEventListener('scroll',()=>document.getElementById('siteHeader').classList.toggle('scrolled',scrollY>10),{passive:true});
+  document.getElementById('rvWriteTop2').onclick=()=>openReviewForm(null);
+</script>
+</body>
+</html>

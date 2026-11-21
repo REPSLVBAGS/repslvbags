@@ -90,45 +90,51 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function renderReviewCard(review) {
   const verifiedBadge = review.verified_purchase ? '<span class="verified-badge">✓ Verified Purchase</span>' : '';
-  const adminReply = review.admin_reply ? `<div class="admin-reply"><strong>Reps LV Bags:</strong> ${review.admin_reply}</div>` : '';
-  const photo = review.photo_url ? `<img src="${review.photo_url}" alt="Review photo" class="review-photo">` : '';
-  
+  const featuredBadge = review.featured ? '<span class="featured-badge">Featured</span>' : '';
+  const adminReply = review.admin_reply ? `<div class="admin-reply"><strong>Reps LV Bags:</strong> ${esc(review.admin_reply)}</div>` : '';
+  const photo = review.photo_url ? `<img src="${esc(review.photo_url)}" alt="Review photo" class="review-photo" loading="lazy">` : '';
+
   return `
     <div class="review-card">
       <div class="review-header">
         <div class="review-meta">
-          <span class="review-name">${review.name}</span>
-          ${verifiedBadge}
+          <span class="review-name">${esc(review.name)}</span>
+          ${verifiedBadge}${featuredBadge}
           <span class="review-date">${formatDate(review.created_at)}</span>
         </div>
         <div class="review-rating">${renderStars(review.rating)}</div>
       </div>
-      ${review.title ? `<h4 class="review-title">${review.title}</h4>` : ''}
-      <p class="review-body">${review.body}</p>
+      ${review.title ? `<h4 class="review-title">${esc(review.title)}</h4>` : ''}
+      <p class="review-body">${esc(review.body)}</p>
       ${photo}
       ${adminReply}
     </div>
   `;
 }
 
-function renderReviewsSection(reviews, productId = null) {
+function renderReviewsSection(reviews, productId = null, limit = 0) {
   const container = document.getElementById('reviewsContainer');
   if (!container) return;
-  
+
   if (!reviews || reviews.length === 0) {
     container.innerHTML = '<p class="no-reviews">No reviews yet. Be the first to share your experience!</p>';
     return;
   }
-  
-  // Calculate average rating
+
+  // Stats always reflect ALL reviews; `limit` only caps the cards shown.
   const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
   const ratingDist = [5,4,3,2,1].map(star => ({
     star,
     count: reviews.filter(r => r.rating === star).length
   }));
-  
+  const visible = limit ? reviews.slice(0, limit) : reviews;
+
   container.innerHTML = `
     <div class="reviews-summary">
       <div class="avg-rating">
@@ -147,9 +153,12 @@ function renderReviewsSection(reviews, productId = null) {
       </div>
     </div>
     <div class="reviews-list">
-      ${reviews.map(renderReviewCard).join('')}
+      ${visible.map(renderReviewCard).join('')}
     </div>
-    <button class="btn-ghost write-review-btn" onclick="openReviewForm(${productId || 'null'})">Write a Review</button>
+    <div class="reviews-actions">
+      ${limit && reviews.length > limit ? `<a class="btn-ghost" href="reviews.html">Read All ${reviews.length} Reviews</a>` : ''}
+      <button class="btn-ghost write-review-btn" onclick="openReviewForm(${productId || 'null'})">Write a Review</button>
+    </div>
   `;
 }
 
@@ -208,28 +217,51 @@ async function handleReviewSubmit(e) {
   const productId = document.getElementById('reviewProductId').value;
   const productName = document.getElementById('reviewProductName').value;
   const photoFile = document.getElementById('reviewPhoto').files[0];
-  
+  const honeypot = document.getElementById('reviewWebsite');
+
+  // Honeypot: silently succeed for bots without submitting.
+  if (honeypot && honeypot.value) {
+    alert('Thank you for your review! It will be published after moderation.');
+    closeReviewForm();
+    return;
+  }
+
   // Validation
   if (!name || !body || !rating) {
     alert('Please fill in all required fields.');
     return;
   }
-  
+
   if (body.length < 10) {
     alert('Review must be at least 10 characters.');
     return;
   }
-  
-  // Handle photo upload (optional)
+
+  if (photoFile && photoFile.size > 5 * 1024 * 1024) {
+    alert('Photo must be under 5MB.');
+    return;
+  }
+
+  // Upload photo to Supabase Storage (public bucket); fall back to a small
+  // data URL only if storage is unavailable and the file is tiny.
   let photoUrl = '';
   if (photoFile) {
-    // For now, store as base64 or skip - in production use Supabase Storage
-    // This is a simplified version
-    photoUrl = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
-      reader.readAsDataURL(photoFile);
-    });
+    const sb = typeof getSb === 'function' ? getSb() : null;
+    if (sb) {
+      try {
+        const ext = (photoFile.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+        const path = `review-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const { error } = await sb.storage.from('review-photos').upload(path, photoFile, { contentType: photoFile.type, upsert: false });
+        if (!error) photoUrl = sb.storage.from('review-photos').getPublicUrl(path).data.publicUrl;
+      } catch (e) { console.warn('Review photo upload failed:', e); }
+    }
+    if (!photoUrl && photoFile.size < 400 * 1024) {
+      photoUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(photoFile);
+      });
+    }
   }
   
   const reviewData = {
@@ -253,6 +285,7 @@ async function handleReviewSubmit(e) {
     } else {
       loadReviews();
     }
+    if (window.refreshReviewsPage) window.refreshReviewsPage();
   } catch (err) {
     alert('Failed to submit review: ' + err.message);
   }
@@ -262,7 +295,7 @@ async function handleReviewSubmit(e) {
 async function loadReviews() {
   const reviews = await fetchReviews('approved');
   reviewsCache = reviews;
-  renderReviewsSection(reviews);
+  renderReviewsSection(reviews, null, 3);
 }
 
 async function loadProductReviews(productId) {

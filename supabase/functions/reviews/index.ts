@@ -7,6 +7,16 @@ const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 const ADMIN_EMAIL = (Deno.env.get('ADMIN_EMAIL') || 'admin@repslvbags.com').toLowerCase();
 const EMAIL_SECRET = Deno.env.get('EMAIL_SECRET') || '';
 
+// Simple in-memory rate limit: max 5 review submissions per IP per hour.
+const submitLog = new Map<string, number[]>();
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const hits = (submitLog.get(ip) || []).filter(t => now - t < 3600_000);
+  if (hits.length >= 5) { submitLog.set(ip, hits); return true; }
+  hits.push(now); submitLog.set(ip, hits);
+  return false;
+}
+
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-email-secret',
@@ -63,7 +73,13 @@ serve(async (req) => {
     }
 
     if (req.method === 'POST') {
+      const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+      if (rateLimited(ip)) return json({ error: 'Too many submissions. Please try again later.' }, 429);
+
       const body = await req.json();
+      // Honeypot: bots fill the hidden "website" field — pretend success, drop it.
+      if (body.website) return json({ ok: true, review: null });
+
       const { product_id, product_name, name, email, rating, title, body: reviewBody, photo_url } = body;
 
       if (!name || !reviewBody || !rating) return json({ error: 'Missing required fields' }, 400);
@@ -73,6 +89,22 @@ serve(async (req) => {
       const spamPatterns = [/https?:\/\//i, /(.)\1{10,}/, /[A-Z]{20,}/];
       if (spamPatterns.some(p => p.test(reviewBody))) {
         return json({ error: 'Review flagged as spam' }, 400);
+      }
+
+      // Duplicate check: same email + identical body within 24h is rejected.
+      if (email) {
+        const since = new Date(Date.now() - 86400_000).toISOString();
+        const dupRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/reviews?email=eq.${encodeURIComponent(email)}&created_at=gte.${since}&select=id,body&limit=20`,
+          { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } }
+        );
+        if (dupRes.ok) {
+          const dups = await dupRes.json();
+          const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+          if ((dups || []).some((d: { body: string }) => norm(d.body) === norm(reviewBody))) {
+            return json({ error: 'This review has already been submitted.' }, 409);
+          }
+        }
       }
 
       const row = {
@@ -110,7 +142,7 @@ serve(async (req) => {
       const { id, ...patch } = await req.json();
       if (!id) return json({ error: 'Missing review id' }, 400);
 
-      const allowed = ['status', 'admin_reply', 'verified_purchase'];
+      const allowed = ['status', 'admin_reply', 'verified_purchase', 'featured'];
       const row: Record<string, unknown> = { updated_at: new Date().toISOString() };
       for (const k of allowed) {
         if (patch[k] !== undefined) row[k] = patch[k];

@@ -19,8 +19,21 @@
     <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
     <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn-gold full" onclick="doLogin()">Log In</button>
-    <a href="mailto:supportrepslvbags@gmail.com?subject=Admin%20Password%20Reset" class="forgot">Forgot Password?</a>
+    <a href="#" class="forgot" onclick="forgotPassword();return false">Forgot Password?</a>
     <p class="login-err hidden" id="loginErr">Invalid email or password.</p>
+  </div>
+</div>
+
+<!-- PASSWORD RESET (Supabase recovery redirect) -->
+<div class="login-screen hidden" id="resetScreen">
+  <div class="login-card">
+    <img src="logo.jpg" alt="Reps LV Bags" style="height:64px;margin-bottom:14px">
+    <p>Set New Password</p>
+    <input type="password" id="newPass" placeholder="New password (min 6 characters)" autocomplete="new-password">
+    <input type="password" id="newPass2" placeholder="Confirm new password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+    <button class="btn-gold full" onclick="doResetPassword()">Update Password</button>
+    <p class="login-err hidden" id="resetErr"></p>
+    <a href="admin.html" class="forgot">Back to login</a>
   </div>
 </div>
 

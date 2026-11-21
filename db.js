@@ -1,5 +1,5 @@
 // ---------- Reps LV Bags database (localStorage — swap internals for Supabase later) ----------
-const DB_PRODUCTS='vr_products', DB_CONTENT='vr_content', DB_DISCOUNTS='vr_discounts', DB_ADMIN='vr_admin_user';
+const DB_PRODUCTS='vr_products', DB_CONTENT='vr_content', DB_DISCOUNTS='vr_discounts';
 
 // ---------- Shared color map + premium SVG bag art ----------
 const COLORS = { Black:'#1a1a1a', Beige:'#d9c8a9', Brown:'#6B4F3A', White:'#f5f2ec', Red:'#8e2f2f' };
@@ -149,6 +149,6 @@ function paymentMethodLabel(key){
   return (cfg.methods[key]&&cfg.methods[key].label)||key;
 }
 
-// ---------- ADMIN USER ----------
-function getAdmin(){let a=JSON.parse(localStorage.getItem(DB_ADMIN)||'null');if(!a){a={email:'admin@repslvbags.com',pass:'admin123'};localStorage.setItem(DB_ADMIN,JSON.stringify(a));}return a;}
-function checkAdmin(email,pass){const a=getAdmin();return a.email.toLowerCase()===email.trim().toLowerCase()&&a.pass===pass;}
+// ---------- ADMIN AUTH ----------
+// Admin login is handled exclusively by Supabase Auth (see admin.js).
+// No credentials are stored in frontend code.

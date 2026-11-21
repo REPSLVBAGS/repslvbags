@@ -35,45 +35,90 @@ function adminPushOrder(no){
   });
 }
 
-// ---------- AUTH (Supabase Auth â€” real authentication) ----------
+// ---------- AUTH (Supabase Auth — the ONLY way in) ----------
+// Only this account may access the admin panel. Enforced here for UX and
+// again server-side: admin-orders/analytics-query/invoices require the
+// ADMIN_EMAIL JWT, so even a forged session gets no data.
+const ADMIN_EMAIL_ALLOWED='supportrepslvbags@gmail.com';
+function isAllowedAdmin(session){
+  const em=(session&&session.user&&session.user.email||'').toLowerCase();
+  return em===ADMIN_EMAIL_ALLOWED;
+}
 async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pass=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');
   err.classList.add('hidden');
-  console.log('[Admin] Login attempt for:', email);
-  console.log('[Admin] sbAdminSignIn available:', typeof sbAdminSignIn);
-  console.log('[Admin] window.supabase available:', typeof window.supabase);
-  if(typeof sbAdminSignIn==='function'){
-    try{
-      const {data,error}=await sbAdminSignIn(email,pass);
-      console.log('[Admin] SignIn result:', {hasData:!!data, hasError:!!error, errorMsg:error?error.message:null});
-      if(!error&&data&&data.session){
-        sessionStorage.setItem('vr_admin','1');
-        enterAdmin();
-        return;
-      }
-      const msg=error?(error.message||'Login failed'):'Login failed - no session returned';
-      err.textContent=msg;
-      err.classList.remove('hidden');
-      return;
-    }catch(e){
-      console.error('[Admin] Login exception:', e);
-      err.textContent='Login error: '+(e.message||e);
+  if(typeof sbAdminSignIn!=='function'||!getSb()){
+    err.textContent='Auth backend is not configured.';
+    err.classList.remove('hidden');
+    return;
+  }
+  try{
+    const {data,error}=await sbAdminSignIn(email,pass);
+    if(error||!data||!data.session){
+      err.textContent=(error&&error.message)||'Invalid email or password.';
       err.classList.remove('hidden');
       return;
     }
-  }
-  // Fallback when Supabase isn't configured (local dev only)
-  console.log('[Admin] Falling back to local checkAdmin');
-  if(checkAdmin(email,pass)){
+    if(!isAllowedAdmin(data.session)){
+      await sbAdminSignOut();
+      err.textContent='This account is not authorized for admin access.';
+      err.classList.remove('hidden');
+      return;
+    }
     sessionStorage.setItem('vr_admin','1');
     enterAdmin();
-  } else {
-    err.textContent='Supabase not configured and local auth failed';
+  }catch(e){
+    err.textContent='Login error: '+(e.message||e);
     err.classList.remove('hidden');
   }
 }
+// Supabase password reset — emails a recovery link back to this page.
+async function forgotPassword(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const err=document.getElementById('loginErr');
+  err.classList.add('hidden');
+  if(!email||!email.includes('@')){
+    err.textContent='Enter your admin email above, then click Forgot Password.';
+    err.classList.remove('hidden');
+    return;
+  }
+  const sb=getSb();
+  if(!sb){err.textContent='Auth backend is not configured.';err.classList.remove('hidden');return;}
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/admin.html'});
+    if(error){err.textContent=error.message;err.classList.remove('hidden');return;}
+    alert('Password reset link sent to '+email+'. Open it to set a new password.');
+  }catch(e){err.textContent=String(e.message||e);err.classList.remove('hidden');}
+}
+// Shown when Supabase redirects back with a recovery session.
+async function doResetPassword(){
+  const p=document.getElementById('newPass').value;
+  const p2=document.getElementById('newPass2').value;
+  const err=document.getElementById('resetErr');
+  err.classList.add('hidden');
+  if(p.length<6){err.textContent='Password must be at least 6 characters.';err.classList.remove('hidden');return;}
+  if(p!==p2){err.textContent='Passwords do not match.';err.classList.remove('hidden');return;}
+  const sb=getSb();
+  if(!sb){err.textContent='Auth backend is not configured.';err.classList.remove('hidden');return;}
+  const {error}=await sb.auth.updateUser({password:p});
+  if(error){err.textContent=error.message;err.classList.remove('hidden');return;}
+  alert('Password updated. Please log in with your new password.');
+  location.href='admin.html';
+}
+// Listen for Supabase recovery redirects (type=recovery in URL hash).
+(function watchRecovery(){
+  const sb=(typeof getSb==='function')?getSb():null;
+  if(!sb||!sb.auth||!sb.auth.onAuthStateChange)return;
+  sb.auth.onAuthStateChange((event)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      document.getElementById('loginScreen').classList.add('hidden');
+      const rs=document.getElementById('resetScreen');
+      if(rs)rs.classList.remove('hidden');
+    }
+  });
+})();
 async function doLogout(){ if(typeof sbAdminSignOut==='function') await sbAdminSignOut(); sessionStorage.removeItem('vr_admin'); location.reload(); }
 function enterAdmin(){
   document.getElementById('loginScreen').classList.add('hidden');
@@ -596,11 +641,11 @@ function delDiscount(i){const d=getDiscounts();d.splice(i,1);saveDiscounts(d);re
 // ---------- INIT ----------
 (async()=>{
   if(sessionStorage.getItem('vr_admin')!=='1') return;
-  // Verify the Supabase session is still valid before entering admin.
+  // Verify the Supabase session is still valid AND belongs to the admin account.
   if(typeof sbAdminSession==='function'){
     const s=await sbAdminSession();
-    if(!s){ sessionStorage.removeItem('vr_admin'); return; }
-  }
+    if(!s||!isAllowedAdmin(s)){ sessionStorage.removeItem('vr_admin'); return; }
+  } else { sessionStorage.removeItem('vr_admin'); return; }
   enterAdmin();
 })();
 

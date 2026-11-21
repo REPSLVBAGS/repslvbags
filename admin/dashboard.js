@@ -6,6 +6,13 @@
 
 var SUPABASE_URL = (typeof SUPABASE_URL !== 'undefined') ? SUPABASE_URL : 'https://wetxlhacaeakstqwqtdh.supabase.co';
 var DAY = 864e5;
+// Only this Supabase Auth account may access analytics (enforced again
+// server-side by analytics-query's ADMIN_EMAIL check).
+var ADMIN_EMAIL_ALLOWED = 'supportrepslvbags@gmail.com';
+function isAllowedAdmin(session){
+  var em=(session&&session.user&&session.user.email||'').toLowerCase();
+  return em===ADMIN_EMAIL_ALLOWED;
+}
 var state = {
   events: [], orders: [], visitors: [],
   selFrom: null, selTo: null,          // selected filter range
@@ -581,10 +588,19 @@ $('loginForm').addEventListener('submit',async function(e){
     var email=$('loginEmail').value.trim(), pass=$('loginPass').value;
     if(typeof sbAdminSignIn==='function'){
       var r=await sbAdminSignIn(email,pass);
-      if(!r.error&&r.data&&r.data.session){ enterApp(); return; }
-      $('loginErr').textContent=(r.error&&r.error.message)||'Login failed';
+      if(!r.error&&r.data&&r.data.session){
+        if(!isAllowedAdmin(r.data.session)){
+          await sbAdminSignOut();
+          $('loginErr').textContent='This account is not authorized for admin access.';
+          $('loginErr').classList.remove('hidden');
+        } else { enterApp(); return; }
+      } else {
+        $('loginErr').textContent=(r.error&&r.error.message)||'Login failed';
+        $('loginErr').classList.remove('hidden');
+      }
     } else {
       $('loginErr').textContent='Backend not configured.';
+      $('loginErr').classList.remove('hidden');
     }
   }catch(err){ $('loginErr').textContent=String(err.message||err); }
   $('loginErr').classList.remove('hidden');
@@ -622,10 +638,11 @@ $('saveSettings').addEventListener('click',function(){
 (async function init(){
   if(typeof getSb!=='function'||!getSb()){ showLogin('Analytics backend is not configured.'); return; }
   var session=await sbAdminSession();
-  if(session){
+  if(session&&isAllowedAdmin(session)){
     var u=session.user; if(u&&u.email)$('acctEmail').textContent='Signed in as '+u.email;
     enterApp();
   } else {
+    if(session) sbAdminSignOut();
     showLogin('');
   }
 })();

@@ -110,7 +110,8 @@ const SEED_PAYMENTS={
   methods:{
     cashapp:{enabled:true, url:'', note:'', label:'Cash App'},
     chime:{enabled:true, details:'', label:'Chime'},
-    zelle:{enabled:true, details:'', label:'Zelle'}
+    zelle:{enabled:true, details:'', label:'Zelle'},
+    venmo:{enabled:true, details:'', label:'Venmo'}
   }
 };
 function getPaymentConfig(){
@@ -125,10 +126,10 @@ function getPaymentConfig(){
   if(c.businessEmail===undefined)c.businessEmail=SEED_PAYMENTS.businessEmail;
   // Centralized inbox: always route business notifications to the main Gmail.
   c.businessEmail='supportrepslvbags@gmail.com';
-  // One-time upgrade: enable all four methods for configs saved before they existed.
-  if(c._v!==2){
-    ['cashapp','chime','zelle'].forEach(k=>{if(c.methods[k])c.methods[k].enabled=true;});
-    c._v=2; localStorage.setItem(DB_PAYMENTS,JSON.stringify(c));
+  // One-time upgrade: enable all methods for configs saved before they existed.
+  if(c._v!==3){
+    ['cashapp','chime','zelle','venmo'].forEach(k=>{if(c.methods[k])c.methods[k].enabled=true;});
+    c._v=3; localStorage.setItem(DB_PAYMENTS,JSON.stringify(c));
   }
   return c;
 }
@@ -137,7 +138,7 @@ function savePaymentConfig(c){localStorage.setItem(DB_PAYMENTS,JSON.stringify(c)
 // manual methods work with or without pre-filled details (instructions are emailed).
 function getActivePaymentMethods(){
   const cfg=getPaymentConfig(), out=[];
-  const order=['cashapp','chime','zelle'];
+  const order=['cashapp','chime','zelle','venmo'];
   order.forEach(k=>{
     const m=cfg.methods[k]; if(!m||!m.enabled) return;
     out.push({key:k,...m});

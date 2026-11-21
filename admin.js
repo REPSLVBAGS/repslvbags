@@ -470,7 +470,7 @@ function renderPayments(){
   // status tabs
   document.getElementById('payTabs').innerHTML=PAY_TABS.map(([k,l])=>`<button class="track-tab ${payTab===k?'active':''}" data-pt="${k}" onclick="setPayTab('${k}')">${l}</button>`).join('');
   // method tabs
-  const methods=['all','Cash App','Chime','Zelle'];
+  const methods=['all','Cash App','Chime','Zelle','Venmo'];
   document.getElementById('payMethodTabs').innerHTML=methods.map(m=>`<button class="track-tab ${payMethodFilter===m?'active':''}" data-pm="${m}" onclick="setPayMethod('${m}')">${m==='all'?'All Methods':m}</button>`).join('');
 
   const q=(document.getElementById('paySearch').value||'').toLowerCase();
@@ -583,6 +583,8 @@ function loadPaymentSettings(){
   document.getElementById('setChimeDetails').value=m.chime.details||'';
   document.getElementById('setZelleEnabled').checked=!!m.zelle.enabled;
   document.getElementById('setZelleDetails').value=m.zelle.details||'';
+  document.getElementById('setVenmoEnabled').checked=!!(m.venmo&&m.venmo.enabled);
+  document.getElementById('setVenmoDetails').value=(m.venmo&&m.venmo.details)||'';
 }
 function savePaymentSettings(){
   const c=getPaymentConfig();
@@ -590,6 +592,7 @@ function savePaymentSettings(){
   c.methods.cashapp={enabled:document.getElementById('setCashEnabled').checked,url:document.getElementById('setCashUrl').value.trim(),note:document.getElementById('setCashNote').value.trim(),label:'Cash App'};
   c.methods.chime={enabled:document.getElementById('setChimeEnabled').checked,details:document.getElementById('setChimeDetails').value.trim(),label:'Chime'};
   c.methods.zelle={enabled:document.getElementById('setZelleEnabled').checked,details:document.getElementById('setZelleDetails').value.trim(),label:'Zelle'};
+  c.methods.venmo={enabled:document.getElementById('setVenmoEnabled').checked,details:document.getElementById('setVenmoDetails').value.trim(),label:'Venmo'};
   delete c.methods.applepay;
   savePaymentConfig(c);
   alert('Payment settings saved. Checkout now shows only configured methods.');

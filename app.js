@@ -223,7 +223,7 @@ function ensureOrder(methodKey,paymentStatus){
   if(!checkoutOrderNo) checkoutOrderNo=genOrderNo();
   const order=createPendingOrder(buildOrderData(methodKey,paymentStatus));
   orderCreated=true;
-  notifyNewOrderToBusiness(order);
+  // New-order owner alert is sent server-side by sync-order (instant + reliable).
   notifyOrderConfirmation(order);
   // Generate invoice + send invoice email (idempotent server-side)
   if(typeof createInvoiceForOrder==='function') createInvoiceForOrder(order);

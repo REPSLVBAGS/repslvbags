@@ -8,6 +8,46 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const EMAIL_SECRET = Deno.env.get('EMAIL_SECRET') || '';
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
+const EMAIL_FROM = Deno.env.get('EMAIL_FROM') || 'Reps LV Bags <onboarding@resend.dev>';
+const ADMIN_EMAIL = (Deno.env.get('ADMIN_EMAIL') || 'admin@repslvbags.com').toLowerCase();
+
+async function logEmail(to: string, subject: string, body: string, status: string) {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/email_log`, {
+      method: 'POST',
+      headers: {
+        apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`,
+        'Content-Type': 'application/json', Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ to_email: to, subject, body: body.slice(0, 5000), status, sent_at: new Date().toISOString() })
+    });
+  } catch (_) { /* never block order sync on logging */ }
+}
+
+// Instant owner alert — fires server-side the moment an order is created,
+// independent of the customer's browser staying open.
+async function notifyNewOrder(row: Record<string, unknown>) {
+  if (!RESEND_API_KEY) { await logEmail(ADMIN_EMAIL, `NEW ORDER – #${row.order_no}`, '', 'no_provider'); return; }
+  const items = Array.isArray(row.items)
+    ? (row.items as Record<string, unknown>[]).map(i => `  • ${i.qty}× ${i.name} — $${((Number(i.price) || 0) * (Number(i.qty) || 1)).toFixed(2)}`).join('\n')
+    : '';
+  const subject = `NEW ORDER – #${row.order_no}`;
+  const body = `${subject}\n\nOrder: ${row.order_no}\nDate: ${row.order_date || new Date().toISOString()}\n\nCUSTOMER\n  Name: ${row.name}\n  Email: ${row.email}\n  Phone: ${row.phone || '—'}\n\nDELIVERY\n  ${row.address}, ${row.city}, ${row.state} ${row.zip}\n\nITEMS\n${items}\n\nTotal: $${row.total}\nPayment: ${row.payment_method || row.paymentMethod || '—'} (${row.payment_status || row.paymentStatus || '—'})\n\nReview in admin → Orders.`;
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: EMAIL_FROM, to: ADMIN_EMAIL, subject, text: body,
+        reply_to: typeof row.email === 'string' ? row.email : undefined
+      })
+    });
+    await logEmail(ADMIN_EMAIL, subject, body, res.ok ? 'sent' : `failed_${res.status}`);
+  } catch (e) {
+    await logEmail(ADMIN_EMAIL, subject, body, 'error');
+  }
+}
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -85,6 +125,9 @@ serve(async (req) => {
         method: 'POST', headers: svcHeaders, body: JSON.stringify(analyticsEvents)
       }).catch(() => {});
     }
+
+    // Instant owner notification on brand-new orders (server-authoritative).
+    if (!prev) await notifyNewOrder(row);
 
     return json({ ok: true });
   } catch (e) {

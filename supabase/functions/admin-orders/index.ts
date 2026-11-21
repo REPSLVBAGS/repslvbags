@@ -80,6 +80,13 @@ serve(async (req) => {
         if (map[k]) row[map[k]] = v;
       }
       if (Object.keys(row).length === 0) return json({ error: 'no valid fields' }, 400);
+      // Capture pre-update state for authoritative analytics transitions.
+      let prevStatus = '', prevTotal: number | null = null;
+      const prevRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/orders?order_no=eq.${encodeURIComponent(order_no)}&select=payment_status,total&limit=1`,
+        { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } }
+      );
+      if (prevRes.ok) { const p = (await prevRes.json())[0]; if (p) { prevStatus = p.payment_status || ''; prevTotal = p.total; } }
       const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?order_no=eq.${encodeURIComponent(order_no)}`, {
         method: 'PATCH',
         headers: {
@@ -89,6 +96,21 @@ serve(async (req) => {
         body: JSON.stringify(row)
       });
       if (!res.ok) return json({ error: await res.text() }, 502);
+
+      // Analytics: emit payment_verified only on a real transition to Paid.
+      const newStatus = String(row.payment_status || '');
+      if (newStatus === 'Paid' && prevStatus !== 'Paid') {
+        await fetch(`${SUPABASE_URL}/rest/v1/analytics_events`, {
+          method: 'POST',
+          headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify([{
+            type: 'payment_verified', visitor_id: 'system', session_id: 'system',
+            page: '', product_name: '', order_no: String(order_no).slice(0, 40),
+            value: prevTotal, referrer: '', source: 'system', device: 'server',
+            utm: {}, meta: {}
+          }])
+        }).catch(() => {});
+      }
       return json({ ok: true });
     }
 

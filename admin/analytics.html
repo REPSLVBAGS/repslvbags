@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Analytics — Reps LV Bags Admin</title>
+<link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <img src="../logo.jpg" alt="Reps LV Bags" class="login-logo">
+      <h1>Analytics</h1>
+      <p>Private admin dashboard</p>
+    </div>
+    <form id="loginForm" autocomplete="off">
+      <label>Email
+        <input type="email" id="loginEmail" required placeholder="admin@repslvbags.com">
+      </label>
+      <label>Password
+        <input type="password" id="loginPass" required placeholder="••••••••">
+      </label>
+      <button type="submit" class="btn-primary" id="loginBtn">Sign In</button>
+      <p id="loginErr" class="login-err hidden"></p>
+    </form>
+    <p class="login-note">Authorized administrators only. All access is logged.</p>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="appShell" class="app-shell hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <img src="../logo.jpg" alt="" class="side-logo">
+      <div><strong>Reps LV Bags</strong><span>Analytics</span></div>
+    </div>
+    <nav class="side-nav" id="sideNav">
+      <a href="#/overview" data-nav="overview" class="active"><i class="dot dot-blue"></i>Overview</a>
+      <a href="#/live" data-nav="live"><i class="dot dot-green"></i>Live Activity</a>
+      <a href="#/sales" data-nav="sales"><i class="dot dot-gold"></i>Sales Analytics</a>
+      <a href="#/visitors" data-nav="visitors"><i class="dot dot-purple"></i>Visitors</a>
+      <a href="#/products" data-nav="products"><i class="dot dot-blue"></i>Products</a>
+      <a href="#/cart" data-nav="cart"><i class="dot dot-orange"></i>Cart Analytics</a>
+      <a href="#/checkout" data-nav="checkout"><i class="dot dot-red"></i>Checkout Analytics</a>
+      <a href="#/orders" data-nav="orders"><i class="dot dot-green"></i>Orders</a>
+      <a href="#/traffic" data-nav="traffic"><i class="dot dot-cyan"></i>Traffic Sources</a>
+      <a href="#/settings" data-nav="settings"><i class="dot dot-gray"></i>Settings</a>
+    </nav>
+    <button id="logoutBtn" class="logout-btn">Log out</button>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button id="burger" class="burger" aria-label="Menu">☰</button>
+      <h2 id="pageTitle">Overview</h2>
+      <div class="topbar-right">
+        <div class="live-pill" id="livePill"><span class="live-dot"></span><span id="livePillText">Connecting…</span></div>
+        <select id="rangeSelect" class="range-select">
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="7d" selected>Last 7 days</option>
+          <option value="30d">Last 30 days</option>
+          <option value="90d">Last 90 days</option>
+          <option value="custom">Custom range</option>
+        </select>
+        <div id="customRange" class="custom-range hidden">
+          <input type="date" id="fromDate"><span>to</span><input type="date" id="toDate">
+          <button id="applyRange" class="btn-ghost-sm">Apply</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+      <!-- OVERVIEW -->
+      <section class="page active" id="page-overview">
+        <div class="hero-row">
+          <div class="hero-card"><span class="hero-label">Visitors</span><span class="hero-num" id="ovVisitors">0</span><span class="hero-sub" id="ovVisitorsSub">last 7 days</span></div>
+          <div class="hero-card"><span class="hero-label">Added to Cart</span><span class="hero-num" id="ovATC">0</span><span class="hero-sub">cart additions</span></div>
+          <div class="hero-card"><span class="hero-label">Left Checkout</span><span class="hero-num" id="ovAbandon">0</span><span class="hero-sub">abandoned checkouts</span></div>
+        </div>
+
+        <div class="stat-grid" id="ovStatGrid"></div>
+
+        <div class="card chart-card">
+          <div class="card-head">
+            <h3>Weekly Activity</h3>
+            <div class="metric-tabs" id="chartMetrics">
+              <button data-m="visitors" class="active">Visitors</button>
+              <button data-m="product_views">Product views</button>
+              <button data-m="add_to_cart">Add to cart</button>
+              <button data-m="checkout_start">Checkout starts</button>
+              <button data-m="orders">Purchases</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="weeklyChart"></div>
+          <div class="chart-tip" id="chartTip" class="hidden"></div>
+        </div>
+      </section>
+
+      <!-- LIVE ACTIVITY -->
+      <section class="page" id="page-live">
+        <div class="card">
+          <div class="card-head"><h3>Recent Activity</h3><span class="muted" id="feedCount"></span></div>
+          <div class="feed" id="activityFeed"></div>
+        </div>
+      </section>
+
+      <!-- SALES -->
+      <section class="page" id="page-sales">
+        <div class="stat-grid" id="salesStatGrid"></div>
+        <div class="card"><div class="card-head"><h3>Daily Revenue</h3></div><div class="chart-wrap" id="salesChart"></div></div>
+        <div class="card"><div class="card-head"><h3>Weekly Revenue</h3></div><div class="chart-wrap" id="salesWeekChart"></div></div>
+      </section>
+
+      <!-- VISITORS -->
+      <section class="page" id="page-visitors">
+        <div class="stat-grid" id="visStatGrid"></div>
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>New vs Returning</h3></div><div id="visSplit"></div></div>
+          <div class="card"><div class="card-head"><h3>Devices</h3></div><div id="visDevices"></div></div>
+        </div>
+        <div class="card"><div class="card-head"><h3>Daily Visitors</h3></div><div class="chart-wrap" id="visChart"></div></div>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section class="page" id="page-products">
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>Most Viewed</h3></div><div id="prodViewed"></div></div>
+          <div class="card"><div class="card-head"><h3>Most Added to Cart</h3></div><div id="prodATC"></div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>Best Sellers (units)</h3></div><div id="prodSold"></div></div>
+          <div class="card"><div class="card-head"><h3>Highest Conversion</h3></div><div id="prodConv"></div></div>
+        </div>
+      </section>
+
+      <!-- CART -->
+      <section class="page" id="page-cart">
+        <div class="stat-grid" id="cartStatGrid"></div>
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>Cart → Checkout Funnel</h3></div><div id="cartFunnel"></div></div>
+          <div class="card"><div class="card-head"><h3>Top Carted Products</h3></div><div id="cartProducts"></div></div>
+        </div>
+      </section>
+
+      <!-- CHECKOUT -->
+      <section class="page" id="page-checkout">
+        <div class="stat-grid" id="coStatGrid"></div>
+        <div class="card"><div class="card-head"><h3>Checkout Funnel</h3></div><div id="coFunnel"></div></div>
+      </section>
+
+      <!-- ORDERS -->
+      <section class="page" id="page-orders">
+        <div class="card"><div class="card-head"><h3>Orders</h3><span class="muted" id="ordersCount"></span></div>
+          <div class="table-wrap"><table class="dt" id="ordersTable">
+            <thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
+            <tbody></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- TRAFFIC -->
+      <section class="page" id="page-traffic">
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>Traffic Sources</h3></div><div id="srcBreakdown"></div></div>
+          <div class="card"><div class="card-head"><h3>Referrers</h3></div><div id="refBreakdown"></div></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-head"><h3>UTM Campaigns</h3></div><div id="utmBreakdown"></div></div>
+          <div class="card"><div class="card-head"><h3>Top Pages</h3></div><div id="pageBreakdown"></div></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="page-settings">
+        <div class="card">
+          <div class="card-head"><h3>Analytics Settings</h3></div>
+          <div class="settings-body">
+            <label>Abandoned session threshold (minutes of inactivity)
+              <input type="number" id="abandonMins" min="5" max="720" value="30">
+            </label>
+            <label class="check"><input type="checkbox" id="autoRefresh" checked> Auto-refresh data every 60 seconds</label>
+            <button id="saveSettings" class="btn-primary">Save Settings</button>
+            <p class="muted" style="margin-top:16px;font-size:12px">Analytics events are collected anonymously (no cookies, no personal data). Revenue only counts orders verified as Paid in the existing order workflow.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Account</h3></div>
+          <div class="settings-body">
+            <p class="muted" id="acctEmail"></p>
+            <button id="logoutBtn2" class="btn-ghost-sm">Log out</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../supabase-js.min.js"></script>
+<script src="../supabase.js?v=4"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

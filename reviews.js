@@ -2,7 +2,7 @@
 // Handles review display, submission, and admin moderation.
 
 const REVIEWS_API = 'https://wetxlhacaeakstqwqtdh.supabase.co/functions/v1/reviews';
-const EMAIL_SECRET = 'vr7f2k9xQm4Lp8Rw3Ty6';
+const REVIEW_API_SECRET = 'vr7f2k9xQm4Lp8Rw3Ty6';
 
 // ---------- State ----------
 let reviewsCache = null;
@@ -17,7 +17,7 @@ async function fetchReviews(status = 'approved', productId = null) {
     
     const headers = { 'Content-Type': 'application/json' };
     // For admin requests, include secret
-    if (status !== 'approved') headers['x-email-secret'] = EMAIL_SECRET;
+    if (status !== 'approved') headers['x-email-secret'] = REVIEW_API_SECRET;
     
     const res = await fetch(url.toString(), { headers });
     if (!res.ok) throw new Error(await res.text());
@@ -50,7 +50,7 @@ async function moderateReview(id, updates) {
       method: 'PATCH',
       headers: { 
         'Content-Type': 'application/json',
-        'x-email-secret': EMAIL_SECRET
+        'x-email-secret': REVIEW_API_SECRET
       },
       body: JSON.stringify({ id, ...updates })
     });
@@ -66,7 +66,7 @@ async function deleteReview(id) {
   try {
     const res = await fetch(`${REVIEWS_API}?id=${id}`, {
       method: 'DELETE',
-      headers: { 'x-email-secret': EMAIL_SECRET }
+      headers: { 'x-email-secret': REVIEW_API_SECRET }
     });
     if (!res.ok) throw new Error(await res.text());
     return await res.json();

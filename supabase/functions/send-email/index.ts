@@ -8,6 +8,31 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const EMAIL_FROM = Deno.env.get('EMAIL_FROM') || 'Reps LV Bags <onboarding@resend.dev>';
 const EMAIL_SECRET = Deno.env.get('EMAIL_SECRET') || '';
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
+const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+
+// Persist every send attempt so deliveries can be audited in the DB.
+async function logSend(to: string, subject: string, body: string, status: string) {
+  if (!SUPABASE_URL || !SERVICE_KEY) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/email_log`, {
+      method: 'POST',
+      headers: {
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({
+        to_email: to,
+        subject,
+        body: String(body).slice(0, 5000),
+        status,
+        sent_at: new Date().toISOString()
+      })
+    });
+  } catch (_) { /* logging must never break sending */ }
+}
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -38,6 +63,7 @@ serve(async (req) => {
 
     if (!RESEND_API_KEY) {
       console.log(`[send-email] To: ${to} | ${subject}`);
+      await logSend(to, subject, body, 'no_provider');
       return json({ sent: false, reason: 'no_provider' });
     }
 
@@ -53,6 +79,7 @@ serve(async (req) => {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
+    await logSend(to, subject, body, res.ok ? 'sent' : `failed_${res.status}`);
     return json({ sent: res.ok, data }, res.ok ? 200 : 502);
   } catch (e) {
     return json({ error: String(e) }, 500);

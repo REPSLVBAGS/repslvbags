@@ -6,9 +6,9 @@
 (function(){
   'use strict';
 
-  // Public Supabase project credentials (same anon key already shipped in supabase.js).
+  // Public Supabase project credentials (same publishable key already shipped in supabase.js).
   var SUPABASE_URL = 'https://wetxlhacaeakstqwqtdh.supabase.co';
-  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndldHhsaGFjYWVha3N0cXdxdGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3ODUzNjUsImV4cCI6MjExMDM2MTM2NX0.kd1s2dKHfN3HCl5cT09hoyyLjk5-pbJy42p9BJjqD3g';
+  var SUPABASE_ANON_KEY = 'sb_publishable_NeqmOcAZSvljuJk_wLWJVQ_BErrsZeM';
   var ENDPOINT = SUPABASE_URL + '/functions/v1/analytics-ingest';
 
   // Respect the existing analytics consent banner (GA4/Meta). First-party

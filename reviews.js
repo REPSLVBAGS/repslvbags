@@ -99,7 +99,7 @@ function esc(s) {
 function renderReviewCard(review) {
   const verifiedBadge = review.verified_purchase ? '<span class="verified-badge">✓ Verified Purchase</span>' : '';
   const featuredBadge = review.featured ? '<span class="featured-badge">Featured</span>' : '';
-  const adminReply = review.admin_reply ? `<div class="admin-reply"><strong>Reps LV Bags:</strong> ${esc(review.admin_reply)}</div>` : '';
+  const adminReply = review.admin_reply ? `<div class="admin-reply"><strong>House of Luxe:</strong> ${esc(review.admin_reply)}</div>` : '';
   const photo = review.photo_url ? `<img src="${esc(review.photo_url)}" alt="Review photo" class="review-photo" loading="lazy">` : '';
 
   return `

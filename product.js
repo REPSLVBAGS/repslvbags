@@ -29,7 +29,7 @@ function render(){
     <div class="pd-info">
       <p class="hero-kicker">${p.style}</p>
       <h1>${p.name}</h1>
-      <div class="price">$${p.price}</div>
+      <div class="price">${p.comparePrice>p.price?`<span class="was">$${p.comparePrice}</span>`:''}$${p.price}</div>
       <p class="pd-desc">${p.desc}</p>
       <div class="pd-meta">
         <div><span>Color</span><span>${p.colors[selColorIdx]}</span></div>
@@ -63,7 +63,7 @@ function render(){
   ld.textContent=JSON.stringify({
     '@context':'https://schema.org','@type':'Product',
     name:p.name,description:p.desc,image:p.images&&p.images.length?p.images[0]:'logo.jpg',
-    sku:'RLV-'+String(p.id).padStart(4,'0'),brand:{'@type':'Brand',name:'Reps LV Bags'},
+    sku:'RLV-'+String(p.id).padStart(4,'0'),brand:{'@type':'Brand',name:'House of Luxe'},
     offers:{'@type':'Offer',priceCurrency:'USD',price:p.price,availability:p.stock>0?'https://schema.org/InStock':'https://schema.org/OutOfStock',url:location.href}
   });
 
@@ -82,7 +82,7 @@ function render(){
 function cardHTML(x){
   return `<div class="card" data-pid="${x.id}">
     <div class="card-img">${x.bestseller>0?'<span class="card-badge">Best Seller</span>':''}${x.images&&x.images.length?`<img src="${x.images[0]}" alt="${x.name}">`:bagSVG(x,0)}</div>
-    <div class="card-body"><h3>${x.name}</h3><div class="price">$${x.price}</div>
+    <div class="card-body"><h3>${x.name}</h3><div class="price">${x.comparePrice>x.price?`<span class="was">$${x.comparePrice}</span>`:''}$${x.price}</div>
     <button class="add-cart" data-add="${x.id}">Add to Cart</button></div></div>`;
 }
 

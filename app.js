@@ -19,6 +19,7 @@ function badgeFor(p){
   if(p.id>=PRODUCTS[PRODUCTS.length-1].id-2) return '<span class="card-badge new">New</span>';
   return '';
 }
+function priceHTML(p){return p.comparePrice>p.price?`<span class="was">$${p.comparePrice}</span>$${p.price}`:`$${p.price}`;}
 function renderProducts(){
   const q=(document.getElementById('searchInput').value||'').toLowerCase();
   const fp=document.getElementById('filterPrice').value, fc=document.getElementById('filterColor').value,
@@ -48,7 +49,7 @@ function renderProducts(){
       </div>
       <div class="card-body">
         <h3>${p.name}</h3>
-        <div class="price">$${p.price}</div>
+        <div class="price">${priceHTML(p)}</div>
         <p class="desc">${p.desc}</p>
         <div class="swatches">${p.colors.map((c,i)=>`<div class="swatch ${i===ci?'sel':''}" style="background:${COLORS[c]}" data-swatch="${p.id}:${i}" title="${c}"></div>`).join('')}</div>
         <button class="add-cart" data-add="${p.id}">Add to Cart</button>
@@ -67,14 +68,14 @@ const CAMPAIGN=[
   'photo_2026-11-14_01-28-06.jpg',
   'photo_2026-11-14_01-28-21.jpg'
 ];
-const CAMPAIGN_ALT='Reps LV Bags campaign — luxury handbag editorial';
+const CAMPAIGN_ALT='House of Luxe campaign — luxury handbag editorial';
 
 // ---------- Collections ----------
 const COLLECTIONS=[
-  {name:'Everyday Elegance',style:'Tote',desc:'Room for everything, styled for nothing'},
+  {name:'Everyday Icons',style:'Tote',desc:'Timeless essentials for every day'},
   {name:'Timeless Classics',style:'Shoulder Bag',desc:'Icons, reimagined for today'},
-  {name:'Modern Shoulder Bags',style:'Crossbody',desc:'Hands-free, head-turning'},
-  {name:'Statement Pieces',style:'Clutch',desc:'For the moments that matter'},
+  {name:'New Arrivals',style:'Crossbody',desc:'The latest edits, just landed'},
+  {name:'Best Sellers',style:'Clutch',desc:'The pieces everyone is talking about'},
 ];
 function renderCollections(){
   const box=document.getElementById('collectionGrid');
@@ -141,7 +142,7 @@ function openProduct(id){
   const p=PRODUCTS.find(x=>x.id===id);if(!p)return;const ci=selColor[id]||0;
   document.getElementById('modalBody').innerHTML=`
     <div class="modal-img">${productImg(p,ci)}</div>
-    <div class="modal-info"><h2>${p.name}</h2><div class="price">$${p.price}</div>
+    <div class="modal-info"><h2>${p.name}</h2><div class="price">${priceHTML(p)}</div>
     <p>${p.desc}</p><p style="font-size:12px;color:var(--muted)">Style: ${p.style} · ${p.stock} in stock</p>
     <div class="swatches">${p.colors.map((c,i)=>`<div class="swatch ${i===ci?'sel':''}" style="background:${COLORS[c]}" data-mswatch="${id}:${i}"></div>`).join('')}</div>
     <button class="add-cart" data-add="${id}">Add to Cart — $${p.price}</button>
@@ -310,8 +311,8 @@ function showConfirmation(order,methodKey){
      'Our team will send the necessary payment instructions for your selected payment method to you via <b>text message (SMS)</b> shortly.<br>'+
      'Please make sure the phone number you provided at checkout is correct and keep an eye on your messages.<br><br>'+
      '<b>PLEASE NOTE:</b> Your order will remain <b>pending</b> until your payment has been successfully verified by our team.<br><br>'+
-     'Thank you for choosing Reps LV Bags. We truly appreciate your trust and look forward to serving you!<br>'+
-     '<i>Elegance in Every Detail.</i>';
+     'Thank you for choosing House of Luxe. We truly appreciate your trust and look forward to serving you!<br>'+
+     '<i>Luxury Is in Every Detail.</i>';
   document.getElementById('confPayLink').innerHTML=`<a href="payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}" style="color:var(--espresso);text-decoration:underline;font-weight:600">Submit Payment Screenshot →</a>`;
   const invLink=document.getElementById('confInvoiceLink');
   if(invLink){const o=findOrderByNo(order.orderNo);invLink.innerHTML=(o&&o.invoiceUrl)?'<a href="'+o.invoiceUrl+'" style="color:var(--espresso);text-decoration:underline;font-weight:600">View Your Invoice &rarr;</a>':'';}
@@ -393,7 +394,9 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // ---------- Init ----------
 const _content=getContent();
-document.querySelector('.announce').textContent=_content.announcement||'Complimentary US shipping on qualifying orders · Secure checkout · 30-day returns';
+const ANNOUNCE=['Discover the House of Luxe Collection','Complimentary Shipping on Qualifying Orders','Timeless Style. Effortless Elegance.','Your Next Favourite Piece Awaits.'];
+const _annEl=document.querySelector('.announce');
+if(_annEl){let _ai=0;_annEl.textContent=ANNOUNCE[0];setInterval(()=>{_ai=(_ai+1)%ANNOUNCE.length;_annEl.textContent=ANNOUNCE[_ai];},4500);}
 document.getElementById('heroImg').innerHTML=`<img src="${CAMPAIGN[0]}" alt="${CAMPAIGN_ALT} — hero" fetchpriority="high">`;
 document.getElementById('storyImg').innerHTML=`<img src="${CAMPAIGN[1]}" alt="${CAMPAIGN_ALT} — brand story" loading="lazy">`;
 document.getElementById('instaGrid').innerHTML=CAMPAIGN.map((src,i)=>{

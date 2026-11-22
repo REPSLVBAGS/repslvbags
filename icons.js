@@ -22,7 +22,11 @@
     arrowU:  '<line x1="12" y1="20" x2="12" y2="4"/><polyline points="5.5 10.5 12 4 18.5 10.5"/>',
     user:    '<circle cx="12" cy="8" r="4"/><path d="M4.8 20.4c1.4-3.4 4.3-5 7.2-5s5.8 1.6 7.2 5"/>',
     insta:   '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.1" cy="6.9" r="1" fill="currentColor" stroke="none"/>',
-    chat:    '<path d="M4.5 6.8A2.3 2.3 0 0 1 6.8 4.5h10.4a2.3 2.3 0 0 1 2.3 2.3v6.4a2.3 2.3 0 0 1-2.3 2.3H9.2L4.5 20.5v-13.7z"/>'
+    chat:    '<path d="M4.5 6.8A2.3 2.3 0 0 1 6.8 4.5h10.4a2.3 2.3 0 0 1 2.3 2.3v6.4a2.3 2.3 0 0 1-2.3 2.3H9.2L4.5 20.5v-13.7z"/>',
+    lock:    '<rect x="5" y="10.5" width="14" height="9.5" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',
+    sparkle: '<path d="M12 4l1.7 4.6L18.3 10l-4.6 1.7L12 16.3l-1.7-4.6L5.7 10l4.6-1.4L12 4z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2z"/>',
+    truck:   '<rect x="2.5" y="6" width="11" height="10" rx="1"/><path d="M13.5 9.5h4l3.5 3.5v3h-7.5"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',
+    headset: '<path d="M4.5 13.5v-1a7.5 7.5 0 0 1 15 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19a4 4 0 0 1-4 2h-2"/>'
   };
 
   function svg(name, cls) {
@@ -47,7 +51,11 @@
     arrowU: function (c) { return svg('arrowU', c); },
     user: function (c) { return svg('user', c); },
     insta: function (c) { return svg('insta', c); },
-    chat: function (c) { return svg('chat', c); }
+    chat: function (c) { return svg('chat', c); },
+    lock: function (c) { return svg('lock', c); },
+    sparkle: function (c) { return svg('sparkle', c); },
+    truck: function (c) { return svg('truck', c); },
+    headset: function (c) { return svg('headset', c); }
   };
 
   // Replace legacy text glyphs in static markup. Dynamic content uses I.* directly.
@@ -69,6 +77,12 @@
       if (el.dataset.iconDone) return;
       el.dataset.iconDone = '1';
       el.innerHTML = svg('star');
+    });
+    // Declarative icons: <span data-icon="truck"></span>
+    document.querySelectorAll('[data-icon]').forEach(function (el) {
+      if (el.dataset.iconDone) return;
+      el.dataset.iconDone = '1';
+      el.innerHTML = svg(el.getAttribute('data-icon'));
     });
     // Social text links get a small platform glyph
     document.querySelectorAll('.socials a').forEach(function (a) {

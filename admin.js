@@ -552,7 +552,7 @@ function adminRequestInfo(no){
   requestMoreInfo(no,note);
   adminPushOrder(no);
   const o=adminGetOrders().find(x=>x.orderNo===no);
-  if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\n— Reps LV Bags`);}
+  if(o){sendEmail(o.email,`Payment Info Needed — Order #${o.orderNo}`,`Hi ${o.name},\n\nWe need a little more information about your payment for order #${o.orderNo}.\n\n${note||'Please reply to this email or contact supportrepslvbags@gmail.com'}\n\n— House of Luxe`);}
   renderPayments();
 }
 function resendInstructions(no){

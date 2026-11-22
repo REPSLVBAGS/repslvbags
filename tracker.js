@@ -1,4 +1,4 @@
-// ---------- Reps LV Bags first-party analytics tracker ----------
+// ---------- House of Luxe first-party analytics tracker ----------
 // Lightweight, privacy-conscious event collection. Sends batched events to the
 // 'analytics-ingest' Supabase Edge Function. No cookies, no fingerprinting —
 // anonymous visitor/session IDs only. Fails silently so the storefront is

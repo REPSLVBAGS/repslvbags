@@ -111,7 +111,7 @@ function requestMoreInfo(no, note){
 // Email hook — real sending needs a backend (Supabase Edge Function / email API).
 // email.js queues + logs every notification; wire sendEmail() to your provider.
 function notifyStatusChange(order, newStatus){
-  console.log(`[EMAIL] To: ${order.email} — "Your Reps LV Bags Order #${order.orderNo} is now ${newStatus}"`);
-  return {to:order.email, subject:`Your Reps LV Bags Order #${order.orderNo} is now ${newStatus}`,
-    body:`Hi ${order.name},\n\nYour order #${order.orderNo} status has been updated to: ${newStatus}.\n\nTrack it anytime at /track-order\n\n— Reps LV Bags`};
+  console.log(`[EMAIL] To: ${order.email} — "Your House of Luxe Order #${order.orderNo} is now ${newStatus}"`);
+  return {to:order.email, subject:`Your House of Luxe Order #${order.orderNo} is now ${newStatus}`,
+    body:`Hi ${order.name},\n\nYour order #${order.orderNo} status has been updated to: ${newStatus}.\n\nTrack it anytime at /track-order\n\n— House of Luxe`};
 }

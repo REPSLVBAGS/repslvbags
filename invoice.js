@@ -78,7 +78,7 @@
       link.href='payment-confirm.html?order='+encodeURIComponent(inv.order_no)+'&email='+encodeURIComponent(inv.customer_email);
     }
 
-    document.title='Invoice '+inv.invoice_no+' — Reps LV Bags';
+    document.title='Invoice '+inv.invoice_no+' — House of Luxe';
   }
   init();
 })();

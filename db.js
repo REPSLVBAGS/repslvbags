@@ -1,4 +1,4 @@
-// ---------- Reps LV Bags database (localStorage — swap internals for Supabase later) ----------
+// ---------- House of Luxe database (localStorage — swap internals for Supabase later) ----------
 const DB_PRODUCTS='vr_products', DB_CONTENT='vr_content', DB_DISCOUNTS='vr_discounts';
 
 // ---------- Shared color map + premium SVG bag art ----------
@@ -84,10 +84,10 @@ function nextProductId(){return Math.max(0,...getProducts().map(p=>p.id))+1;}
 // ---------- CONTENT (homepage editable bits) ----------
 const SEED_CONTENT={
   announcement:'Free US Shipping Over $150  |  30-Day Easy Returns',
-  heroKicker:'Luxury, Reimagined.',
-  heroTitle:'Timeless Bags.<br><em>Modern Prices.</em>',
-  heroSub:'Iconic silhouettes, impeccable quality, and prices that make sense. Vintage-inspired luxury — delivered to your door.',
-  heroBtn:'Shop Bestsellers',
+  heroKicker:'House of Luxe',
+  heroTitle:'Luxury Is in<br><em>Every Detail.</em>',
+  heroSub:'Discover a curated collection of timeless handbags and statement accessories, selected to elevate your everyday style.',
+  heroBtn:'Explore the Collection',
   instagram:['https://instagram.com/repslvbags','https://instagram.com/repslvbags/p/1','https://instagram.com/repslvbags/p/2']
 };
 function getContent(){let c=JSON.parse(localStorage.getItem(DB_CONTENT)||'null');if(!c){c=SEED_CONTENT;localStorage.setItem(DB_CONTENT,JSON.stringify(c));}return c;}

@@ -127,7 +127,7 @@ function orderEmailHtml(order){
       <p style="margin-top:24px;font-size:12px;color:#8a8177">Review &amp; verify this order in the admin dashboard → Payments.</p>
     </div>
     <div style="background:#f8f6f2;padding:18px 30px;text-align:center;font-size:11px;color:#8a8177;letter-spacing:1px">
-      Reps LV Bags · supportrepslvbags@gmail.com · repslvbags.com
+      House of Luxe · supportrepslvbags@gmail.com · repslvbags.com
     </div>
   </div></body></html>`;
 }
@@ -136,8 +136,8 @@ function orderEmailHtml(order){
 async function notifyOrderConfirmation(order){
   if(alreadySent(order,'order_confirmation'))return;
   await sendEmail(order.email,
-    `Order Confirmed — Reps LV Bags #${order.orderNo}`,
-    `Hi ${order.name},\n\nThank you for your order! Your order has been received and is awaiting payment verification.\n\nOrder Number: ${order.orderNo}\nPayment Method: ${order.paymentMethod}\nTotal: $${order.total.toFixed(2)}\n\nItems:\n${orderItemsText(order)}\n\n${orderTotalsText(order)}\n\nDelivery address:\n${order.address}, ${order.city}, ${order.state} ${order.zip}\n\nWe will email you payment instructions and tracking updates as your order progresses.\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
+    `Order Confirmed — House of Luxe #${order.orderNo}`,
+    `Hi ${order.name},\n\nThank you for your order! Your order has been received and is awaiting payment verification.\n\nOrder Number: ${order.orderNo}\nPayment Method: ${order.paymentMethod}\nTotal: $${order.total.toFixed(2)}\n\nItems:\n${orderItemsText(order)}\n\n${orderTotalsText(order)}\n\nDelivery address:\n${order.address}, ${order.city}, ${order.state} ${order.zip}\n\nWe will send payment instructions via SMS and tracking updates by email as your order progresses.\n\n— House of Luxe\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'order_confirmation');
 }
 
@@ -148,7 +148,7 @@ async function notifyPaymentInstructions(order){
   const key=methodKey==='cashapp'?'cashapp':methodKey;
   await sendEmail(order.email,
     `Payment Instructions — Order #${order.orderNo}`,
-    `Hi ${order.name},\n\nYour order #${order.orderNo} is awaiting payment.\n\nAmount to pay: $${order.total.toFixed(2)}\nPayment method: ${order.paymentMethod}\nRequired payment reference: ${order.orderNo}\n\n${paymentDetailsText(key)}\n\nHow to pay:\n1. Send exactly $${order.total.toFixed(2)} using ${order.paymentMethod}.\n2. Include "${order.orderNo}" as the payment reference/note.\n3. After paying, submit your payment screenshot here:\n   https://repslvbags.com/payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}\n\nOur team verifies every payment manually before dispatch. You will receive a confirmation email once payment is verified.\n\nQuestions? supportrepslvbags@gmail.com\n\n— Reps LV Bags`);
+    `Hi ${order.name},\n\nYour order #${order.orderNo} is awaiting payment.\n\nAmount to pay: $${order.total.toFixed(2)}\nPayment method: ${order.paymentMethod}\nRequired payment reference: ${order.orderNo}\n\n${paymentDetailsText(key)}\n\nHow to pay:\n1. Send exactly $${order.total.toFixed(2)} using ${order.paymentMethod}.\n2. Include "${order.orderNo}" as the payment reference/note.\n3. After paying, submit your payment screenshot here:\n   https://repslvbags.com/payment-confirm.html?order=${order.orderNo}&email=${encodeURIComponent(order.email)}\n\nOur team verifies every payment manually before dispatch. You will receive a confirmation email once payment is verified.\n\nQuestions? supportrepslvbags@gmail.com\n\n— House of Luxe`);
   markSent(order.orderNo,'payment_instructions');
 }
 
@@ -192,7 +192,7 @@ async function notifyPaymentVerified(order){
   if(alreadySent(order,'payment_verified'))return;
   await sendEmail(order.email,
     `Payment Verified — Order #${order.orderNo}`,
-    `Hi ${order.name},\n\nGreat news — we've verified your payment for order #${order.orderNo}.\n\nYour order is now being prepared for shipment. We'll email you tracking details as soon as it ships.\n\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
+    `Hi ${order.name},\n\nGreat news — we've verified your payment for order #${order.orderNo}.\n\nYour order is now being prepared for shipment. We'll email you tracking details as soon as it ships.\n\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— House of Luxe\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'payment_verified');
 }
 
@@ -201,7 +201,7 @@ async function notifyShipping(order){
   if(alreadySent(order,'shipping_'+order.status))return;
   await sendEmail(order.email,
     `Your Order #${order.orderNo} — ${order.status}`,
-    `Hi ${order.name},\n\nYour order #${order.orderNo} is now: ${order.status}.\n\n${order.carrier?'Carrier: '+order.carrier+'\n':''}${order.tracking?'Tracking: '+order.tracking+'\n\nTrack it here: '+carrierTrackUrl(order.carrier,order.tracking)+'\n':''}\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— Reps LV Bags\nsupportrepslvbags@gmail.com`);
+    `Hi ${order.name},\n\nYour order #${order.orderNo} is now: ${order.status}.\n\n${order.carrier?'Carrier: '+order.carrier+'\n':''}${order.tracking?'Tracking: '+order.tracking+'\n\nTrack it here: '+carrierTrackUrl(order.carrier,order.tracking)+'\n':''}\nTrack your order anytime: https://repslvbags.com/track-order.html\n\n— House of Luxe\nsupportrepslvbags@gmail.com`);
   markSent(order.orderNo,'shipping_'+order.status);
 }
 function carrierTrackUrl(carrier,tracking){
@@ -228,7 +228,7 @@ async function notifyCustomerMessage(msg){
   const ref=genMsgRef(msg.type);
   const typeLabel={contact:'CUSTOMER MESSAGE',inquiry:'CUSTOMER INQUIRY',support:'CUSTOMER SUPPORT',newsletter:'NEWSLETTER SIGNUP'}[msg.type]||'CUSTOMER MESSAGE';
   const subject=`${typeLabel} – #${ref}`;
-  const body=`${subject}\n\nReference: ${ref}\nType: ${typeLabel}\nReceived: ${new Date().toLocaleString()}\n\nFROM\n  Name: ${msg.name||'—'}\n  Email: ${msg.email||'—'}\n${msg.orderNo?'  Order #: '+msg.orderNo+'\n':''}\nMESSAGE\n${msg.message||'—'}\n\n— Reps LV Bags website`;
+  const body=`${subject}\n\nReference: ${ref}\nType: ${typeLabel}\nReceived: ${new Date().toLocaleString()}\n\nFROM\n  Name: ${msg.name||'—'}\n  Email: ${msg.email||'—'}\n${msg.orderNo?'  Order #: '+msg.orderNo+'\n':''}\nMESSAGE\n${msg.message||'—'}\n\n— House of Luxe website`;
   const fields={
     'Reference':ref,'Type':typeLabel,'Name':msg.name||'—','Email':msg.email||'—',
     ...(msg.orderNo?{'Order Number':msg.orderNo}:{}),

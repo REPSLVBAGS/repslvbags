@@ -1,4 +1,4 @@
-// ---------- Reps LV Bags Analytics Dashboard ----------
+// ---------- House of Luxe Analytics Dashboard ----------
 // Private admin analytics. All data comes from the 'analytics-query'
 // Edge Function (admin-JWT protected). Live feed via Supabase Realtime.
 (function(){

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="logo.jpg">
+<link rel="icon" href="logo.svg">
 <title>Admin — House of Luxe</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -15,7 +15,7 @@
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <img src="logo.jpg" alt="House of Luxe" style="height:64px;margin-bottom:14px">
+    <img src="logo.svg" alt="House of Luxe" style="height:64px;margin-bottom:14px">
     <p>Admin Dashboard</p>
     <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
     <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
@@ -28,7 +28,7 @@
 <!-- PASSWORD RESET (Supabase recovery redirect) -->
 <div class="login-screen hidden" id="resetScreen">
   <div class="login-card">
-    <img src="logo.jpg" alt="House of Luxe" style="height:64px;margin-bottom:14px">
+    <img src="logo.svg" alt="House of Luxe" style="height:64px;margin-bottom:14px">
     <p>Set New Password</p>
     <input type="password" id="newPass" placeholder="New password (min 6 characters)" autocomplete="new-password">
     <input type="password" id="newPass2" placeholder="Confirm new password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
@@ -41,7 +41,7 @@
 <!-- DASHBOARD -->
 <div class="admin-shell hidden" id="adminShell">
   <aside class="sidebar">
-    <div class="side-logo"><img src="logo.jpg" alt="House of Luxe" style="height:40px"></div>
+    <div class="side-logo"><img src="logo.svg" alt="House of Luxe" style="height:40px"></div>
     <nav>
       <a href="#/dashboard" data-nav="dashboard" class="active">◈ Dashboard</a>
       <a href="#/products" data-nav="products">▣ Products</a>

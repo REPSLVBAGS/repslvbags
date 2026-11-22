@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" role="img" aria-label="House of Luxe">
+  <!-- Hairlines -->
+  <line x1="70" y1="18" x2="570" y2="18" stroke="#B49A6C" stroke-width="1" opacity="0.55"/>
+  <line x1="70" y1="102" x2="570" y2="102" stroke="#B49A6C" stroke-width="1" opacity="0.55"/>
+  <!-- Wordmark -->
+  <text x="198" y="72" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="40" letter-spacing="10" fill="#171717">HOUSE</text>
+  <text x="322" y="70" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-style="italic" font-size="30" letter-spacing="4" fill="#B49A6C">of</text>
+  <text x="446" y="72" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="40" letter-spacing="10" fill="#171717">LUXE</text>
+</svg>

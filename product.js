@@ -62,7 +62,7 @@ function render(){
   if(!ld){ld=document.createElement('script');ld.type='application/ld+json';ld.id='ld-product';document.head.appendChild(ld);}
   ld.textContent=JSON.stringify({
     '@context':'https://schema.org','@type':'Product',
-    name:p.name,description:p.desc,image:p.images&&p.images.length?p.images[0]:'logo.jpg',
+    name:p.name,description:p.desc,image:p.images&&p.images.length?p.images[0]:'logo.svg',
     sku:'RLV-'+String(p.id).padStart(4,'0'),brand:{'@type':'Brand',name:'House of Luxe'},
     offers:{'@type':'Offer',priceCurrency:'USD',price:p.price,availability:p.stock>0?'https://schema.org/InStock':'https://schema.org/OutOfStock',url:location.href}
   });

@@ -25,9 +25,11 @@
     var avg = reviews.length ? reviews.reduce(function (s, r) { return s + r.rating; }, 0) / reviews.length : 0;
     var el = document.getElementById('rvAvg'); if (el) el.textContent = avg ? avg.toFixed(1) : '—';
     var stars = document.getElementById('rvAvgStars');
-    if (stars) {
+    if (stars && window.I) {
       var full = Math.round(avg);
-      stars.textContent = '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
+      var s = '';
+      for (var i = 1; i <= 5; i++) s += window.I[i <= full ? 'starFill' : 'star']();
+      stars.innerHTML = s;
     }
     var cnt = document.getElementById('rvCount');
     if (cnt) cnt.textContent = reviews.length + ' review' + (reviews.length !== 1 ? 's' : '');

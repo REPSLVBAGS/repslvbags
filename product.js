@@ -41,7 +41,7 @@ function render(){
         ${p.colors.map((c,i)=>`<div class="swatch ${i===selColorIdx?'sel':''}" style="background:${COLORS[c]};width:26px;height:26px" data-pcolor="${i}" title="${c}"></div>`).join('')}
       </div>
       <div class="pd-qty">
-        <button data-q="-1" aria-label="Decrease">−</button><span id="qtyVal">${qty}</span><button data-q="1" aria-label="Increase">+</button>
+        <button data-q="-1" aria-label="Decrease">${window.I?window.I.minus():'−'}</button><span id="qtyVal">${qty}</span><button data-q="1" aria-label="Increase">${window.I?window.I.plus():'+'}</button>
       </div>
       <div class="pd-actions">
         <button class="btn-gold" id="pdAdd" ${p.stock<=0?'disabled style="opacity:.5"':''}>Add to Cart — $${(p.price*qty).toFixed(2)}</button>

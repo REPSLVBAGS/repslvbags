@@ -80,7 +80,9 @@ async function deleteReview(id) {
 function renderStars(rating) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
-    stars.push(`<span class="star ${i <= rating ? 'filled' : ''}">★</span>`);
+    const filled = i <= rating;
+    const icon = window.I ? (filled ? window.I.starFill() : window.I.star()) : '★';
+    stars.push(`<span class="star ${filled ? 'filled' : ''}">${icon}</span>`);
   }
   return stars.join('');
 }
@@ -145,7 +147,7 @@ function renderReviewsSection(reviews, productId = null, limit = 0) {
       <div class="rating-dist">
         ${ratingDist.map(d => `
           <div class="dist-row">
-            <span class="dist-star">${d.star}★</span>
+            <span class="dist-star">${d.star} ${window.I ? window.I.star() : '★'}</span>
             <div class="dist-bar"><div class="dist-fill" style="width:${(d.count/reviews.length)*100}%"></div></div>
             <span class="dist-count">${d.count}</span>
           </div>

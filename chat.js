@@ -44,7 +44,7 @@ function initFallbackChat() {
   widget.id = 'chatWidget';
   widget.innerHTML = `
     <div class="chat-button" id="chatButton">
-      <span class="chat-icon">💬</span>
+      <span class="chat-icon">${window.I ? window.I.chat() : '💬'}</span>
       <span class="chat-label">Chat</span>
       <span class="chat-status" id="chatStatus"></span>
     </div>
@@ -54,7 +54,7 @@ function initFallbackChat() {
           <h4>Customer Support</h4>
           <p class="chat-status-text" id="chatStatusText">Online</p>
         </div>
-        <button class="chat-close" id="chatClose">✕</button>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">${window.I ? window.I.close() : '✕'}</button>
       </div>
       <div class="chat-messages" id="chatMessages">
         <div class="chat-message bot">

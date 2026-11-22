@@ -530,3 +530,67 @@ img{max-width:100%}
   .chat-window{width:calc(100vw - 32px);right:16px;bottom:90px;height:400px}
   .chat-button{bottom:16px;right:16px;width:56px;height:56px}
 }
+
+/* ---------- Luxury icon system ---------- */
+.ic{width:1.15em;height:1.15em;display:inline-block;vertical-align:-0.18em;flex:none}
+svg.ic{overflow:visible}
+
+/* Header icon buttons — clean, borderless, gold hover accent */
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px}
+.icon-btn .ic{width:21px;height:21px}
+.icon-btn:hover{color:var(--gold)}
+.icon-btn:active{transform:scale(.92)}
+.icon-btn:focus-visible,.hamburger:focus-visible,.close:focus-visible,.menu-close:focus-visible,.wish-heart:focus-visible,.qty button:focus-visible,.pd-qty button:focus-visible,.star-rating .star:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+.badge{top:2px;right:0}
+
+/* Hamburger */
+.hamburger{display:inline-flex;align-items:center;justify-content:center}
+.hamburger .ic{width:24px;height:24px}
+
+/* Close buttons (drawers, modals, mobile menu, chat) */
+.drawer-head .close,.modal .close,.checkout-box>.close,.menu-close,.chat-close{display:inline-flex;align-items:center;justify-content:center}
+.drawer-head .close .ic,.modal .close .ic,.checkout-box>.close .ic,.menu-close .ic,.chat-close .ic{width:19px;height:19px}
+.close:hover,.menu-close:hover,.chat-close:hover{color:var(--gold);transform:rotate(90deg)}
+.close,.menu-close,.chat-close{transition:color .25s,transform .25s}
+
+/* Quantity steppers */
+.qty button{display:inline-flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s,background .2s}
+.qty button .ic{width:15px;height:15px}
+.qty button:hover{border-color:var(--gold);color:var(--gold)}
+.pd-qty button{display:inline-flex;align-items:center;justify-content:center;transition:color .2s}
+.pd-qty button .ic{width:18px;height:18px}
+.pd-qty button:hover{color:var(--gold)}
+.pd-qty button:active{color:var(--espresso)}
+
+/* Wishlist heart — champagne-gold fill on select */
+.wish-heart{display:inline-flex;align-items:center;justify-content:center}
+.wish-heart .ic{width:18px;height:18px;transition:transform .2s}
+.wish-heart:hover{transform:scale(1.08)}
+.wish-heart:hover .ic{transform:scale(1.05)}
+.wish-heart.active{color:var(--gold)}
+.wish-heart.active .ic{animation:heartPop .35s ease}
+@keyframes heartPop{0%{transform:scale(.6)}55%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* Star icons */
+.star-rating .star{display:inline-flex;color:var(--line);transition:color .2s,transform .2s}
+.star-rating .star .ic{width:27px;height:27px}
+.star-rating .star:hover{color:var(--gold);transform:scale(1.12)}
+.star-rating .star.active{color:var(--gold)}
+.review-rating .star{color:var(--line)}
+.review-rating .star.filled{color:var(--gold)}
+.review-rating .star .ic{width:16px;height:16px}
+.dist-star{display:inline-flex;align-items:center;gap:5px;color:var(--gold)}
+.dist-star .ic{width:12px;height:12px}
+.rv-score .avg-stars{display:inline-flex;gap:3px;color:var(--gold)}
+.rv-score .avg-stars .ic{width:20px;height:20px}
+
+/* Chat widget */
+.chat-icon{display:inline-flex}
+.chat-icon .ic{width:26px;height:26px}
+.chat-button{border:1px solid rgba(248,246,242,.25)}
+.socials a{display:inline-flex;align-items:center}
+.socials a .ic{width:16px;height:16px;color:var(--taupe)}
+.socials a:hover .ic{color:var(--gold)}
+
+/* Thin gold underline sweep for text-arrow links */
+a .ic.arrowR{width:14px;height:14px;vertical-align:-2px;margin-left:2px}

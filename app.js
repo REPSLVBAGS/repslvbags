@@ -42,7 +42,7 @@ function renderProducts(){
     return `<div class="card" data-id="${p.id}">
       <div class="card-img">
         ${badgeFor(p)}
-        <button class="wish-heart ${wished?'active':''}" data-wish="${p.id}" aria-label="Wishlist">${wished?'♥':'♡'}</button>
+        <button class="wish-heart ${wished?'active':''}" data-wish="${p.id}" aria-label="Wishlist">${wished?(window.I?window.I.heartFill():'♥'):(window.I?window.I.heart():'♡')}</button>
         ${productImg(p,ci)}
         <button class="quick-view" data-qv="${p.id}">Quick View</button>
       </div>
@@ -99,7 +99,7 @@ function renderCart(){
   else box.innerHTML=cart.map(i=>`<div class="cart-item">
     <div class="ci-img">${productImg(i,0)}</div>
     <div class="ci-info"><h4>${i.name}</h4><div class="price">$${i.price}</div>
-    <div class="qty"><button data-dec="${i.id}">−</button><span>${i.qty}</span><button data-inc="${i.id}">+</button><button class="remove" data-rm="${i.id}">Remove</button></div></div></div>`).join('');
+    <div class="qty"><button data-dec="${i.id}" aria-label="Decrease quantity">${window.I?window.I.minus():'−'}</button><span>${i.qty}</span><button data-inc="${i.id}" aria-label="Increase quantity">${window.I?window.I.plus():'+'}</button><button class="remove" data-rm="${i.id}">Remove</button></div></div></div>`).join('');
   const t=cartTotal();
   document.getElementById('cartSubtotal').textContent='$'+t.toFixed(2);
   const rem=FREE_SHIP-t;
@@ -131,7 +131,7 @@ function grandTotal(){return cartTotal()+shipCost()-discountAmt();}
 function renderWish(){
   const box=document.getElementById('wishItems');
   const items=wishlist.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
-  box.innerHTML=items.length?items.map(p=>`<div class="cart-item"><div class="ci-img">${bagSVG(p,0)}</div><div class="ci-info"><h4>${p.name}</h4><div class="price">$${p.price}</div><button class="add-cart" style="margin-top:8px;padding:8px" data-add="${p.id}">Add to Cart</button></div></div>`).join(''):'<p class="empty-msg">No saved bags yet. Tap ♡ on any bag.</p>';
+  box.innerHTML=items.length?items.map(p=>`<div class="cart-item"><div class="ci-img">${bagSVG(p,0)}</div><div class="ci-info"><h4>${p.name}</h4><div class="price">$${p.price}</div><button class="add-cart" style="margin-top:8px;padding:8px" data-add="${p.id}">Add to Cart</button></div></div>`).join(''):'<p class="empty-msg">No saved bags yet. Tap the heart on any bag to save it here.</p>';
 }
 
 // ---------- Modal ----------

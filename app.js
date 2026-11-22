@@ -261,7 +261,7 @@ function renderPayAction(){
         <p>Amount Due: <b>$${total.toFixed(2)}</b></p>
         ${hasLink
           ?`<p style="font-size:13px;color:var(--muted)">Click below to open Cash App and pay securely. <b>Include "${order.orderNo}" in the payment note</b> so we can match your payment instantly.</p>`
-          :`<p style="font-size:13px;color:#8a5a00"><b>Our Cash App payment link is being configured.</b> Please use another method below, or email supportrepslvbags@gmail.com and we'll send you payment details for order ${order.orderNo}.</p>`}
+          :`<p style="font-size:13px;color:#8a5a00"><b>Our Cash App payment link is being configured.</b> Please use another payment method below — payment instructions will be sent to you via text message (SMS) after you complete your order. Questions? Contact supportrepslvbags@gmail.com for order ${order.orderNo}.</p>`}
       </div>
       ${hasLink?`<a class="btn-gold full" style="display:block;text-align:center;margin-bottom:12px" href="${payUrl}" target="_blank" rel="noopener" id="cashAppPayBtn">PAY WITH CASH APP</a>`:''}
       <div class="step-nav">

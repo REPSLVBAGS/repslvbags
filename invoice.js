@@ -66,7 +66,7 @@
     } else if(inv.payment_details){
       payBox.textContent=inv.payment_details;
     } else {
-      payBox.textContent='Payment instructions were sent to your email. Contact supportrepslvbags@gmail.com if you need assistance.';
+      payBox.textContent='Payment instructions were sent to you via SMS. Contact supportrepslvbags@gmail.com if you need assistance.';
     }
 
     // Print button

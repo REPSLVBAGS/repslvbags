@@ -183,7 +183,7 @@ function renderPayMethods(){
     <label class="pay-method ${m.key==='cashapp'?'primary':''}">
       <input type="radio" name="paymethod" value="${m.key}" ${m.key==='cashapp'?'checked':''}>
       <span class="pm-name">${m.label}${m.key==='cashapp'?' <em class="pm-badge">Recommended</em>':''}</span>
-      <span class="pm-desc">${m.key==='cashapp'?'Pay instantly via secure Cash App link':'Instructions emailed to you — pay & submit screenshot'}</span>
+      <span class="pm-desc">${m.key==='cashapp'?'Pay instantly via secure Cash App link':'Payment instructions will be sent to you via text message (SMS) after you complete your order — pay & submit screenshot'}</span>
     </label>`).join('');
   box.querySelectorAll('input[name=paymethod]').forEach(r=>r.onchange=()=>{selectedPayMethod=r.value;});
   selectedPayMethod=box.querySelector('input[name=paymethod]:checked')?.value||methods[0].key;
@@ -268,7 +268,7 @@ function renderPayAction(){
         <button class="btn-ghost" id="backTo3">Back</button>
         <button class="btn-ghost" id="paidDoneBtn">I've Completed Payment</button>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin-top:14px">After paying, click "I've Completed Payment". You can also submit your payment screenshot later via the confirmation link in your email. Payment stays <b>pending</b> until our team verifies it.</p>`;
+      <p style="font-size:12px;color:var(--muted);margin-top:14px">After paying, click "I've Completed Payment". You can also submit your payment screenshot later via the link in your order confirmation. Payment stays <b>pending</b> until our team verifies it.</p>`;
     const payBtn=document.getElementById('cashAppPayBtn');if(payBtn)payBtn.onclick=()=>{if(window.trackEvent)trackEvent('InitiateCheckout',{value:total,order_id:order.orderNo});};
     document.getElementById('paidDoneBtn').onclick=()=>showConfirmation(order,'cashapp');
   } else {
@@ -281,13 +281,13 @@ function renderPayAction(){
       <div class="cashapp-box">
         <p>Order Number: <b>${order.orderNo}</b></p>
         <p>Amount Due: <b>$${total.toFixed(2)}</b></p>
-        <p style="font-size:13px">Payment instructions for <b>${m.label}</b> have been emailed to <b>${order.email}</b>.</p>
+        <p style="font-size:13px">Payment instructions for <b>${m.label}</b> will be sent to you via text message (SMS).</p>
         ${m.details?`<p style="font-size:13px;margin-top:8px"><b>Details:</b> ${m.details}</p>`:''}
-        <p style="font-size:13px;margin-top:8px">After sending payment, our team will verify it and confirm your order by email.</p>
+        <p style="font-size:13px;margin-top:8px">After sending payment, our team will verify it and confirm your order.</p>
       </div>
       <div class="step-nav">
         <button class="btn-ghost" id="backTo3">Back</button>
-        <button class="btn-gold" id="manualDoneBtn">Done — I'll Pay via Email Instructions</button>
+        <button class="btn-gold" id="manualDoneBtn">Done — I'll Pay via SMS Instructions</button>
       </div>`;
     document.getElementById('manualDoneBtn').onclick=()=>showConfirmation(order,m.key);
   }
@@ -306,9 +306,9 @@ function showConfirmation(order,methodKey){
     ?'Thank you! Complete your Cash App payment using the link — your order is <b>awaiting payment verification</b>.'
     :'🎉 Your order has been successfully received!<br><br>'+
      '<b>⚠️ IMPORTANT: PLEASE TAKE A SCREENSHOT OF YOUR ORDER NUMBER</b> and keep it safe for your records. You may need it when communicating with our customer care team.<br><br>'+
-     '📧 <b>CHECK YOUR EMAIL FOR PAYMENT INSTRUCTIONS!</b><br>'+
-     'Our team will send you a follow-up email shortly with the necessary payment instructions for your selected payment method.<br>'+
-     'Please check your <b>Inbox, Spam/Junk and Promotions</b> folders if you don\'t see our email in your main inbox.<br><br>'+
+     '📱 <b>CHECK YOUR PHONE FOR PAYMENT INSTRUCTIONS!</b><br>'+
+     'Our team will send the necessary payment instructions for your selected payment method to you via <b>text message (SMS)</b> shortly.<br>'+
+     'Please make sure the phone number you provided at checkout is correct and keep an eye on your messages.<br><br>'+
      '<b>PLEASE NOTE:</b> Your order will remain <b>pending</b> until your payment has been successfully verified by our team.<br><br>'+
      'Thank you for choosing Reps LV Bags. We truly appreciate your trust and look forward to serving you!<br>'+
      '<i>Elegance in Every Detail.</i>';
